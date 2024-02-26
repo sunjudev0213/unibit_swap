@@ -24,9 +24,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import RepartitionIcon from '@mui/icons-material/Repartition';
-import LockClockIcon from '@mui/icons-material/LockClock';
-import SavingsIcon from '@mui/icons-material/Savings';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 
 // Iconify Icons
 import { Icon } from '@iconify/react';
@@ -50,7 +48,6 @@ const HeaderWrapper = styled(AppBar)(({ theme }) => `
     border: none;
     border-radius: 0px;
     border-bottom: 0px solid ${alpha('#CBCCD2', 0.2)};
-    opacity: 0.6;
     // position: -webkit-sticky;
     // position: sticky;
     // top: 0;
@@ -93,7 +90,7 @@ export default function Header() {
         setFullSearch(true);
     }
     return (
-        <HeaderWrapper position="sticky" enableColorOnDark={true} sx={{ py: 1 }}>
+        <HeaderWrapper position="sticky" enableColorOnDark={true} sx={{ py: 1, opacity: isMobile ? 0.9 : 0.6 }}>
             <Container maxWidth="xl" sx={{minWidth:"90%"}}>
                 <Toolbar disableGutters>
 
@@ -233,7 +230,7 @@ export default function Header() {
                                     >
                                         <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
                                             <AccountBalanceIcon />
-                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Pool</Typography>
+                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Liquidity Pool</Typography>
                                         </Stack>
                                     </Link>
                                 </MenuItem>
@@ -241,38 +238,12 @@ export default function Header() {
                                     <Link
                                         underline="none"
                                         color="inherit"
-                                        href={`/farm`}
+                                        href={`/create`}
                                         rel="noreferrer noopener nofollow"
                                     >
                                         <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
-                                            <RepartitionIcon />
-                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Farm</Typography>
-                                        </Stack>
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem onClick={handleCloseNavMenu}>
-                                    <Link
-                                        underline="none"
-                                        color="inherit"
-                                        href={`/lock`}
-                                        rel="noreferrer noopener nofollow"
-                                    >
-                                        <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
-                                            <LockClockIcon />
-                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Lock</Typography>
-                                        </Stack>
-                                    </Link>
-                                </MenuItem>
-                                <MenuItem onClick={handleCloseNavMenu}>
-                                    <Link
-                                        underline="none"
-                                        color="inherit"
-                                        href={`/airdrop`}
-                                        rel="noreferrer noopener nofollow"
-                                    >
-                                        <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
-                                            <SavingsIcon />
-                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Airdrop</Typography>
+                                            <RocketLaunchIcon />
+                                            <Typography variant='s3' style={{marginLeft: '10px'}}>Token Launch</Typography>
                                         </Stack>
                                     </Link>
                                 </MenuItem>

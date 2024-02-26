@@ -21,8 +21,8 @@ import {
     styled,
     Box
 } from '@mui/material';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import GridOnIcon from '@mui/icons-material/GridOn';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SettingsIcon from '@mui/icons-material/Settings';
