@@ -234,7 +234,11 @@ export default function Pool({}) {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export function L_pool(){
-    const { darkMode, openSnackbar } = useContext(AppContext);
+    const { darkMode, openSnackbar, modalContext } = useContext(AppContext);
+    const {
+        walletaccount,
+        showConnectWallet,
+     } = modalContext;
     const router_address = "0x28a1676bcC9b479B49E3c0C6b56e280563D8E47f"
     const factory_address = "0x1F78A1891383E35BCF89108f40Ae3229372cdC58"
     const WETH = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
@@ -788,7 +792,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='ethereum'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23}} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23}} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     Ethereum
                                                 </Typography>
@@ -796,7 +800,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='bsc'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23 }} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23 }} src="https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     BSC
                                                 </Typography>
@@ -804,7 +808,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='arbitrum'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23}} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23}} src="https://cryptologos.cc/logos/arbitrum-arb-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     Arbitrum
                                                 </Typography>
@@ -936,7 +940,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='ethereum'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23}} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23}} src="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     Ethereum
                                                 </Typography>
@@ -944,7 +948,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='bsc'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23 }} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23 }} src="https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     BSC
                                                 </Typography>
@@ -952,7 +956,7 @@ export function L_pool(){
                                         </MenuItem>
                                         <MenuItem value='arbitrum'>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <img style={{ height: 23}} src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg" />
+                                                <img style={{ height: 23}} src="https://cryptologos.cc/logos/arbitrum-arb-logo.svg?v=029" />
                                                 <Typography variant="s3">
                                                     Arbitrum
                                                 </Typography>
@@ -992,15 +996,20 @@ export function L_pool(){
                             <br/>
                             <Stack display='flex' alignItems='center' textAlign="center">
                                 <Box display='flex' justifyContent='space-around' alignItems='center' textAlign="center" sx={{mt:1}} width="100%">
-                                    { allowance1 <= 0 &&
+                                    { allowance1 <= 0 && walletaccount &&
                                         <Button style={{color: "black", background:"#F8D20F", padding:"10px 30px"}} onClick={()=>{approveHandler(token1)}}>Enable Token1</Button>
                                     }
-                                    { allowance2 <= 0 &&
+                                    { allowance2 <= 0 && walletaccount &&
                                     <Button style={{color: "black", background:"#F8D20F", padding:"10px 30px"}} onClick={()=>{approveHandler(token2)}}>Enable Token2</Button>
                                     }
                                 </Box>
                                 <Box display='flex' justifyContent='space-around' alignItems='center' sx={{mt:2}} width="75%">
-                                    <Button fullWidth sx={{color: "black", background:"#F8D20F", padding:"10px 30px"}} onClick={()=>{SupplyHandler()}}>Supply</Button>
+                                    {
+                                        !walletaccount ?
+                                        <Button fullWidth sx={{color: "black", background:"#F8D20F", padding:"10px 30px"}} onClick={showConnectWallet}>Connect Wallet</Button>
+                                        :
+                                        <Button fullWidth sx={{color: "black", background:"#F8D20F", padding:"10px 30px"}} onClick={()=>{SupplyHandler()}}>Supply</Button>
+                                    }
                                 </Box>
                             </Stack>
                         </Box>
