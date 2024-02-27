@@ -35,7 +35,8 @@ function BloxifiApp(props) {
                 */}
 
                 <link rel="manifest" href="/site.webmanifest" />
-                {/* <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#121619" /> */}
+                <title>Unibit Swap</title>
+                <link rel="shortcut icon" href="logo/logo.png"/>
                 <meta name="msapplication-TileColor" content="#121619" />
                 <meta name="theme-color" content="#ffffff"/>
             </Head>

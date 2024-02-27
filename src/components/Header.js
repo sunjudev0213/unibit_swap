@@ -72,7 +72,7 @@ export default function Header() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
-    const shareUrl = `https://bloxfi-dex.onrender.com/`;
+    const shareUrl = `https://unibit-swap.vercel.app/`;
     const shareTitle = 'BLOXFI is the Best DEX on Arbitrum network';
     const shareDesc = 'BLOXFI is a zero-fee dex platform for trading on Arbitrum network, providing token swapping and farming service.';
 
@@ -150,6 +150,14 @@ export default function Header() {
                                     rel="noreferrer noopener nofollow"
                                 >
                                     <Button variant="text">Create</Button>
+                                </Link>
+                                <Link
+                                    underline="none"
+                                    color="inherit"
+                                    href={`https://bridge.unibit.app`}
+                                    rel="noreferrer noopener nofollow"
+                                >
+                                    <Button variant="text">Bridge</Button>
                                 </Link>
                             </>
                         }

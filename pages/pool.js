@@ -75,19 +75,19 @@ const BackgroundWrapper = styled(Box)(
 let DEFAULT_TOKENS = [
     {
         id: 0,
-        symbol: 'Unibit',
-        address: '0x46d84F7A78D3E5017fd33b990a327F8e2E28f30B',
-        decimal: 18,
-        description:'Unibit token',
-        logo: 'logo/logo.png'
-    },
-    {
-        id: 1,
         symbol: 'BTC',
         address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
         decimal: 18,
         description:'Bitcoin',
         logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png'
+    },
+    {
+        id: 1,
+        symbol: 'UIBT',
+        address: '0x46d84F7A78D3E5017fd33b990a327F8e2E28f30B',
+        decimal: 18,
+        description:'Unibit token',
+        logo: 'static/ubit.png'
     },
     {
         id: 2,
@@ -123,27 +123,27 @@ let DEFAULT_TOKENS = [
     },
     {
         id: 6,
-        symbol: 'GMX',
-        address: '0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a',
+        symbol: 'ORDI',
+        address: 'b61b0172d95e266c18aea0c624db987e971a5d6d4ebc2aaed85da4642d635735i0',
         decimal: 18,
-        description:'GMX',
-        logo: 'static/gmx.jfif'
+        description:'ORDI',
+        logo: 'https://assets-currency.kucoin.com/6478143f4958230001079b56_logo.png'
     },
     {
         id: 7,
-        symbol: 'UNIDX',
+        symbol: 'Multibit',
         address: '0x5429706887FCb58a595677B73E9B0441C25d993D',
         decimal: 18,
-        description:'UniDex',
-        logo: 'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/0x5429706887FCb58a595677B73E9B0441C25d993D/logo.png'
+        description:'MUBI',
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/200x200/28412.png'
     },
     {
         id: 8,
-        symbol: 'BFR',
-        address: '0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D',
+        symbol: 'LeverFi',
+        address: '0x4B5f49487ea7B3609b1aD05459BE420548789f1f',
         decimal: 18,
-        description:'Buffer Finance',
-        logo: 'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D/logo.png'
+        description:'LEVER',
+        logo: 'https://pbs.twimg.com/profile_images/1514224753376370695/WI72SpBl_400x400.jpg'
     },
     {
         id: 9,
