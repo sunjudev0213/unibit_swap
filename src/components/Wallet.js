@@ -24,6 +24,7 @@ import {
 import GridOnIcon from '@mui/icons-material/GridOn';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Web3 from "web3";
@@ -305,6 +306,24 @@ export default function Wallet() {
                                     <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
                                         <RocketLaunchIcon />
                                         <Typography variant='s3' style={{marginLeft: '10px'}}>Token Launch</Typography>
+                                    </Stack>
+                                </MenuItem>
+                            </Link>
+                            <Link
+                                underline="none"
+                                color="inherit"
+                                target="blank"
+                                href="https://bridge.unibit.app"
+                                rel="noreferrer noopener nofollow"
+                            >
+                                <MenuItem
+                                    key="token-launch"
+                                    sx={{ typography: 'body2', py: 2, px: 2.5 }}
+                                    onClick={()=>setOpen(false)}
+                                >
+                                    <Stack direction='row' spacing={1} sx={{mr: 2}} alignItems='center'>
+                                        <SwapCallsIcon />
+                                        <Typography variant='s3' style={{marginLeft: '10px'}}>Bridge</Typography>
                                     </Stack>
                                 </MenuItem>
                             </Link>
