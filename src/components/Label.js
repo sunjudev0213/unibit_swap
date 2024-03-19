@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
 
-const LabelWrapper = styled('span')(
-  ({ theme }) => `
+const LabelWrapper = styled("span")(
+    ({ theme }) => `
       background-color: ${theme.colors.alpha.black[5]};
       padding: ${theme.spacing(0.5, 1)};
       font-size: ${theme.typography.pxToRem(13)};
@@ -51,26 +51,18 @@ const LabelWrapper = styled('span')(
 `
 );
 
-const Label = ({ className, color = 'secondary', children, ...rest }) => {
-  return (
-    <LabelWrapper className={'MuiLabel-' + color} {...rest}>
-      {children}
-    </LabelWrapper>
-  );
+const Label = ({ className, color = "secondary", children, ...rest }) => {
+    return (
+        <LabelWrapper className={"MuiLabel-" + color} {...rest}>
+            {children}
+        </LabelWrapper>
+    );
 };
 
 Label.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  color: PropTypes.oneOf([
-    'primary',
-    'black',
-    'secondary',
-    'error',
-    'warning',
-    'success',
-    'info'
-  ])
+    children: PropTypes.node,
+    className: PropTypes.string,
+    color: PropTypes.oneOf(["primary", "black", "secondary", "error", "warning", "success", "info"])
 };
 
 export default Label;

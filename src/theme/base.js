@@ -1,17 +1,17 @@
 // Dark Mode
-import { DarkSpacesTheme } from './schemes/DarkSpacesTheme';
+import { DarkSpacesTheme } from "./schemes/DarkSpacesTheme";
 
 // Light Mode
-import { PureLightTheme } from './schemes/PureLightTheme';
+import { PureLightTheme } from "./schemes/PureLightTheme";
 
 const themeMap = {
-  DarkSpacesTheme,
-  PureLightTheme
+    DarkSpacesTheme,
+    PureLightTheme
 };
 
 export function themeCreator(dark) {
-  let theme;
-  if (dark) theme = 'DarkSpacesTheme';
-  else theme = 'PureLightTheme';
-  return themeMap[theme];
+    let theme;
+    if (dark) theme = "DarkSpacesTheme";
+    else theme = "PureLightTheme";
+    return themeMap[theme];
 }
