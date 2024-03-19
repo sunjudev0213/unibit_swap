@@ -39,6 +39,8 @@
     "@mui/lab": "5.0.0-alpha.94",
     "@mui/material": "5.8.6",
     "@mui/styles": "5.8.6",
+    "@okxweb3/coin-bitcoin": "^1.0.13",
+    "@okxweb3/crypto-lib": "^1.0.1",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@rango-dev/widget-embedded": "^0.23.0",
     "@web3-react/core": "^6.1.9",
