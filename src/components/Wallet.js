@@ -49,7 +49,7 @@ export default function Wallet() {
     }
     async function connectMetamask() {
         const { ethereum } = window;
-        
+
         if (!ethereum) {
             throw new Error("Metamask is not installed! Go install the extension!");
         }
@@ -88,28 +88,28 @@ export default function Wallet() {
             await getAddress(getAddressOptions);
         } catch (error) {
             console.error("Error while connecting Xverse wallet: ", error);
-            openSnackbar(error.message, "error");          
+            openSnackbar(error.message, "error");
         }
     }
 
     async function connectUnisat() {
         const unisat = window.unisat;
-       
+
         if (!unisat) {
             openSnackbar("Unisat is not installed! Go install the extension!", "error");
             return;
         }
         try {
-         // keep track of accounts returned
+            // keep track of accounts returned
             let accounts = await unisat.requestAccounts();
             handleCloseWallet();
             setWalletAccount(accounts[0]);
-            setWalletType(WalletTypes.unisat)   
+            setWalletType(WalletTypes.unisat)
         } catch (error) {
             console.error("Error while connecting Unisat wallet: ", error);
             openSnackbar(error.message, "error");
         }
-         
+
     }
 
     function BootstrapDialogTitle(props) {
@@ -184,7 +184,7 @@ export default function Wallet() {
             <IconButton
                 ref={anchorRef}
                 onClick={handleOpen}
-                // onMouseOver={handleOpen}
+            // onMouseOver={handleOpen}
             >
                 <Badge color="primary">
                     {logoImageUrl ? <Avatar variant={accountLogo ? "" : "square"} alt="user" src={logoImageUrl} sx={{ width: 32, height: 32 }} /> : <Icon icon={userLock} />}
@@ -208,101 +208,29 @@ export default function Wallet() {
                 }}
             >
                 {walletAccount ? (
-                    <>
+
+                    <Stack spacing={1} alignItems="center" sx={{ pt: 1, pb: 2 }}>
                         <Link
-                            underline="none"
                             color="inherit"
-                            // target="_blank"
-                            href={`/`}
+                            target="_blank"
+                            // href={`https://arbiscan.io/address/${walletaccount}`}
                             rel="noreferrer noopener nofollow"
                         >
-                            <MenuItem key="unibit-swap" sx={{ typography: "body2", py: 2, px: 2.5 }} onClick={() => setOpen(false)}>
-                                <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
-                                    <Badge color="primary">
-                                        <CurrencyExchangeIcon />
-                                    </Badge>
-                                    <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                        Swap
-                                    </Typography>
-                                </Stack>
-                            </MenuItem>
+                            <Typography align="center" style={{ wordWrap: "break-word" }} variant="body2" sx={{ width: 180, color: "text.secondary" }}>
+                                {walletAccount}
+                            </Typography>
                         </Link>
-                        <Link
-                            underline="none"
-                            color="inherit"
-                            // target="_blank"
-                            href="/pool"
-                            rel="noreferrer noopener nofollow"
-                        >
-                            <MenuItem key="liquidity" sx={{ typography: "body2", py: 2, px: 2.5 }} onClick={() => setOpen(false)}>
-                                <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
-                                    <GridOnIcon />
-                                    <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                        Add Liquidity
-                                    </Typography>
-                                </Stack>
-                            </MenuItem>
-                        </Link>
-                        <Link
-                            underline="none"
-                            color="inherit"
-                            // target="_blank"
-                            href="/create"
-                            rel="noreferrer noopener nofollow"
-                        >
-                            <MenuItem key="token-launch" sx={{ typography: "body2", py: 2, px: 2.5 }} onClick={() => setOpen(false)}>
-                                <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
-                                    <RocketLaunchIcon />
-                                    <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                        Token Launch
-                                    </Typography>
-                                </Stack>
-                            </MenuItem>
-                        </Link>
-                        <Link underline="none" color="inherit" target="blank" href="https://bridge.unibit.app" rel="noreferrer noopener nofollow">
-                            <MenuItem key="token-launch" sx={{ typography: "body2", py: 2, px: 2.5 }} onClick={() => setOpen(false)}>
-                                <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
-                                    <SwapCallsIcon />
-                                    <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                        Bridge
-                                    </Typography>
-                                </Stack>
-                            </MenuItem>
-                        </Link>
-                        <Link underline="none" color="inherit" href={`/setting`} rel="noreferrer noopener nofollow">
-                            <MenuItem key="settings" sx={{ typography: "body2", py: 2, px: 2.5 }} onClick={() => setOpen(false)}>
-                                <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
-                                    <SettingsIcon />
-                                    <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                        Settings
-                                    </Typography>
-                                </Stack>
-                            </MenuItem>
-                        </Link>
-                        <Divider />
-                        <Stack spacing={1} alignItems="center" sx={{ pt: 1, pb: 2 }}>
-                            <Link
-                                color="inherit"
-                                target="_blank"
-                                // href={`https://arbiscan.io/address/${walletaccount}`}
-                                rel="noreferrer noopener nofollow"
-                            >
-                                <Typography align="center" style={{ wordWrap: "break-word" }} variant="body2" sx={{ width: 180, color: "text.secondary" }}>
-                                    {walletAccount}
-                                </Typography>
-                            </Link>
-                            <Stack direction="row" spacing={1}>
-                                <Button variant="contained" onClick={handleLogout} size="small">
-                                    Logout
+                        <Stack direction="row" spacing={1}>
+                            <Button variant="contained" onClick={handleLogout} size="small">
+                                Logout
+                            </Button>
+                            <CopyToClipboard text={walletAccount} onCopy={() => { }}>
+                                <Button variant="outlined" size="small">
+                                    Copy
                                 </Button>
-                                <CopyToClipboard text={walletAccount} onCopy={() => {}}>
-                                    <Button variant="outlined" size="small">
-                                        Copy
-                                    </Button>
-                                </CopyToClipboard>
-                            </Stack>
+                            </CopyToClipboard>
                         </Stack>
-                    </>
+                    </Stack>
                 ) : (
                     <MenuItem key="wallet" onClick={handleOpenModal} sx={{ typography: "body2", py: 2, px: 2.5 }}>
                         <Stack direction="row" spacing={1} alignItems="center">

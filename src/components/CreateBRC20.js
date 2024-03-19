@@ -15,8 +15,10 @@ import {
 import { AppContext } from "src/AppContext";
 //component
 import Page from "src/components/Page";
+
 export default function CreateBRC20() {
-  const { openSnackbar } = useContext(AppContext);
+  const { openSnackbar, walletContext } = useContext(AppContext);
+  const { walletType, walletAccount, WalletTypes} = walletContext;
   const [tokenName, setTokenName] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [customCode, setCustomCode] = useState("");
@@ -25,7 +27,13 @@ export default function CreateBRC20() {
     openSnackbar("listing BRC20 tokens");
   }
   const mintBRC20 = () => {
+    if(walletType === WalletTypes.metamask) {
+      openSnackbar("Please connect bitcoin wallet!", "warning");
+      return;
+    }
     openSnackbar("minting BRC20 token");
+    console.log(walletAccount, walletType)
+    // send transaction
   }
   return (
       <Page title="Create">
