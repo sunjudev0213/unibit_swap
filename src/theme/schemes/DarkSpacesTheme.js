@@ -52,7 +52,7 @@ const colors = {
   },
   layout: {
     general: {
-      bodyBg: '#121619', //'#1C1C1C'
+      bodyBg: '#121619' //'#1C1C1C'
     },
     sidebar: {
       background: themeColors.primaryAlt,
@@ -108,25 +108,25 @@ const colors = {
   },
   success: {
     lighter: alpha(themeColors.success, 0.85),
-    light: alpha(themeColors.success, 1/*0.3*/),
+    light: alpha(themeColors.success, 1 /*0.3*/),
     main: themeColors.success,
     dark: darken(themeColors.success, 0.2)
   },
   warning: {
     lighter: alpha(themeColors.warning, 0.85),
-    light: alpha(themeColors.warning, 1/*0.3*/),
+    light: alpha(themeColors.warning, 1 /*0.3*/),
     main: themeColors.warning,
     dark: darken(themeColors.warning, 0.2)
   },
   error: {
     lighter: alpha(themeColors.error, 0.85),
-    light: alpha(themeColors.error, 1/*0.3*/),
+    light: alpha(themeColors.error, 1 /*0.3*/),
     main: themeColors.error,
     dark: darken(themeColors.error, 0.2)
   },
   info: {
     lighter: alpha(themeColors.info, 0.85),
-    light: alpha(themeColors.info, 1/*0.3*/),
+    light: alpha(themeColors.info, 1 /*0.3*/),
     main: themeColors.info,
     dark: darken(themeColors.info, 0.2)
   }
@@ -499,7 +499,7 @@ export const DarkSpacesTheme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          color: colors.alpha.black[50],
+          color: colors.alpha.black[50]
         },
         colorSecondary: {
           background: colors.alpha.black[5],
@@ -510,7 +510,7 @@ export const DarkSpacesTheme = createTheme({
           }
         },
         icon: {
-          color: colors.alpha.black[50],
+          color: colors.alpha.black[50]
         },
         label: {
           paddingLeft: '8px',
@@ -677,7 +677,7 @@ export const DarkSpacesTheme = createTheme({
     },
     MuiButtonBase: {
       defaultProps: {
-        disableRipple:false
+        disableRipple: false
       },
       styleOverrides: {
         root: {
@@ -734,7 +734,7 @@ export const DarkSpacesTheme = createTheme({
         root: {
           '& .MuiTouchRipple-root': {
             opacity: 0.3
-          },
+          }
           // '&:hover, &.Mui-selected, &.Mui-selected:hover': {
           //   color: colors.alpha.white[70],
           //   background: colors.alpha.white[70],
@@ -782,7 +782,7 @@ export const DarkSpacesTheme = createTheme({
           background: '#21252B',
           padding: 0,
           border: '1px solid #32373C'
-        },
+        }
         // elevation0: {
         //   boxShadow: 'none'
         // },
@@ -874,7 +874,7 @@ export const DarkSpacesTheme = createTheme({
         indicator: {
           height: 38,
           minHeight: 38,
-          borderRadius: 6,
+          borderRadius: 6
           // border: '1px solid ' + colors.primary.dark,
           // boxShadow: '0px 2px 10px ' + colors.primary.light
         },
@@ -897,7 +897,7 @@ export const DarkSpacesTheme = createTheme({
             minWidth: 'auto',
             paddingLeft: 20,
             paddingRight: 20,
-            marginRight: 4,
+            marginRight: 4
           },
           '&.Mui-selected, &.Mui-selected:hover': {
             color: colors.alpha.white[100],
@@ -907,7 +907,7 @@ export const DarkSpacesTheme = createTheme({
             color: colors.alpha.black[100]
           }
         }
-      },
+      }
     },
     MuiMenu: {
       // defaultProps: {
@@ -1042,7 +1042,7 @@ export const DarkSpacesTheme = createTheme({
           // color: colors.alpha.black[70],
           // background: 'inherit'
           background: alpha(colors.layout.general.bodyBg, 0)
-        },
+        }
       }
     },
     MuiAlert: {
@@ -1112,12 +1112,15 @@ export const DarkSpacesTheme = createTheme({
     },
     MuiPopover: {
       defaultProps: {
-        disableScrollLock: true, keepMounted: true, disablePortal: true
+        disableScrollLock: true,
+        keepMounted: true,
+        disablePortal: true
       }
     },
     MuiPopper: {
       defaultProps: {
-        keepMounted: true, disablePortal: true
+        keepMounted: true,
+        disablePortal: true
       }
     },
     MuiTooltip: {
@@ -1256,11 +1259,11 @@ export const DarkSpacesTheme = createTheme({
             fontWeight: 600,
             fontSize: 28,
             [theme.breakpoints.up('md')]: {
-              fontSize: 36,
+              fontSize: 36
             },
             [theme.breakpoints.up('lg')]: {
-              fontSize: 40,
-            },
+              fontSize: 40
+            }
           })
         },
         {
@@ -1269,8 +1272,8 @@ export const DarkSpacesTheme = createTheme({
             fontWeight: 600,
             fontSize: 18,
             [theme.breakpoints.up('md')]: {
-              fontSize: 24,
-            },
+              fontSize: 24
+            }
           })
         },
         {
@@ -1281,8 +1284,8 @@ export const DarkSpacesTheme = createTheme({
             lineHeight: 1.4,
             color: colors.alpha.black[100],
             [theme.breakpoints.up('md')]: {
-              fontSize: 20,
-            },
+              fontSize: 20
+            }
           })
         },
         {
@@ -1292,8 +1295,8 @@ export const DarkSpacesTheme = createTheme({
             fontSize: 12,
             color: colors.alpha.black[50],
             [theme.breakpoints.up('sm')]: {
-              fontSize: 16,
-            },
+              fontSize: 16
+            }
           })
         },
         {
@@ -1303,11 +1306,11 @@ export const DarkSpacesTheme = createTheme({
             fontSize: 14,
             color: colors.alpha.black[100],
             [theme.breakpoints.up('sm')]: {
-              fontSize: 20,
-            },
+              fontSize: 20
+            }
           })
         }
-      ],
+      ]
     }
   },
   shape: {
@@ -1371,7 +1374,7 @@ export const DarkSpacesTheme = createTheme({
     },
     s6: {
       fontWeight: 500,
-      fontSize: 14,
+      fontSize: 14
       // color: colors.alpha.black[100]
     },
     s7: {
@@ -1397,7 +1400,7 @@ export const DarkSpacesTheme = createTheme({
     },
     s11: {
       fontWeight: 400,
-      fontSize: 12,
+      fontSize: 12
     },
     s12: {
       fontWeight: 400,

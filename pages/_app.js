@@ -3,8 +3,8 @@ import { SnackbarProvider } from 'notistack';
 import ThemeProvider from 'src/theme/ThemeProvider';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ContextProvider } from 'src/AppContext';
-import Web3 from "web3";
-import { Web3ReactProvider } from "@web3-react/core";
+import Web3 from 'web3';
+import { Web3ReactProvider } from '@web3-react/core';
 
 function getLibrary(provider, connector) {
   return new Web3(provider);
@@ -15,44 +15,49 @@ import XSnackbar from 'src/components/Snackbar';
 import { useSnackbar } from 'src/components/useSnackbar';
 
 function BloxifiApp(props) {
-    const { isOpen, msg, variant, openSnackbar, closeSnackbar } = useSnackbar();
+  const { isOpen, msg, variant, openSnackbar, closeSnackbar } = useSnackbar();
 
-    const { Component, pageProps } = props;
+  const { Component, pageProps } = props;
 
-    return (
-        <>
-            <Head>
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                />
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
 
-                {/*
+        {/*
                     <meta name="apple-mobile-web-app-title" content="Snippit"/>
                     <meta name="application-name" content="<APP NAME>"/>
                     <meta name="msapplication-TileColor" content="#ffc40d"/>
                     <meta name="theme-color" content="#ffffff"/>
                 */}
 
-                <link rel="manifest" href="/site.webmanifest" />
-                <title>Unibit Swap</title>
-                <link rel="shortcut icon" href="logo/logo.png"/>
-                <meta name="msapplication-TileColor" content="#121619" />
-                <meta name="theme-color" content="#ffffff"/>
-            </Head>
-            <Web3ReactProvider getLibrary={getLibrary}>
-                <ContextProvider openSnackbar={openSnackbar}>
-                    <ThemeProvider>
-                            <SnackbarProvider maxSnack={3}>
-                                <CssBaseline />
-                                <Component {...pageProps} />
-                                <XSnackbar isOpen={isOpen} message={msg} variant={variant} close={closeSnackbar} />
-                            </SnackbarProvider>
-                    </ThemeProvider>
-                </ContextProvider>
-            </Web3ReactProvider>    
-        </>
-    );
+        <link rel="manifest" href="/site.webmanifest" />
+        <title>Unibit Swap</title>
+        <link rel="shortcut icon" href="logo/logo.png" />
+        <meta name="msapplication-TileColor" content="#121619" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <ContextProvider openSnackbar={openSnackbar}>
+          <ThemeProvider>
+            <SnackbarProvider maxSnack={3}>
+              <CssBaseline />
+              <Component {...pageProps} />
+              <XSnackbar
+                isOpen={isOpen}
+                message={msg}
+                variant={variant}
+                close={closeSnackbar}
+              />
+            </SnackbarProvider>
+          </ThemeProvider>
+        </ContextProvider>
+      </Web3ReactProvider>
+    </>
+  );
 }
 
 export default BloxifiApp;

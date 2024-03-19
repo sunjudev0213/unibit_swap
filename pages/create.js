@@ -1,23 +1,22 @@
-
 // Material
 import {
-    Box,
-    Container,
-    Toolbar,
-    Select,
-    MenuItem,
-    Stack,
-    TextField,
-    Tooltip,
-    Card,
-    Button,
-    Input,
-    Icon,
-    Typography,
-    FormControl,
-    RadioGroup,
-    FormControlLabel,
-    Radio 
+  Box,
+  Container,
+  Toolbar,
+  Select,
+  MenuItem,
+  Stack,
+  TextField,
+  Tooltip,
+  Card,
+  Button,
+  Input,
+  Icon,
+  Typography,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from '@mui/material';
 
 // Context
@@ -29,37 +28,37 @@ import Header from 'src/components/Header';
 import ScrollToTop from 'src/components/ScrollToTop';
 
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import React from 'react';
 import Page from 'src/components/Page';
 import styled from 'styled-components';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import axios from 'axios'
+import axios from 'axios';
 import FormData from 'form-data';
 import XSnackbar from 'src/components/Snackbar';
 import { useSnackbar } from 'src/components/useSnackbar';
-import { Modal } from "react-bootstrap";
+import { Modal } from 'react-bootstrap';
 
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React } from '@web3-react/core';
 
 // overflow: scroll;
 // overflow: auto;
 // overflow: hidden;
 
 const OverviewWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
         // overflow: hidden;
         flex: 1;
 `
 );
 
 const BackgroundWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
         width: 100%;
         height: 90%;
         position: absolute;
@@ -74,54 +73,53 @@ const BackgroundWrapper = styled(Box)(
 );
 
 export default function Swap({}) {
-    const { darkMode, openSnackbar } = useContext(AppContext);
-    
-    return (
-        <OverviewWrapper>
-            <Toolbar id="back-to-top-anchor" />
+  const { darkMode, openSnackbar } = useContext(AppContext);
 
-            <BackgroundWrapper
-                style={{
-                    backgroundImage: `url(/static/background.png)`,
-                    opacity: `${darkMode?0.5:0.7}`
-                }}
-            />
+  return (
+    <OverviewWrapper>
+      <Toolbar id="back-to-top-anchor" />
 
-            <Header />
+      <BackgroundWrapper
+        style={{
+          backgroundImage: `url(/static/background.png)`,
+          opacity: `${darkMode ? 0.5 : 0.7}`
+        }}
+      />
 
-            <Container maxWidth="lg">
-                <Create />
-            </Container>
+      <Header />
 
-            <ScrollToTop />
+      <Container maxWidth="lg">
+        <Create />
+      </Container>
 
-        </OverviewWrapper>
-    );
+      <ScrollToTop />
+    </OverviewWrapper>
+  );
 }
 
-function Create(){
-  const router = useRouter()
-  const [tokenName, setTokenName] = useState('')
-  const [price, setPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const { isOpen, msg, variant, openSnackbar, closeSnackbar } = useSnackbar()
+function Create() {
+  const router = useRouter();
+  const [tokenName, setTokenName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const { isOpen, msg, variant, openSnackbar, closeSnackbar } = useSnackbar();
   const fileRef = useRef();
-  const [fileUrl, setFileUrl] = useState(null)
-  const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [tokenid, setTokenid] = useState(null)
-  const [tokenuri, setTokenuri] = useState(null)
+  const [fileUrl, setFileUrl] = useState(null);
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [tokenid, setTokenid] = useState(null);
+  const [tokenuri, setTokenuri] = useState(null);
   const [codeType, setCodeType] = useState('Template');
-  const create_url = "http://135.181.234.78/api/upload"
+  const create_url = 'http://135.181.234.78/api/upload';
   const { account, active, library, chainId } = useWeb3React();
 
   const [show, setShow] = useState({
     show: false,
-    title: "",
-    link: "",
+    title: '',
+    link: '',
     progress: false,
     dismiss: false,
-    buttonText: "",
+    buttonText: ''
   });
   const handleClose = () => setShow(false);
   function showMintModal(state, title, link, progress, dismiss, buttonText) {
@@ -131,151 +129,168 @@ function Create(){
       link,
       progress,
       dismiss,
-      buttonText,
+      buttonText
     });
   }
 
   const handleFileSelect = (e) => {
-      const pickedFile = e.target.files[0]
+    const pickedFile = e.target.files[0];
 
-      const reader = new FileReader()
-      if (pickedFile) {
-          setFile(pickedFile)
+    const reader = new FileReader();
+    if (pickedFile) {
+      setFile(pickedFile);
 
-          // This is used as src of image
-          reader.readAsDataURL(pickedFile)
-          reader.onloadend = function (e) {
-              setFileUrl(reader.result)
-          }
-      }
-  }
+      // This is used as src of image
+      reader.readAsDataURL(pickedFile);
+      reader.onloadend = function (e) {
+        setFileUrl(reader.result);
+      };
+    }
+  };
 
   const uploadfile = async () => {
-
-      // TODO: Called only when the file is uploaded to site.
-      if (!tokenName || !description || !price || !fileUrl) {
-        openSnackbar('Please fillout data', 'error')
-        return
+    // TODO: Called only when the file is uploaded to site.
+    if (!tokenName || !description || !price || !fileUrl) {
+      openSnackbar('Please fillout data', 'error');
+      return;
+    }
+    setLoading(true);
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', tokenName);
+        formData.append('description', description);
+        console.log('uploading image to ipfs');
+        const response = await axios.post(create_url, formData);
+        if (response.result === 'success') {
+          openSnackbar('NFT uploading success');
+          setTokenuri(response.data);
+        } else {
+          openSnackbar('NFT uploading failed', 'error');
+        }
+      } catch (e) {
+        console.log(e);
+        openSnackbar(e.message, 'error');
       }
-      setLoading(true)
-      if (file) {
-          try {
-              const formData = new FormData()
-              formData.append("file", file)
-              formData.append("name", tokenName)
-              formData.append("description", description)
-              console.log('uploading image to ipfs')
-              const response = await axios.post(
-                  create_url,
-                  formData
-              )
-              if(response.result === 'success'){
-                openSnackbar('NFT uploading success')
-                setTokenuri(response.data)
-              }
-              else{
-                openSnackbar('NFT uploading failed', 'error')
-              }
-          } catch (e) {
-              console.log(e)
-              openSnackbar(e.message, 'error')
-          }
-      }
-      setLoading(false)
-  }
+    }
+    setLoading(false);
+  };
 
   const handleResetFile = (e) => {
-      e.stopPropagation()
-      setFileUrl(null)
-      fileRef.current.value = null
-  }
+    e.stopPropagation();
+    setFileUrl(null);
+    fileRef.current.value = null;
+  };
 
   const NFTUploader = () => {
-    return(
+    return (
       <CardWrapper>
-          <input
-              ref={fileRef}
-              style={{ display: 'none' }}
-              // accept='image/*,video/*,audio/*,webgl/*,.glb,.gltf'
-              accept='all/*'
-              id='contained-button-file'
-              multiple
-              type='file'
-              onChange={handleFileSelect}
+        <input
+          ref={fileRef}
+          style={{ display: 'none' }}
+          // accept='image/*,video/*,audio/*,webgl/*,.glb,.gltf'
+          accept="all/*"
+          id="contained-button-file"
+          multiple
+          type="file"
+          onChange={handleFileSelect}
+        />
+        <Card
+          sx={{
+            display: 'flex',
+            width: 200,
+            height: 120,
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'auto',
+            position: 'relative'
+          }}
+        >
+          <CardOverlay onClick={() => fileRef.current.click()}>
+            <IconButton
+              aria-label="close"
+              onClick={(e) => handleResetFile(e)}
+              sx={
+                fileUrl
+                  ? { position: 'absolute', right: '1vw', top: '1vh' }
+                  : { display: 'none' }
+              }
+            >
+              <CloseIcon color="white" />
+            </IconButton>
+          </CardOverlay>
+          <img
+            src={fileUrl}
+            alt=""
+            style={
+              fileUrl
+                ? { objectFit: 'cover', height: '100%', overflow: 'hidden' }
+                : { display: 'none' }
+            }
           />
-          <Card
-              sx={{
-                  display: 'flex',
-                  width: 200,
-                  height: 120,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  overflow: 'auto',
-                  position: 'relative'
-              }}
+          <ImageIcon
+            fontSize="large"
+            sx={fileUrl ? { display: 'none' } : { width: 100, height: 100 }}
+          />
+        </Card>
+        <Stack>
+          <LoadingButton
+            loading={loading}
+            loadingPosition="start"
+            startIcon={<SendIcon />}
+            onClick={uploadfile}
           >
-              <CardOverlay
-                  onClick={() => fileRef.current.click()}
-              >
-                  <IconButton
-                      aria-label='close' onClick={(e) => handleResetFile(e)}
-                      sx={fileUrl ? { position: 'absolute', right: '1vw', top: '1vh' } : { display: 'none' }}
-                  >
-                      <CloseIcon color='white' />
-                  </IconButton>
-              </CardOverlay>
-              <img src={fileUrl} alt='' style={fileUrl ? {objectFit:'cover', height: '100%', overflow:'hidden'} : { display: 'none' }} />
-              <ImageIcon fontSize='large' sx={fileUrl ? { display: 'none' } : {width: 100, height: 100}} />
-          </Card>
-          <Stack>
-              <LoadingButton
-                  loading={loading}
-                  loadingPosition='start'
-                  startIcon={<SendIcon />}
-                  onClick={uploadfile}
-              >
-                  Upload
-              </LoadingButton>
-          </Stack>
-          <XSnackbar isOpen={isOpen} message={msg} variant={variant} close={closeSnackbar} />
+            Upload
+          </LoadingButton>
+        </Stack>
+        <XSnackbar
+          isOpen={isOpen}
+          message={msg}
+          variant={variant}
+          close={closeSnackbar}
+        />
       </CardWrapper>
-    )
-  }
+    );
+  };
 
   return (
-    <Page title='Create - NFT'>
-      <Container maxWidth='md' sx={{ marginBottom: '3vh' }}>
-        
+    <Page title="Create - NFT">
+      <Container maxWidth="md" sx={{ marginBottom: '3vh' }}>
         <Stack spacing={2} marginBottom={3} marginTop={3}>
-          <Typography variant="h4" >
-            Create New BRC20 Token
-          </Typography>
-          <Typography variant='caption'>Name</Typography>
-          <TextField required placeholder='Token Name' margin='dense'
+          <Typography variant="h4">Create New BRC20 Token</Typography>
+          <Typography variant="caption">Name</Typography>
+          <TextField
+            required
+            placeholder="Token Name"
+            margin="dense"
             onChange={(e) => {
-              setTokenName(e.target.value)
+              setTokenName(e.target.value);
             }}
             value={tokenName}
             sx={{
               '&.MuiTextField-root': {
                 marginTop: 1
               }
-            }} />
+            }}
+          />
         </Stack>
         <Stack spacing={2} marginBottom={3}>
-          <Typography variant='caption'>Symbol</Typography>
+          <Typography variant="caption">Symbol</Typography>
           <TextField
-            required placeholder='Token Symbol'
-            margin='dense'
+            required
+            placeholder="Token Symbol"
+            margin="dense"
             onChange={(e) => {
-              setPrice(e.target.value)
+              setPrice(e.target.value);
             }}
             value={price}
             sx={{
               '&.MuiTextField-root': {
                 marginTop: 1
               }
-            }} />
+            }}
+          />
         </Stack>
         <FormControl>
           <RadioGroup
@@ -283,25 +298,35 @@ function Create(){
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
             value={codeType}
-            onChange={(e) => {setCodeType(e.target.value)}}
+            onChange={(e) => {
+              setCodeType(e.target.value);
+            }}
           >
-            <FormControlLabel value="Template" control={<Radio />} label="Template" />
-            <FormControlLabel value="Customize" control={<Radio />} label="Customized code" />
+            <FormControlLabel
+              value="Template"
+              control={<Radio />}
+              label="Template"
+            />
+            <FormControlLabel
+              value="Customize"
+              control={<Radio />}
+              label="Customized code"
+            />
           </RadioGroup>
         </FormControl>
 
-        { codeType == "Customize" &&
+        {codeType == 'Customize' && (
           <>
             <Stack spacing={2} marginBottom={3} marginTop={2}>
-              <Typography variant='caption' >Contract code</Typography>
+              <Typography variant="caption">Contract code</Typography>
               <TextField
-                placeholder='Provide a customized contract code'
-                margin='dense'
+                placeholder="Provide a customized contract code"
+                margin="dense"
                 multiline
                 maxRows={4}
                 value={description}
                 onChange={(e) => {
-                  setDescription(e.target.value)
+                  setDescription(e.target.value);
                 }}
                 sx={{
                   '&.MuiTextField-root': {
@@ -312,30 +337,28 @@ function Create(){
                     height: 100,
                     alignItems: 'start'
                   }
-                }} />
+                }}
+              />
             </Stack>
-            
+
             <Stack spacing={2} marginBottom={3}>
-              
-              <Typography variant='caption'>
-                Token Contract files
-              </Typography>
+              <Typography variant="caption">Token Contract files</Typography>
               <NFTUploader />
             </Stack>
           </>
-        }
+        )}
         <Stack spacing={2} marginBottom={3} marginTop={3} direction="row">
           <Button
-            sx={{ padding: 1, width:'35%' }}
+            sx={{ padding: 1, width: '35%' }}
             // onClick={() => mintNFT(tokenuri)}
-            variant='contained'
+            variant="contained"
           >
             Create
           </Button>
           <Button
-            sx={{ padding: 1, width:'35%' }}
+            sx={{ padding: 1, width: '35%' }}
             onClick={() => listNFT(tokenid)}
-            variant='contained'
+            variant="contained"
           >
             List Token
           </Button>
@@ -355,7 +378,7 @@ function Create(){
               <h3>
                 See the transaction on
                 <a href={show.link} target="_blank" rel="noreferrer">
-                  {" "}
+                  {' '}
                   Matle Explorer
                 </a>
               </h3>
@@ -375,18 +398,18 @@ function Create(){
           </Modal.Body>
         </Modal>
       </div>
-    </Page >
+    </Page>
   );
 }
 const CardWrapper = styled.div`
-    border: dashed 3px;
-    border-radius: 5px;
-    padding: 5px;
-    width: fit-content;
-    &:hover {
-        cursor: pointer;
-    }
-`
+  border: dashed 3px;
+  border-radius: 5px;
+  padding: 5px;
+  width: fit-content;
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const CardOverlay = styled.div`
 display: flex;
@@ -403,4 +426,4 @@ display: flex;
     opacity: 0.6;
   }
   }
-`
+`;

@@ -52,7 +52,7 @@ const colors = {
   },
   layout: {
     general: {
-      bodyBg: '#ffffff', // '#f2f5f9'
+      bodyBg: '#ffffff' // '#f2f5f9'
     },
     sidebar: {
       background: themeColors.white,
@@ -506,7 +506,7 @@ export const PureLightTheme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          color: colors.alpha.black[50],
+          color: colors.alpha.black[50]
         },
         colorSecondary: {
           background: colors.alpha.black[5],
@@ -521,7 +521,7 @@ export const PureLightTheme = createTheme({
           paddingRight: '5px'
         },
         icon: {
-          color: colors.alpha.black[30],
+          color: colors.alpha.black[30]
         },
         deleteIcon: {
           color: colors.alpha.black[50],
@@ -796,7 +796,7 @@ export const PureLightTheme = createTheme({
           background: '#F4F5FB',
           padding: 0,
           border: '1px solid #E0E7EC'
-        },
+        }
         // elevation0: {
         //   boxShadow: 'none'
         // },
@@ -888,7 +888,7 @@ export const PureLightTheme = createTheme({
         indicator: {
           height: 38,
           minHeight: 38,
-          borderRadius: 6,
+          borderRadius: 6
           // border: '1px solid ' + colors.primary.dark,
           // boxShadow: '0px 2px 10px ' + colors.primary.light
         },
@@ -1055,7 +1055,7 @@ export const PureLightTheme = createTheme({
           // color: colors.alpha.black[70],
           // background: 'inherit'
           background: alpha(colors.layout.general.bodyBg, 0)
-        },
+        }
       }
     },
     MuiAlert: {
@@ -1122,12 +1122,15 @@ export const PureLightTheme = createTheme({
     },
     MuiPopover: {
       defaultProps: {
-        disableScrollLock: true, keepMounted: true, disablePortal: true
+        disableScrollLock: true,
+        keepMounted: true,
+        disablePortal: true
       }
     },
     MuiPopper: {
       defaultProps: {
-        keepMounted: true, disablePortal: true
+        keepMounted: true,
+        disablePortal: true
       }
     },
     MuiTooltip: {
@@ -1266,11 +1269,11 @@ export const PureLightTheme = createTheme({
             fontWeight: 600,
             fontSize: 28,
             [theme.breakpoints.up('md')]: {
-              fontSize: 32,
+              fontSize: 32
             },
             [theme.breakpoints.up('lg')]: {
-              fontSize: 40,
-            },
+              fontSize: 40
+            }
           })
         },
         {
@@ -1279,8 +1282,8 @@ export const PureLightTheme = createTheme({
             fontWeight: 600,
             fontSize: 18,
             [theme.breakpoints.up('md')]: {
-              fontSize: 24,
-            },
+              fontSize: 24
+            }
           })
         },
         {
@@ -1291,8 +1294,8 @@ export const PureLightTheme = createTheme({
             lineHeight: 1.4,
             color: colors.alpha.black[100],
             [theme.breakpoints.up('md')]: {
-              fontSize: 20,
-            },
+              fontSize: 20
+            }
           })
         },
         {
@@ -1302,8 +1305,8 @@ export const PureLightTheme = createTheme({
             fontSize: 12,
             color: colors.alpha.black[50],
             [theme.breakpoints.up('sm')]: {
-              fontSize: 16,
-            },
+              fontSize: 16
+            }
           })
         },
         {
@@ -1313,11 +1316,11 @@ export const PureLightTheme = createTheme({
             fontSize: 14,
             color: colors.alpha.black[100],
             [theme.breakpoints.up('sm')]: {
-              fontSize: 20,
-            },
+              fontSize: 20
+            }
           })
         }
-      ],
+      ]
     }
   },
   shape: {
@@ -1381,7 +1384,7 @@ export const PureLightTheme = createTheme({
     },
     s6: {
       fontWeight: 500,
-      fontSize: 14,
+      fontSize: 14
       // color: colors.alpha.black[100]
     },
     s7: {
@@ -1408,7 +1411,7 @@ export const PureLightTheme = createTheme({
     },
     s11: {
       fontWeight: 400,
-      fontSize: 12,
+      fontSize: 12
     },
     s12: {
       fontWeight: 400,
@@ -1431,7 +1434,7 @@ export const PureLightTheme = createTheme({
     },
     h2b: {
       fontSize: '1rem',
-      lineHeight: '1.5rem',
+      lineHeight: '1.5rem'
     },
     h3: {
       fontWeight: 700,

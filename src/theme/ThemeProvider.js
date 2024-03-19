@@ -6,23 +6,21 @@ import { themeCreator } from './base';
 import { StylesProvider } from '@mui/styles';
 
 const ThemeProviderWrapper = (props) => {
-    const [isMounted, setIsMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false);
 
-    const { darkMode } = useContext(AppContext);
-    
-    const theme = themeCreator(darkMode);
+  const { darkMode } = useContext(AppContext);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-    
-    return (
-        <StylesProvider injectFirst>
-            <ThemeProvider theme={theme}>
-                {isMounted && props.children}
-            </ThemeProvider>
-        </StylesProvider>
-    );
+  const theme = themeCreator(darkMode);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return (
+    <StylesProvider injectFirst>
+      <ThemeProvider theme={theme}>{isMounted && props.children}</ThemeProvider>
+    </StylesProvider>
+  );
 };
 
 export default ThemeProviderWrapper;
