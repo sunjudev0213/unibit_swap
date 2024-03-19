@@ -1,34 +1,27 @@
-import axios from "axios";
 import { useRef, useState, useEffect } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-
+import Web3 from "web3";
 // Material
 import { alpha, Avatar, Badge, Button, Divider, IconButton, Link, MenuItem, Popover, Stack, Typography, Dialog, DialogActions, DialogTitle, styled, Box } from "@mui/material";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import SwapCallsIcon from "@mui/icons-material/SwapCalls";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Web3 from "web3";
 import CloseIcon from "@mui/icons-material/Close";
-// Context
-import { useContext } from "react";
-import { AppContext } from "src/AppContext";
-
 // Iconify
 import { Icon } from "@iconify/react";
 import userLock from "@iconify/icons-fa-solid/user-lock";
-import { getAddress } from "sats-connect";
+// Context
+import { useContext } from "react";
+import { AppContext } from "src/AppContext";
 // Utils
-
-// Components
-
+import { getAddress } from "sats-connect";
+//styles
+import { BootstrapDialog } from "src/utils/styles";
 export default function Wallet() {
     const anchorRef = useRef(null);
-
     const [open, setOpen] = useState(false);
-
     let logoImageUrl = null;
 
     const handleOpen = () => {
@@ -40,11 +33,13 @@ export default function Wallet() {
 
     const handleLogout = () => {
         handleClose();
-        setWalletaccount(null);
+        setWalletAccount(null);
+        setWalletType(WalletTypes.metamask);
     };
 
-    const { darkMode, modalContext } = useContext(AppContext);
-    const { modal, walletaccount, setWalletaccount, showConnectWallet, hideModal } = modalContext;
+    const { modalContext, walletContext, openSnackbar } = useContext(AppContext);
+    const { modal, showConnectWallet, hideModal } = modalContext;
+    const { walletAccount, setWalletAccount, setWalletType, WalletTypes } = walletContext;
     function handleOpenModal() {
         showConnectWallet();
     }
@@ -54,17 +49,17 @@ export default function Wallet() {
     }
     async function connectMetamask() {
         const { ethereum } = window;
-        // keep track of accounts returned
-        let accounts = [];
+        
         if (!ethereum) {
             throw new Error("Metamask is not installed! Go install the extension!");
         }
-
-        accounts = await ethereum.request({
+        // keep track of accounts returned
+        let accounts = await ethereum.request({
             method: "eth_requestAccounts"
         });
         handleCloseWallet();
-        setWalletaccount(accounts[0]);
+        setWalletAccount(accounts[0]);
+        setWalletType(WalletTypes.metamask);
     }
 
     async function connectXverse() {
@@ -77,7 +72,8 @@ export default function Wallet() {
                 }
             },
             onFinish: (response) => {
-                setWalletaccount(response.addresses[0].address);
+                setWalletAccount(response.addresses[0].address);
+                setWalletType(WalletTypes.xverse);
                 //   setPaymentAddress(response.addresses[1].address);
                 //   setOrdinalsPublicKey(response.addresses[0].publicKey);
                 //   setPaymentPublicKey(response.addresses[1].publicKey);
@@ -85,32 +81,36 @@ export default function Wallet() {
             },
             onCancel: (e) => {
                 console.log(e);
+                openSnackbar("Error connecting Xverse Wallet")
             }
         };
-        await getAddress(getAddressOptions);
+        try {
+            await getAddress(getAddressOptions);
+        } catch (error) {
+            console.error("Error while connecting Xverse wallet: ", error);
+            openSnackbar(error.message, "error");          
+        }
     }
 
     async function connectUnisat() {
         const unisat = window.unisat;
-        // keep track of accounts returned
-        let accounts = [];
+       
         if (!unisat) {
-            throw new Error("Unisat is not installed! Go install the extension!");
+            openSnackbar("Unisat is not installed! Go install the extension!", "error");
+            return;
         }
-
-        accounts = await unisat.requestAccounts();
-        handleCloseWallet();
-        setWalletaccount(accounts[0]);
+        try {
+         // keep track of accounts returned
+            let accounts = await unisat.requestAccounts();
+            handleCloseWallet();
+            setWalletAccount(accounts[0]);
+            setWalletType(WalletTypes.unisat)   
+        } catch (error) {
+            console.error("Error while connecting Unisat wallet: ", error);
+            openSnackbar(error.message, "error");
+        }
+         
     }
-
-    const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-        "& .MuiDialogContent-root": {
-            padding: theme.spacing(2)
-        },
-        "& .MuiDialogActions-root": {
-            padding: theme.spacing(1)
-        }
-    }));
 
     function BootstrapDialogTitle(props) {
         const { children, onClose, ...other } = props;
@@ -207,7 +207,7 @@ export default function Wallet() {
                     }
                 }}
             >
-                {walletaccount ? (
+                {walletAccount ? (
                     <>
                         <Link
                             underline="none"
@@ -288,14 +288,14 @@ export default function Wallet() {
                                 rel="noreferrer noopener nofollow"
                             >
                                 <Typography align="center" style={{ wordWrap: "break-word" }} variant="body2" sx={{ width: 180, color: "text.secondary" }}>
-                                    {walletaccount}
+                                    {walletAccount}
                                 </Typography>
                             </Link>
                             <Stack direction="row" spacing={1}>
                                 <Button variant="contained" onClick={handleLogout} size="small">
                                     Logout
                                 </Button>
-                                <CopyToClipboard text={walletaccount} onCopy={() => {}}>
+                                <CopyToClipboard text={walletAccount} onCopy={() => {}}>
                                     <Button variant="outlined" size="small">
                                         Copy
                                     </Button>

@@ -54,7 +54,6 @@
         "is-ipfs": "^6.0.2",
         "next": "12.2.0",
         "next-images": "1.8.4",
-        "notistack": "^2.0.5",
         "numeral": "2.0.6",
         "react": "17.0.2",
         "react-bootstrap": "^2.10.1",

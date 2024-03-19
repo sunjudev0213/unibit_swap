@@ -1,5 +1,4 @@
 import * as React from "react";
-
 // Material
 import { Alert as MuiAlert, Slide, Snackbar } from "@mui/material";
 
@@ -14,15 +13,6 @@ export default function XSnackbar({ isOpen, close, message, variant }) {
         }
         close();
     };
-
-    // <Snackbar
-    //         autoHideDuration={2000}
-    //         anchorOrigin={{ vertical:'top', horizontal:'right' }}
-    //         open={openSnack}
-    //         onClose={handleCloseSnack}
-    //         TransitionComponent={TransitionLeft}
-    //         key={'TransitionLeft'}
-    // ></Snackbar>
 
     return (
         <Snackbar
