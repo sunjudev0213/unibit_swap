@@ -1,5 +1,5 @@
 // Material
-import { Box, styled, Switch, Dialog } from "@mui/material";
+import { Box, styled, Switch, Dialog, AppBar, alpha } from "@mui/material";
 
 export const OverviewWrapper = styled(Box)(
     ({ theme }) => `
@@ -83,3 +83,19 @@ export const yellowButtonStyle = {
     background: "#F8D20F",
     padding: "10px 30px"
 };
+
+export const HeaderWrapper = styled(AppBar)(
+    ({ theme }) => `
+    width: 100%;
+    background-color: ${theme.colors.nav.background};
+    margin-bottom: ${theme.spacing(0)};
+    justify-content: center;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 0px solid ${alpha("#CBCCD2", 0.2)};
+    // position: -webkit-sticky;
+    // position: sticky;
+    // top: 0;
+    // z-index: 1300;
+`
+);

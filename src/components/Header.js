@@ -1,16 +1,7 @@
-import { useState } from "react";
-import { FacebookShareButton, TwitterShareButton } from "react-share";
-import { FacebookIcon, TwitterIcon } from "react-share";
 
 // Material
-import { alpha, styled, useMediaQuery, useTheme, AppBar, Box, Button, Container, Divider, Grid, IconButton, Link, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import { alpha, styled, useMediaQuery, useTheme, AppBar, Box, Button, Container,  IconButton, Link, Toolbar } from "@mui/material";
 
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import SwapCallsIcon from "@mui/icons-material/SwapCalls";
 
 // Iconify Icons
 import { Icon } from "@iconify/react";
@@ -25,22 +16,9 @@ import { AppContext } from "src/AppContext";
 import Logo from "./Logo";
 import Wallet from "./Wallet";
 import HeaderMobileMenu from "./HeaderMobileMenu";
+import NavLink from "./NavLink";
 
-const HeaderWrapper = styled(AppBar)(
-    ({ theme }) => `
-    width: 100%;
-    background-color: ${theme.colors.nav.background};
-    margin-bottom: ${theme.spacing(0)};
-    justify-content: center;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 0px solid ${alpha("#CBCCD2", 0.2)};
-    // position: -webkit-sticky;
-    // position: sticky;
-    // top: 0;
-    // z-index: 1300;
-`
-);
+import { HeaderWrapper } from "src/utils/styles";
 
 export default function Header() {
     const theme = useTheme();
@@ -71,21 +49,11 @@ export default function Header() {
                     >
                         {!isMobile && (
                             <>
-                                <Link underline="none" color="inherit" href={`/`} rel="noreferrer noopener nofollow">
-                                    <Button variant="text">Swap</Button>
-                                </Link>
-                                <Link underline="none" color="inherit" href={`/pool`} rel="noreferrer noopener nofollow">
-                                    <Button variant="text">Liquidity Pool</Button>
-                                </Link>
-                                <Link underline="none" color="inherit" href={`/staking`} rel="noreferrer noopener nofollow">
-                                    <Button variant="text">Staking</Button>
-                                </Link>
-                                <Link underline="none" color="inherit" href={`/create`} rel="noreferrer noopener nofollow">
-                                    <Button variant="text">BRC20</Button>
-                                </Link>
-                                <Link underline="none" color="inherit" href={`https://bridge.unibit.app`} rel="noreferrer noopener nofollow" target="blank">
-                                    <Button variant="text">Bridge</Button>
-                                </Link>
+                                <NavLink link={"/"} text={"Swap"} />
+                                <NavLink link={"/pool"} text={"Liquidity Pool"} />
+                                <NavLink link={"/staking"} text={"Staking"} />
+                                <NavLink link={"/create"} text={"BRC20"} />
+                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external />                                
                             </>
                         )}
 
