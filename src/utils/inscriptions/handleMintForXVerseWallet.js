@@ -1,45 +1,21 @@
 import { createInscription } from "sats-connect";
 import { defaultNetwork } from "../constants";
 // pass toast func() and walletAccount(ordinals address)
-const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
-  // const signMessageOptions = {
-  //   payload: {
-  //     network: {
-  //       type: "Testnet",
-  //     },
-  //     address: 'ordinalsAddress',
-  //     message: "Hello World",
-  //   },
-  //   onFinish: (response) => {
-  //     // signature
-  //     alert(response);
-  //   },
-  //   onCancel: () => alert("Canceled"),
-  // }
-  // await signMessage(signMessageOptions);
+const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {  
+  // prepare payload
+  const payload = {
+    network: {
+      type: defaultNetwork,
+    },
+    contentType: "text/html",
+    content: "My inscription text",
+    payloadType: "PLAIN_TEXT"
+  }
 
-
-  const contentType = "text/html"; 
-  const content = "My inscription text";
-  const payloadType = "PLAIN_TEXT";
-
-  // optional parameters:
-  const appFeeAddress = walletAccount; // the address where the inscription fee should go
-  const appFee = 1500; // the amount of sats that should be sent to the fee address
-  const suggestedMinerFeeRate = 10; // suggest a fee rate for the transaction in sats/byte
+  // send inscription request
   try {
     await createInscription({
-      payload: {
-        network: {
-          type: defaultNetwork,
-        },
-        contentType,
-        content,
-        payloadType,
-        appFeeAddress,
-        appFee,
-        suggestedMinerFeeRate,
-      },
+      payload: payload,
       onFinish: (response) => {
         console.log("Inscription result for xverse wallet: ", response);
         openSnackbar("Inscription cancelled!", "success");
