@@ -129,14 +129,14 @@ export default function Wallet() {
                             rel="noreferrer noopener nofollow"
                         >
                             <Typography align="center" style={{ wordWrap: "break-word" }} variant="body2" sx={{ width: 180, color: "text.secondary" }}>
-                                {walletAccount}
+                                {walletAccount.address}
                             </Typography>
                         </Link>
                         <Stack direction="row" spacing={1}>
                             <Button variant="contained" onClick={handleLogout} size="small">
                                 Logout
                             </Button>
-                            <CopyToClipboard text={walletAccount} onCopy={() => { }}>
+                            <CopyToClipboard text={walletAccount.address} onCopy={() => { }}>
                                 <Button variant="outlined" size="small">
                                     Copy
                                 </Button>

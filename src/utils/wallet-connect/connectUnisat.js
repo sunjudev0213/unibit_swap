@@ -10,9 +10,15 @@ async function connectUnisat(
   try {
       // keep track of accounts returned
       let accounts = await unisat.requestAccounts();
-      console.info("Unisat Wallet: ", accounts);
+      let pubKey = await unisat.getPublicKey();
+      console.info("Unisat Wallet: ", accounts, pubKey);
       handleCloseWallet();
-      setWalletAccount(accounts[0]);
+      setWalletAccount({
+        address: accounts[0],
+        pubKey: pubKey,
+        paymentAddress: "",
+        paymentPublicKey: ""
+      });
       setWalletType(WalletTypes.unisat);
       openSnackbar("Unisat Wallet is connected!", "success");
   } catch (error) {

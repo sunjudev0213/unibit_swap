@@ -15,7 +15,12 @@ async function connectXverse(
       onFinish: (response) => {
           const addresses = response.addresses
           console.info("XVerse Wallet: ", addresses);
-          setWalletAccount(response.addresses[0].address);
+          setWalletAccount({
+            address: response.addresses[0].address,
+            pubKey: response.addresses[0].publicKey,            
+            paymentAddress: response.addresses[1].address,
+            paymentPublicKey: response.addresses[1].publicKey
+          });
           setWalletType(WalletTypes.xverse);
           handleCloseWallet();
           openSnackbar("XVerse Wallet is connected!", "success");

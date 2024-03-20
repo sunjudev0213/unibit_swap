@@ -1,11 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import Decimal from "decimal.js";
-import axios from "axios";
 // Material
-import { Box, MenuItem, Stack, TextField, Typography, Button, Input, IconButton, FormControlLabel, DialogActions, InputAdornment } from "@mui/material";
+import { Box, MenuItem, Stack, TextField, Typography, Button, Input, InputAdornment } from "@mui/material";
 
-import SettingsIcon from "@mui/icons-material/Settings";
 import SwapVerticalCircleIcon from "@mui/icons-material/SwapVerticalCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
@@ -14,18 +12,22 @@ import router_abi from "src/Contracts/router_abi.json";
 import token_abi from "src/Contracts/token_abi.json";
 
 import { DEFAULT_TOKENS } from "src/utils/tokenList";
-import { IOSSwitch, BootstrapDialog } from "src/utils/styles";
+import { BootstrapDialog } from "src/utils/styles";
 import { ADDR_WETH, router_address } from "src/utils/constants";
 import BootstrapDialogTitle from "src/components/common/BootstrapDialogTitle";
+import SwapConnectButton from "src/components/SwapConnectButton"
 
 import { AppContext } from "src/AppContext";
-
+import SwapButton from "./SwapButton";
+//
+import getPrice from "src/utils/swapping/getPrice";
+import getTokeninfo from "src/utils/swapping/getTokenInfo";
+import SwapSetting from "./SwapSetting";
 export default function Swapping() {
-    const { darkMode, openSnackbar, modalContext } = useContext(AppContext);
-    const { walletaccount, showConnectWallet } = modalContext;
-
+    const { darkMode, openSnackbar, modalContext, walletContext } = useContext(AppContext);
+    const { showConnectWallet } = modalContext;
+    const { walletAccount } = walletContext;
     const [slippage, setSlippage] = useState(0.5);
-    const [autoSlippage, setAutoSlippage] = useState(false);
 
     const [tokens, setTokens] = useState(DEFAULT_TOKENS);
     const [select1, setSelect1] = useState(0); // ETH by default
@@ -39,7 +41,6 @@ export default function Swapping() {
 
     const [allowance, setAllowance] = useState(0);
 
-    const [open, setOpen] = useState(false);
     const [openSelect1, setOpenSelect1] = useState(false);
     const [openSelect2, setOpenSelect2] = useState(false);
 
@@ -78,28 +79,14 @@ export default function Swapping() {
         return 0;
     };
 
-    const getPrice = async (name1, name2) => {
-        try {
-            const price_data = await axios.post(`https://min-api.cryptocompare.com/data/price?fsym=${name1}&tsyms=${name2}`);
-            if (price_data) {
-                const price = price_data.data[name2];
-                console.log(price.toString());
-                return price.toString();
-            }
-        } catch (err) {
-            console.log("Error on getting price", err);
-        }
-        return 0;
-    };
-
     const checkPrice = async (amount) => {
         const value = new Decimal(amount || 0).toNumber();
         const token1 = tokens[select1];
         const token2 = tokens[select2];
         const addr1 = token1.address;
         const addr2 = token2.address;
-        const name1 = token1.symbol;
-        const name2 = token2.symbol;
+        let name1 = token1.symbol;
+        let name2 = token2.symbol;
         if (name1 === "BLO") {
             name1 = "USD";
             const price = await getPrice(name1, name2);
@@ -156,24 +143,7 @@ export default function Swapping() {
         setAmount2(amount1);
     };
 
-    const getTokeninfo = async (token) => {
-        const { ethereum } = window;
-        try {
-            const provider = new ethers.providers.Web3Provider(ethereum);
-            const signer = provider.getSigner();
-            const token_contract = new ethers.Contract(token, token_abi, signer);
-            try {
-                const symbol = await token_contract.symbol();
-                const decimal = parseInt(await token_contract.decimals());
-                return [symbol, decimal];
-            } catch (e) {
-                console.log(e);
-                return false;
-            }
-        } catch (e) {
-            console.log("Wallet is not connected", e);
-        }
-    };
+
 
     const swapHandler = async () => {
         // const value = new Decimal(amount || 0).toNumber();
@@ -262,109 +232,7 @@ export default function Swapping() {
         }
     };
 
-    const ConnectButton = () => {
-        return (
-            <Button fullWidth onClick={showConnectWallet} variant="outlined" sx={{ borderRadius: "10px", margin: "20px" }}>
-                <h3>Connect Wallet</h3>
-            </Button>
-        );
-    };
 
-    const swapButton = () => {
-        return (
-            <>
-                {allowance < amount1 ? (
-                    <Button fullWidth onClick={approveHandler} variant="outlined" sx={{ borderRadius: "10px", margin: "20px" }}>
-                        <h3>Approve</h3>
-                    </Button>
-                ) : (
-                    <Button fullWidth onClick={swapHandler} variant="outlined" sx={{ margin: "20px", borderRadius: "10px" }}>
-                        <h3>Exchange</h3>
-                    </Button>
-                )}
-            </>
-        );
-    };
-
-    const settingSlippage = () => {
-        return (
-            <BootstrapDialog open={open} onClose={handleClose} aria-labelledby="customized-dialog-title">
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    <Typography variant="h3">Setting Slippage</Typography>
-                </BootstrapDialogTitle>
-                <Box alignItems="center">
-                    {/* <Typography variant='s1'>Setting Slippage</Typography> */}
-                    <DialogActions>
-                        <Box width="98%" alignItems="center" justifyContent="center" minHeight="300px" minWidth="450px">
-                            <Stack spacing={1}>
-                                <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
-                                    <Typography variant="s1">Automatic Slippage Tolerance</Typography>
-                                    <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} checked={autoSlippage} onChange={autoslippageHandler} />} />
-                                </Stack>
-                                <Stack display="flex" justifyContent="space-between" direction="row">
-                                    <Typography variant="s1">Slippage</Typography>
-                                    <Typography variant="s1" sx={{ mr: 2 }}>
-                                        {slippage === 100 ? "Auto" : `${slippage}%`}
-                                    </Typography>
-                                </Stack>
-                                {slippage === 0.1 && <Typography color="red">Your transaction may be reverted due to low slippage tolerance</Typography>}
-                                <br />
-                                {autoSlippage === false && (
-                                    <Stack display="flex" spacing={2} direction="row" alignItems="center">
-                                        <Box>
-                                            <Button
-                                                onClick={() => {
-                                                    setSlippage(0.1);
-                                                }}
-                                            >
-                                                0.1%
-                                            </Button>
-                                        </Box>
-                                        <Box>
-                                            <Button
-                                                onClick={() => {
-                                                    setSlippage(0.5);
-                                                }}
-                                            >
-                                                0.5%
-                                            </Button>
-                                        </Box>
-                                        <Box>
-                                            <Button
-                                                onClick={() => {
-                                                    setSlippage(1);
-                                                }}
-                                            >
-                                                1.0%
-                                            </Button>
-                                        </Box>
-                                        <Box>
-                                            <Input
-                                                disableUnderline
-                                                onChange={(e) => {
-                                                    setSlippage(e.target.value);
-                                                }}
-                                                placeholder="Custom"
-                                            ></Input>
-                                        </Box>
-                                    </Stack>
-                                )}
-                            </Stack>
-                        </Box>
-                    </DialogActions>
-                </Box>
-            </BootstrapDialog>
-        );
-    };
-
-    const autoslippageHandler = (e) => {
-        if (e.target.checked) {
-            setSlippage(100);
-            setAutoSlippage(true);
-        } else {
-            setAutoSlippage(false);
-        }
-    };
 
     const handleSelect1 = (value) => {
         if (value !== select2) {
@@ -380,13 +248,7 @@ export default function Swapping() {
         setOpenSelect2(false);
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleSearch = (e) => {
         const value = e.target.value;
@@ -438,7 +300,7 @@ export default function Swapping() {
 
     return (
         <Box>
-            <Stack alignItems="center" justifyContent="center" minHeight="90vh">
+            <Stack alignItems="center" justifyContent="center" minHeight="84vh">
                 <Box
                     minWidth="38vw"
                     sx={{
@@ -450,10 +312,8 @@ export default function Swapping() {
                 >
                     <Stack direction="row" display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h3">Unibit Swap</Typography>
-                        <IconButton onClick={handleClickOpen}>
-                            <SettingsIcon />
-                        </IconButton>
-                        {settingSlippage()}
+                        <SwapSetting slippage={slippage} setSlippage={setSlippage}/>
+                        
                     </Stack>
                     <br />
                     <Box>
@@ -704,7 +564,17 @@ export default function Swapping() {
                             </Stack>
                         </Box>
                         <Box display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
-                            {walletaccount ? swapButton() : ConnectButton()}
+                            {
+                            walletAccount
+                            ? 
+                            <SwapButton  
+                                allowance = {allowance}
+                                amount1={amount1}
+                                approveHandler={approveHandler}
+                                swapHandler={swapHandler}
+                            />
+                            : 
+                            <SwapConnectButton showConnectWallet={() => showConnectWallet()} />}
                         </Box>
                     </Box>
                 </Box>

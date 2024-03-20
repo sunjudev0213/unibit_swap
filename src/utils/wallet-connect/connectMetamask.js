@@ -11,7 +11,13 @@ async function connectMetamask(handleCloseWallet, setWalletAccount, setWalletTyp
         method: "eth_requestAccounts"
     });
     handleCloseWallet();
-    setWalletAccount(accounts[0]);
+    console.log("Metamask: ", accounts[0])
+    setWalletAccount({
+      address: accounts[0],
+      pubKey: "",
+      paymentAddress: "",
+      paymentPublicKey: ""
+    });
     setWalletType(WalletTypes.metamask);
     openSnackbar("Metamask Wallet is connected!", "success");
   } catch (error) {
