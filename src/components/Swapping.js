@@ -15,7 +15,7 @@ import { DEFAULT_TOKENS } from "src/utils/tokenList";
 import { BootstrapDialog } from "src/utils/styles";
 import { ADDR_WETH, router_address } from "src/utils/constants";
 import BootstrapDialogTitle from "src/components/common/BootstrapDialogTitle";
-import SwapConnectButton from "src/components/SwapConnectButton"
+import SwapConnectButton from "src/components/SwapConnectButton";
 
 import { AppContext } from "src/AppContext";
 import SwapButton from "./SwapButton";
@@ -70,6 +70,7 @@ export default function Swapping() {
                     return amount;
                 } catch (e) {
                     console.log(e);
+                    openS;
                     return 0;
                 }
             }
@@ -143,8 +144,6 @@ export default function Swapping() {
         setAmount2(amount1);
     };
 
-
-
     const swapHandler = async () => {
         // const value = new Decimal(amount || 0).toNumber();
         const token1 = tokens[select1];
@@ -200,6 +199,7 @@ export default function Swapping() {
                 openSnackbar("Token is not approved yet, Please approve token", "error");
             } else {
                 console.log(e);
+                openSnackbar("Error Occured while exchanging. " + e.message, "error");
             }
         }
     };
@@ -232,8 +232,6 @@ export default function Swapping() {
         }
     };
 
-
-
     const handleSelect1 = (value) => {
         if (value !== select2) {
             setSelect1(value);
@@ -247,8 +245,6 @@ export default function Swapping() {
         }
         setOpenSelect2(false);
     };
-
-
 
     const handleSearch = (e) => {
         const value = e.target.value;
@@ -312,8 +308,7 @@ export default function Swapping() {
                 >
                     <Stack direction="row" display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h3">Unibit Swap</Typography>
-                        <SwapSetting slippage={slippage} setSlippage={setSlippage}/>
-                        
+                        <SwapSetting slippage={slippage} setSlippage={setSlippage} />
                     </Stack>
                     <br />
                     <Box>
@@ -564,17 +559,11 @@ export default function Swapping() {
                             </Stack>
                         </Box>
                         <Box display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
-                            {
-                            walletAccount
-                            ? 
-                            <SwapButton  
-                                allowance = {allowance}
-                                amount1={amount1}
-                                approveHandler={approveHandler}
-                                swapHandler={swapHandler}
-                            />
-                            : 
-                            <SwapConnectButton showConnectWallet={() => showConnectWallet()} />}
+                            {walletAccount ? (
+                                <SwapButton allowance={allowance} amount1={amount1} approveHandler={approveHandler} swapHandler={swapHandler} />
+                            ) : (
+                                <SwapConnectButton showConnectWallet={() => showConnectWallet()} />
+                            )}
                         </Box>
                     </Box>
                 </Box>

@@ -78,3 +78,8 @@ export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     }
 }));
 
+export const yellowButtonStyle = {
+    color: "black",
+    background: "#F8D20F",
+    padding: "10px 30px"
+};

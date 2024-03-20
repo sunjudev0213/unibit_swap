@@ -13,7 +13,7 @@ export function ContextProvider({ children, openSnackbar }) {
     const [loading, setLoading] = useState(false);
     const [darkMode, setDarkMode] = useState(true);
     const [modal, setModal] = useState("");
-    const { walletAccount, walletType, setWalletType, setWalletAccount, WalletTypes} = useWallet();
+    const { walletAccount, walletType, setWalletType, setWalletAccount, WalletTypes } = useWallet();
 
     const toggleTheme = () => {
         window.localStorage.setItem("appTheme", !darkMode);
@@ -38,8 +38,8 @@ export function ContextProvider({ children, openSnackbar }) {
         }
     }, []);
     const modalContext = {
-        modal, 
-        hideModal,       
+        modal,
+        hideModal,
         showConnectWallet,
         showTransactionModal
     };
@@ -49,8 +49,8 @@ export function ContextProvider({ children, openSnackbar }) {
         setWalletAccount,
         walletType,
         setWalletType,
-        WalletTypes,
-    }
+        WalletTypes
+    };
 
     return (
         <AppContext.Provider value={{ toggleTheme, darkMode, setLoading, openSnackbar, modalContext, walletContext }}>

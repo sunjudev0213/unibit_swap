@@ -20,7 +20,7 @@ export default function Wallet() {
     const { modalContext, walletContext, openSnackbar } = useContext(AppContext);
     const { modal, showConnectWallet, hideModal } = modalContext;
     const { walletAccount, setWalletAccount, setWalletType, WalletTypes } = walletContext;
-    const [ open, setOpen ] = useState(false);
+    const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
     let logoImageUrl = null;
     // menu open and close
@@ -55,9 +55,12 @@ export default function Wallet() {
                     <DialogActions>
                         <Box width="98%" alignItems="center" justifyContent="center" minHeight="260px" minWidth="450px">
                             <Stack width="100%" spacing={1} display="flex" alignItems="center" justifyContent="center">
-                                <Button sx={{ width: "85%" }} onClick={async () => {
-                                    await connectMetamask(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
-                                }}>
+                                <Button
+                                    sx={{ width: "85%" }}
+                                    onClick={async () => {
+                                        await connectMetamask(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                    }}
+                                >
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/meta.png" height="50px" />
@@ -65,9 +68,12 @@ export default function Wallet() {
                                         <Typography variant="s1">Metamask</Typography>
                                     </Stack>
                                 </Button>
-                                <Button sx={{ width: "85%" }} onClick={async () => {
-                                    await connectXverse(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
-                                }}>
+                                <Button
+                                    sx={{ width: "85%" }}
+                                    onClick={async () => {
+                                        await connectXverse(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                    }}
+                                >
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/xverse-wallet.svg" height="50px" />
@@ -75,9 +81,12 @@ export default function Wallet() {
                                         <Typography variant="s1">Xverse</Typography>
                                     </Stack>
                                 </Button>
-                                <Button sx={{ width: "85%" }} onClick={async () => {
-                                    await connectUnisat(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
-                                }}>
+                                <Button
+                                    sx={{ width: "85%" }}
+                                    onClick={async () => {
+                                        await connectUnisat(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                    }}
+                                >
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/unisat-wallet.svg" height="50px" />
@@ -96,10 +105,7 @@ export default function Wallet() {
 
     return (
         <>
-            <IconButton
-                ref={anchorRef}
-                onClick={handleOpen}
-            >
+            <IconButton ref={anchorRef} onClick={handleOpen}>
                 <Badge color="primary">
                     {logoImageUrl ? <Avatar variant={accountLogo ? "" : "square"} alt="user" src={logoImageUrl} sx={{ width: 32, height: 32 }} /> : <Icon icon={userLock} />}
                 </Badge>
@@ -136,7 +142,7 @@ export default function Wallet() {
                             <Button variant="contained" onClick={handleLogout} size="small">
                                 Logout
                             </Button>
-                            <CopyToClipboard text={walletAccount.address} onCopy={() => { }}>
+                            <CopyToClipboard text={walletAccount.address} onCopy={() => {}}>
                                 <Button variant="outlined" size="small">
                                     Copy
                                 </Button>

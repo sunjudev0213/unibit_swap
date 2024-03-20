@@ -1,44 +1,38 @@
-import React, { useContext } from 'react'
+import React, { useContext } from "react";
 
 // Material
-import {
-  Button,
-} from "@mui/material";
+import { Button } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
 // Utils
-import handleMintForXVerseWallet from 'src/utils/inscriptions/handleMintForXVerseWallet';
-import handleMintForUnisatWallet from 'src/utils/inscriptions/handleMintForUnisatWallet';
+import handleMintForXVerseWallet from "src/utils/inscriptions/handleMintForXVerseWallet";
+import handleMintForUnisatWallet from "src/utils/inscriptions/handleMintForUnisatWallet";
 
 export default function MintBRC20Button() {
-  const { openSnackbar, walletContext } = useContext(AppContext);
-  const { walletType, walletAccount, WalletTypes} = walletContext;
-  const mintBRC20 = () => {
-    if(walletType === WalletTypes.none) {
-      openSnackbar("Please connect wallet!", "warning");
-      return;
-    }
-    openSnackbar("minting BRC20 token");
-    console.log(walletAccount, walletType);
-    switch (walletType) {
-      case WalletTypes.xverse:
-        handleMintForXVerseWallet(openSnackbar, walletAccount);
-        break;
-      case WalletTypes.unisat:
-        handleMintForUnisatWallet(openSnackbar, walletAccount);
-        break;
-      default:
-        openSnackbar("Minting BRC20 for your wallet type is not supported yet.", "warning");
-    }
-  }
-  
-  return (
-    <Button
-        sx={{ padding: 1, width: "35%" }}
-        onClick={() => mintBRC20()}
-        variant="contained"
-    >
-        Create
-    </Button>
-  )
+    const { openSnackbar, walletContext } = useContext(AppContext);
+    const { walletType, walletAccount, WalletTypes } = walletContext;
+    const mintBRC20 = () => {
+        if (walletType === WalletTypes.none) {
+            openSnackbar("Please connect wallet!", "warning");
+            return;
+        }
+        openSnackbar("minting BRC20 token");
+        console.log(walletAccount, walletType);
+        switch (walletType) {
+            case WalletTypes.xverse:
+                handleMintForXVerseWallet(openSnackbar, walletAccount);
+                break;
+            case WalletTypes.unisat:
+                handleMintForUnisatWallet(openSnackbar, walletAccount);
+                break;
+            default:
+                openSnackbar("Minting BRC20 for your wallet type is not supported yet.", "warning");
+        }
+    };
+
+    return (
+        <Button sx={{ padding: 1, width: "35%" }} onClick={() => mintBRC20()} variant="contained">
+            Create
+        </Button>
+    );
 }
