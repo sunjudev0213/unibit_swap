@@ -13,6 +13,7 @@ async function connectMetamask(handleCloseWallet, setWalletAccount, setWalletTyp
     handleCloseWallet();
     setWalletAccount(accounts[0]);
     setWalletType(WalletTypes.metamask);
+    openSnackbar("Metamask Wallet is connected!", "success");
   } catch (error) {
     console.error("Error while connecting metamask wallet: ", error);
     openSnackbar(error.message, "error");

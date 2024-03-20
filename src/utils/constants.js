@@ -6,3 +6,5 @@ export const WalletTypes = {
   xverse: 2,
   unisat: 3
 }
+
+export const defaultNetwork = "Testnet";

@@ -1,4 +1,5 @@
 import { getAddress } from "sats-connect";
+import { defaultNetwork } from "../constants";
 
 async function connectXverse(
   handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar
@@ -8,7 +9,7 @@ async function connectXverse(
           purposes: ["ordinals", "payment"],
           message: "Address for receiving Ordinals",
           network: {
-              type: process.env.NETWORK
+              type: defaultNetwork
           }
       },
       onFinish: (response) => {
@@ -16,14 +17,11 @@ async function connectXverse(
           console.info("XVerse Wallet: ", addresses);
           setWalletAccount(response.addresses[0].address);
           setWalletType(WalletTypes.xverse);
-          //   setPaymentAddress(response.addresses[1].address);
-          //   setOrdinalsPublicKey(response.addresses[0].publicKey);
-          //   setPaymentPublicKey(response.addresses[1].publicKey);
           handleCloseWallet();
+          openSnackbar("XVerse Wallet is connected!", "success");
       },
       onCancel: (e) => {
-          console.log(e);
-          openSnackbar("Error connecting Xverse Wallet")
+          openSnackbar("Cancelled connecting wallet!", "error");
       }
   };
   try {

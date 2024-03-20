@@ -1,6 +1,7 @@
 import { createInscription } from "sats-connect";
+import { defaultNetwork } from "../constants";
 // pass toast func() and walletAccount(ordinals address)
-export default handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
+const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
   // const signMessageOptions = {
   //   payload: {
   //     network: {
@@ -30,7 +31,7 @@ export default handleMintForXVerseWallet = async (openSnackbar, walletAccount) =
     await createInscription({
       payload: {
         network: {
-          type: process.env.NETWORK,
+          type: defaultNetwork,
         },
         contentType,
         content,
@@ -52,3 +53,5 @@ export default handleMintForXVerseWallet = async (openSnackbar, walletAccount) =
     openSnackbar("Inscription failed with message: " + error.message);
   }
 }
+
+export default handleMintForXVerseWallet;

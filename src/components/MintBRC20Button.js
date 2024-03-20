@@ -1,21 +1,12 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 
 // Material
 import {
-  Container,
-  Stack,
-  TextField,
   Button,
-  Typography,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio
 } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
 // Utils
-import { getAddress, signMessage } from "sats-connect";
 import handleMintForXVerseWallet from 'src/utils/inscriptions/handleMintForXVerseWallet';
 import handleMintForUnisatWallet from 'src/utils/inscriptions/handleMintForUnisatWallet';
 
@@ -40,7 +31,6 @@ export default function MintBRC20Button() {
         openSnackbar("Minting BRC20 for your wallet type is not supported yet.", "warning");
     }
   }
-
   
   return (
     <Button

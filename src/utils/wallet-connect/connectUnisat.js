@@ -13,7 +13,8 @@ async function connectUnisat(
       console.info("Unisat Wallet: ", accounts);
       handleCloseWallet();
       setWalletAccount(accounts[0]);
-      setWalletType(WalletTypes.unisat)
+      setWalletType(WalletTypes.unisat);
+      openSnackbar("Unisat Wallet is connected!", "success");
   } catch (error) {
       console.error("Error while connecting Unisat wallet: ", error);
       openSnackbar(error.message, "error");

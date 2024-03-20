@@ -12,8 +12,10 @@ import { AppContext } from "src/AppContext";
 import connectMetamask from "src/utils/wallet-connect/connectMetamask";
 import connectXverse from "src/utils/wallet-connect/connectXverse";
 import connectUnisat from "src/utils/wallet-connect/connectUnisat";
+
+import BootstrapDialogTitle from "src/components/common/BootstrapDialogTitle";
 //styles
-import { BootstrapDialog, BootstrapDialogTitle } from "src/utils/styles";
+import { BootstrapDialog } from "src/utils/styles";
 export default function Wallet() {
     const { modalContext, walletContext, openSnackbar } = useContext(AppContext);
     const { modal, showConnectWallet, hideModal } = modalContext;
@@ -119,7 +121,6 @@ export default function Wallet() {
                 }}
             >
                 {walletAccount ? (
-
                     <Stack spacing={1} alignItems="center" sx={{ pt: 1, pb: 2 }}>
                         <Link
                             color="inherit"
