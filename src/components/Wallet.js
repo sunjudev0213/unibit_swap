@@ -1,14 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Web3 from "web3";
 // Material
-import { alpha, Avatar, Badge, Button, Divider, IconButton, Link, MenuItem, Popover, Stack, Typography, Dialog, DialogActions, DialogTitle, styled, Box } from "@mui/material";
-import GridOnIcon from "@mui/icons-material/GridOn";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import SwapCallsIcon from "@mui/icons-material/SwapCalls";
-import SettingsIcon from "@mui/icons-material/Settings";
-import CloseIcon from "@mui/icons-material/Close";
+import { alpha, Avatar, Badge, Button, IconButton, Link, MenuItem, Popover, Stack, Typography, DialogActions, Box } from "@mui/material";
 // Iconify
 import { Icon } from "@iconify/react";
 import userLock from "@iconify/icons-fa-solid/user-lock";
@@ -16,30 +9,26 @@ import userLock from "@iconify/icons-fa-solid/user-lock";
 import { useContext } from "react";
 import { AppContext } from "src/AppContext";
 // Utils
-import { getAddress } from "sats-connect";
+import connectMetamask from "src/utils/wallet-connect/connectMetamask";
+import connectXverse from "src/utils/wallet-connect/connectXverse";
+import connectUnisat from "src/utils/wallet-connect/connectUnisat";
 //styles
-import { BootstrapDialog } from "src/utils/styles";
+import { BootstrapDialog, BootstrapDialogTitle } from "src/utils/styles";
 export default function Wallet() {
+    const { modalContext, walletContext, openSnackbar } = useContext(AppContext);
+    const { modal, showConnectWallet, hideModal } = modalContext;
+    const { walletAccount, setWalletAccount, setWalletType, WalletTypes } = walletContext;
+    const [ open, setOpen ] = useState(false);
     const anchorRef = useRef(null);
-    const [open, setOpen] = useState(false);
     let logoImageUrl = null;
-
+    // menu open and close
     const handleOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
-
-    const handleLogout = () => {
-        handleClose();
-        setWalletAccount(null);
-        setWalletType(WalletTypes.metamask);
-    };
-
-    const { modalContext, walletContext, openSnackbar } = useContext(AppContext);
-    const { modal, showConnectWallet, hideModal } = modalContext;
-    const { walletAccount, setWalletAccount, setWalletType, WalletTypes } = walletContext;
+    // modal open and close
     function handleOpenModal() {
         showConnectWallet();
     }
@@ -47,94 +36,12 @@ export default function Wallet() {
         hideModal();
         handleClose();
     }
-    async function connectMetamask() {
-        const { ethereum } = window;
-
-        if (!ethereum) {
-            throw new Error("Metamask is not installed! Go install the extension!");
-        }
-        // keep track of accounts returned
-        let accounts = await ethereum.request({
-            method: "eth_requestAccounts"
-        });
-        handleCloseWallet();
-        setWalletAccount(accounts[0]);
-        setWalletType(WalletTypes.metamask);
-    }
-
-    async function connectXverse() {
-        const getAddressOptions = {
-            payload: {
-                purposes: ["ordinals", "payment"],
-                message: "Address for receiving Ordinals",
-                network: {
-                    type: "Testnet"
-                }
-            },
-            onFinish: (response) => {
-                setWalletAccount(response.addresses[0].address);
-                setWalletType(WalletTypes.xverse);
-                //   setPaymentAddress(response.addresses[1].address);
-                //   setOrdinalsPublicKey(response.addresses[0].publicKey);
-                //   setPaymentPublicKey(response.addresses[1].publicKey);
-                handleCloseWallet();
-            },
-            onCancel: (e) => {
-                console.log(e);
-                openSnackbar("Error connecting Xverse Wallet")
-            }
-        };
-        try {
-            await getAddress(getAddressOptions);
-        } catch (error) {
-            console.error("Error while connecting Xverse wallet: ", error);
-            openSnackbar(error.message, "error");
-        }
-    }
-
-    async function connectUnisat() {
-        const unisat = window.unisat;
-
-        if (!unisat) {
-            openSnackbar("Unisat is not installed! Go install the extension!", "error");
-            return;
-        }
-        try {
-            // keep track of accounts returned
-            let accounts = await unisat.requestAccounts();
-            handleCloseWallet();
-            setWalletAccount(accounts[0]);
-            setWalletType(WalletTypes.unisat)
-        } catch (error) {
-            console.error("Error while connecting Unisat wallet: ", error);
-            openSnackbar(error.message, "error");
-        }
-
-    }
-
-    function BootstrapDialogTitle(props) {
-        const { children, onClose, ...other } = props;
-
-        return (
-            <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-                {children}
-                {onClose ? (
-                    <IconButton
-                        aria-label="close"
-                        onClick={onClose}
-                        sx={{
-                            position: "absolute",
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500]
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                ) : null}
-            </DialogTitle>
-        );
-    }
+    // logout action
+    const handleLogout = () => {
+        handleClose();
+        setWalletAccount(null);
+        setWalletType(WalletTypes.none);
+    };
 
     const ModalWallet = () => {
         return (
@@ -146,7 +53,9 @@ export default function Wallet() {
                     <DialogActions>
                         <Box width="98%" alignItems="center" justifyContent="center" minHeight="260px" minWidth="450px">
                             <Stack width="100%" spacing={1} display="flex" alignItems="center" justifyContent="center">
-                                <Button sx={{ width: "85%" }} onClick={connectMetamask}>
+                                <Button sx={{ width: "85%" }} onClick={async () => {
+                                    await connectMetamask(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                }}>
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/meta.png" height="50px" />
@@ -154,7 +63,9 @@ export default function Wallet() {
                                         <Typography variant="s1">Metamask</Typography>
                                     </Stack>
                                 </Button>
-                                <Button sx={{ width: "85%" }} onClick={connectXverse}>
+                                <Button sx={{ width: "85%" }} onClick={async () => {
+                                    await connectXverse(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                }}>
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/xverse-wallet.svg" height="50px" />
@@ -162,7 +73,9 @@ export default function Wallet() {
                                         <Typography variant="s1">Xverse</Typography>
                                     </Stack>
                                 </Button>
-                                <Button sx={{ width: "85%" }} onClick={connectUnisat}>
+                                <Button sx={{ width: "85%" }} onClick={async () => {
+                                    await connectUnisat(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar);
+                                }}>
                                     <Stack width="100%" display="flex" alignItems="center" justifyContent="space-between" direction="row">
                                         <Icon>
                                             <img src="static/wallet/unisat-wallet.svg" height="50px" />
@@ -184,13 +97,11 @@ export default function Wallet() {
             <IconButton
                 ref={anchorRef}
                 onClick={handleOpen}
-            // onMouseOver={handleOpen}
             >
                 <Badge color="primary">
                     {logoImageUrl ? <Avatar variant={accountLogo ? "" : "square"} alt="user" src={logoImageUrl} sx={{ width: 32, height: 32 }} /> : <Icon icon={userLock} />}
                 </Badge>
             </IconButton>
-
             <Popover
                 open={open}
                 onClose={handleClose}

@@ -24,7 +24,6 @@ import { AppContext } from "src/AppContext";
 // Components
 import Logo from "./Logo";
 import Wallet from "./Wallet";
-import NavSearchBar from "./NavSearchBar";
 
 const HeaderWrapper = styled(AppBar)(
     ({ theme }) => `
@@ -42,22 +41,14 @@ const HeaderWrapper = styled(AppBar)(
 `
 );
 
-export default function Header() {
-    /*
-    xs: 0,
-    mobile: 450,
-    sm: 600,
-    md: 960,
-    lg: 1280,
-    xl: 1840
-    */
+export default function Header() {   
+   
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     const { toggleTheme, darkMode } = useContext(AppContext);
 
     const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
 
     const shareUrl = `https://unibit-swap.vercel.app/`;
     const shareTitle = "BLOXFI is the Best DEX on Arbitrum network";
@@ -80,15 +71,6 @@ export default function Header() {
         <HeaderWrapper position="sticky" enableColorOnDark={true} sx={{ py: 1, opacity: isMobile ? 0.9 : 0.6 }}>
             <Container maxWidth="xl" sx={{ minWidth: "90%" }}>
                 <Toolbar disableGutters>
-                    {/* {fullSearch &&
-                        <NavSearchBar
-                            id='id_search_items_collections_accounts'
-                            placeholder='Search Token and Add Metamask'
-                            type='SEARCH_ITEM_COLLECTION_ACCOUNT'
-                            fullSearch={fullSearch}
-                            setFullSearch={setFullSearch}
-                        />
-                    } */}
 
                     {!fullSearch && (
                         <Box
@@ -101,15 +83,7 @@ export default function Header() {
                             <Logo />
                         </Box>
                     )}
-                    {/* {!fullSearch && !isMobile &&
-                        <NavSearchBar
-                            id='id_search_items_collections_accounts'
-                            placeholder='Search Token and Add Metamask'
-                            type='SEARCH_ITEM_COLLECTION_ACCOUNT'
-                            fullSearch={fullSearch}
-                            setFullSearch={setFullSearch}
-                        />
-                    } */}
+                    
 
                     <Box
                         sx={{

@@ -15,10 +15,10 @@ import {
 import { AppContext } from "src/AppContext";
 //component
 import Page from "src/components/Page";
+import MintBRC20Button from "./MintBRC20Button";
 
 export default function CreateBRC20() {
-  const { openSnackbar, walletContext } = useContext(AppContext);
-  const { walletType, walletAccount, WalletTypes} = walletContext;
+  const { openSnackbar } = useContext(AppContext);
   const [tokenName, setTokenName] = useState("");
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [customCode, setCustomCode] = useState("");
@@ -26,15 +26,7 @@ export default function CreateBRC20() {
   const listBRC20Tokens = () => {
     openSnackbar("listing BRC20 tokens");
   }
-  const mintBRC20 = () => {
-    if(walletType === WalletTypes.metamask) {
-      openSnackbar("Please connect bitcoin wallet!", "warning");
-      return;
-    }
-    openSnackbar("minting BRC20 token");
-    console.log(walletAccount, walletType)
-    // send transaction
-  }
+
   return (
       <Page title="Create">
           <Container maxWidth="md" sx={{ marginBottom: "3vh" }}>
@@ -115,13 +107,7 @@ export default function CreateBRC20() {
                   </>
               )}
               <Stack spacing={2} marginBottom={3} marginTop={3} direction="row">
-                  <Button
-                      sx={{ padding: 1, width: "35%" }}
-                      onClick={() => mintBRC20()}
-                      variant="contained"
-                  >
-                      Create
-                  </Button>
+                  <MintBRC20Button />
                   <Button sx={{ padding: 1, width: "35%" }} onClick={() => listBRC20Tokens()} variant="contained">
                       List Token
                   </Button>
