@@ -57,7 +57,6 @@ export function ContextProvider({ children, openSnackbar }) {
             <Backdrop sx={{ color: "#000", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 <PuffLoader color={"#00AB55"} size={50} />
             </Backdrop>
-
             {children}
         </AppContext.Provider>
     );

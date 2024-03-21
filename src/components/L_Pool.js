@@ -33,7 +33,7 @@ import checkBalanceMetamask from "src/utils/checkBalanceHandlers/checkBalanceMet
 import WalletConnectButton from "./WalletConnectButton";
 
 export function L_pool() {
-    const { openSnackbar, modalContext, walletContext, darkMode } = useContext(AppContext);
+    const { openSnackbar, modalContext, walletContext, darkMode, setLoading } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount } = walletContext;
 
@@ -244,7 +244,7 @@ export function L_pool() {
         }
     }
     const approveHandler = async (token) => {
-        approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback);
+        approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback, setLoading);
     };
 
     const checkPrice = async () => {

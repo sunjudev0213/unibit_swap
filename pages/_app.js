@@ -10,6 +10,7 @@ import { ContextProvider } from "src/AppContext";
 // Components
 import XSnackbar from "src/components/Snackbar";
 import { useSnackbar } from "src/hooks/useSnackbar";
+import NextNProgress from 'nextjs-progressbar';
 
 function getLibrary(provider, connector) {
     return new Web3(provider);
@@ -33,6 +34,7 @@ function BloxifiApp(props) {
                     <ThemeProvider>
                         <SnackbarProvider maxSnack={3}>
                             <CssBaseline />
+                            <NextNProgress />
                             <Component {...pageProps} />
                             <XSnackbar isOpen={isOpen} message={msg} variant={variant} close={closeSnackbar} />
                         </SnackbarProvider>

@@ -26,7 +26,7 @@ import getTokeninfo from "src/utils/swapping/getTokeninfo";
 import { BootstrapDialog } from "src/utils/styles";
 
 export default function Swapping() {
-    const { openSnackbar, modalContext, walletContext, darkMode } = useContext(AppContext);
+    const { openSnackbar, modalContext, walletContext, darkMode, setLoading } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount } = walletContext;
     const [slippage, setSlippage] = useState(0.5);
@@ -212,7 +212,7 @@ export default function Swapping() {
     const approveHandler = async () => {
         const token1 = tokens[select1];
         const addr1 = token1.address;
-        approveHandlerMetamask(addr1, token_abi, router_address, openSnackbar, approveHanderCallback);
+        approveHandlerMetamask(addr1, token_abi, router_address, openSnackbar, approveHanderCallback, setLoading);
     };
 
     const handleSelect1 = (value) => {
