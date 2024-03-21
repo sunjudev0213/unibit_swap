@@ -1,8 +1,8 @@
 // contract address
 export const router_address = "0xb4315e873dBcf96Ffd0acd8EA43f689D8c20fB30"; // swapping contract
 export const router_address_pool = "0x28a1676bcC9b479B49E3c0C6b56e280563D8E47f"; // pool contract
-export const factory_address = "0x1F78A1891383E35BCF89108f40Ae3229372cdC58"; // 
-export const staking_contract_address = "0x89cD5cf20Be7ae54897edAF19658dEe2144b7476" // staking contract
+export const factory_address = "0x1F78A1891383E35BCF89108f40Ae3229372cdC58"; //
+export const staking_contract_address = "0x89cD5cf20Be7ae54897edAF19658dEe2144b7476"; // staking contract
 // token addresses
 export const ADDR_WETH = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
 export const UNIBIT = "0x46d84F7A78D3E5017fd33b990a327F8e2E28f30B";

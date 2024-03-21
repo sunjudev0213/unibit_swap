@@ -1,7 +1,5 @@
-
 // Material
-import { alpha, styled, useMediaQuery, useTheme, AppBar, Box, Button, Container,  IconButton, Link, Toolbar } from "@mui/material";
-
+import { alpha, styled, useMediaQuery, useTheme, AppBar, Box, Button, Container, IconButton, Link, Toolbar } from "@mui/material";
 
 // Iconify Icons
 import { Icon } from "@iconify/react";
@@ -53,7 +51,7 @@ export default function Header() {
                                 <NavLink link={"/pool"} text={"Liquidity Pool"} />
                                 <NavLink link={"/staking"} text={"Staking"} />
                                 <NavLink link={"/create"} text={"BRC20"} />
-                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external />                                
+                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external />
                             </>
                         )}
 

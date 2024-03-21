@@ -96,4 +96,3 @@ export const DEFAULT_TOKENS = [
         logo: "https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/0x6C2C06790b3E3E3c38e12Ee22F8183b37a13EE55/logo.png"
     }
 ];
-

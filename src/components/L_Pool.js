@@ -19,16 +19,7 @@ import factory_abi from "src/Contracts/factory_abi.json";
 import { BootstrapDialog, yellowButtonStyle } from "src/utils/styles";
 import { DEFAULT_TOKENS } from "src/utils/tokenList";
 import getPrice from "src/utils/swapping/getPrice";
-import {
-    router_address_pool as router_address,
-    factory_address,
-    ADDR_WETH as WETH,
-    UNIBIT,
-    USDC,
-    USDT,
-    EU_pair,
-    EB_pair
-} from "src/utils/constants"
+import { router_address_pool as router_address, factory_address, ADDR_WETH as WETH, UNIBIT, USDC, USDT, EU_pair, EB_pair } from "src/utils/constants";
 import checkBalanceMetamask from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
 import WalletConnectButton from "./WalletConnectButton";
 
@@ -138,7 +129,7 @@ export function L_pool() {
         checkBalance(EB_pair).then((amount) => {
             setLiquidity_bal2(amount);
         });
-        return () => { }
+        return () => {};
     }, [add_click]);
 
     useEffect(() => {
@@ -152,7 +143,7 @@ export function L_pool() {
         if (token1 === WETH) {
             setDecimal1(18);
         }
-        return () => { }
+        return () => {};
     }, [token1, setting_click, enable]);
 
     useEffect(() => {
@@ -166,12 +157,12 @@ export function L_pool() {
         if (token2 === WETH) {
             setDecimal2(18);
         }
-        return () => { }
+        return () => {};
     }, [token2, setting_click, enable, walletAccount]);
 
     useEffect(() => {
         checkPrice();
-        return () => { }
+        return () => {};
     }, [amount1, amount2, token1, token2]);
 
     useEffect(() => {
@@ -182,7 +173,7 @@ export function L_pool() {
             });
         });
 
-        return () => { }
+        return () => {};
     }, [liquidity_status, walletAccount]);
 
     const checkBalance = async (token) => {
@@ -242,7 +233,7 @@ export function L_pool() {
         } else {
             // setAllowance2(allowance);
         }
-    }
+    };
     const approveHandler = async (token) => {
         approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback, setLoading);
     };
@@ -459,7 +450,7 @@ export function L_pool() {
                                                     endAdornment: (
                                                         <InputAdornment
                                                             position="end"
-                                                        // onClick={handleClear}
+                                                            // onClick={handleClear}
                                                         ></InputAdornment>
                                                     )
                                                 }}
@@ -620,7 +611,7 @@ export function L_pool() {
                                                     endAdornment: (
                                                         <InputAdornment
                                                             position="end"
-                                                        // onClick={handleClear}
+                                                            // onClick={handleClear}
                                                         ></InputAdornment>
                                                     )
                                                 }}
@@ -743,8 +734,8 @@ export function L_pool() {
                             <Box display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
                                 {allowance1 <= 0 && walletAccount && (
                                     <Button
-                                    sx={yellowButtonStyle}
-                                    variant="contained"
+                                        sx={yellowButtonStyle}
+                                        variant="contained"
                                         onClick={() => {
                                             approveHandler(token1);
                                         }}
@@ -754,8 +745,8 @@ export function L_pool() {
                                 )}
                                 {allowance2 <= 0 && walletAccount && (
                                     <Button
-                                    sx={yellowButtonStyle}
-                                    variant="contained"
+                                        sx={yellowButtonStyle}
+                                        variant="contained"
                                         onClick={() => {
                                             approveHandler(token2);
                                         }}
@@ -765,22 +756,20 @@ export function L_pool() {
                                 )}
                             </Box>
                             <Box display="flex" justifyContent="space-around" alignItems="center" sx={{ mt: 2 }} width="100%">
-                                {
-                                    !walletAccount
-                                        ?
-                                        <WalletConnectButton showConnectWallet={showConnectWallet} />
-                                        : (
-                                            <Button
-                                                fullWidth
-                                                sx={yellowButtonStyle}
-                                                variant="contained"
-                                                onClick={() => {
-                                                    SupplyHandler();
-                                                }}
-                                            >
-                                                Supply
-                                            </Button>
-                                        )}
+                                {!walletAccount ? (
+                                    <WalletConnectButton showConnectWallet={showConnectWallet} />
+                                ) : (
+                                    <Button
+                                        fullWidth
+                                        sx={yellowButtonStyle}
+                                        variant="contained"
+                                        onClick={() => {
+                                            SupplyHandler();
+                                        }}
+                                    >
+                                        Supply
+                                    </Button>
+                                )}
                             </Box>
                         </Stack>
                     </Box>

@@ -10,7 +10,7 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
         tick: "xversetest",
         amt: 1000
     };
-    
+
     // inscription payload
     const payload = {
         network: {

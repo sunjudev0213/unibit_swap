@@ -23,13 +23,15 @@ export default function CreateBRC20() {
     return (
         <Page title="Create">
             <Stack justifyContent="center" alignItems="center" display="flex" minHeight="80vh">
-                <Box maxWidth="md"
+                <Box
+                    maxWidth="md"
                     minWidth="35vw"
                     sx={{
                         borderRadius: "10px",
                         border: darkMode ? "1px solid rgb(255, 255, 255)" : "1px solid rgb(0, 0, 0, 0.3)",
                         padding: "20px 30px"
-                    }}>
+                    }}
+                >
                     <Stack spacing={2} marginBottom={3} marginTop={3}>
                         <Typography variant="h3">Create New BRC20 Token</Typography>
                         <Typography variant="caption">Name</Typography>
@@ -107,17 +109,26 @@ export default function CreateBRC20() {
                         </>
                     )}
                     <Stack display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
-                        {
-                            !walletAccount ?
-                                <WalletConnectButton showConnectWallet={showConnectWallet} />
-                                :
-                                <Stack spacing={2} marginBottom={3} marginTop={3} direction="row" alignItems="center" justifyContent="space-around" display="flex" textAlign="center" width="100%">
-                                    <MintBRC20Button />
-                                    <Button sx={{ padding: 1, width: "35%" }} onClick={() => listBRC20Tokens()} variant="contained">
-                                        List Token
-                                    </Button>
-                                </Stack>
-                        }
+                        {!walletAccount ? (
+                            <WalletConnectButton showConnectWallet={showConnectWallet} />
+                        ) : (
+                            <Stack
+                                spacing={2}
+                                marginBottom={3}
+                                marginTop={3}
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-around"
+                                display="flex"
+                                textAlign="center"
+                                width="100%"
+                            >
+                                <MintBRC20Button />
+                                <Button sx={{ padding: 1, width: "35%" }} onClick={() => listBRC20Tokens()} variant="contained">
+                                    List Token
+                                </Button>
+                            </Stack>
+                        )}
                     </Stack>
                 </Box>
             </Stack>

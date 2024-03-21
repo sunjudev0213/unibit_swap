@@ -205,10 +205,10 @@ export default function Swapping() {
             }
         }
     };
-    const approveHanderCallback = async() => {
+    const approveHanderCallback = async () => {
         // const allow = await checkAllowance();
         setAllowance(allow);
-    }
+    };
     const approveHandler = async () => {
         const token1 = tokens[select1];
         const addr1 = token1.address;

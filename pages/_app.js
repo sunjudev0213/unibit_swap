@@ -10,7 +10,7 @@ import { ContextProvider } from "src/AppContext";
 // Components
 import XSnackbar from "src/components/Snackbar";
 import { useSnackbar } from "src/hooks/useSnackbar";
-import NextNProgress from 'nextjs-progressbar';
+import NextNProgress from "nextjs-progressbar";
 
 function getLibrary(provider, connector) {
     return new Web3(provider);
@@ -22,7 +22,7 @@ function BloxifiApp(props) {
     return (
         <>
             <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />  
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <link rel="manifest" href="/site.webmanifest" />
                 <title>Unibit Swap</title>
                 <link rel="shortcut icon" href="logo/logo.png" />
