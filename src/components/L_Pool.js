@@ -19,8 +19,8 @@ import factory_abi from "src/Contracts/factory_abi.json";
 import { BootstrapDialog, yellowButtonStyle } from "src/utils/styles";
 import { DEFAULT_TOKENS } from "src/utils/tokenList";
 import getPrice from "src/utils/swapping/getPrice";
-import { 
-    router_address_pool as router_address, 
+import {
+    router_address_pool as router_address,
     factory_address,
     ADDR_WETH as WETH,
     UNIBIT,
@@ -30,6 +30,7 @@ import {
     EB_pair
 } from "src/utils/constants"
 import checkBalanceMetamask from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
+import WalletConnectButton from "./WalletConnectButton";
 
 export function L_pool() {
     const { openSnackbar, modalContext, walletContext, darkMode } = useContext(AppContext);
@@ -130,18 +131,18 @@ export function L_pool() {
     };
 
     useEffect(() => {
-        if(!walletAccount) return;
+        if (!walletAccount) return;
         checkBalance(EU_pair).then((amount) => {
             setLiquidity_bal1(amount);
         });
         checkBalance(EB_pair).then((amount) => {
             setLiquidity_bal2(amount);
         });
-        return () => {}
+        return () => { }
     }, [add_click]);
 
     useEffect(() => {
-        if(!walletAccount) return;
+        if (!walletAccount) return;
         checkBalance(token1).then((amount) => {
             setBal1(amount);
         });
@@ -151,11 +152,11 @@ export function L_pool() {
         if (token1 === WETH) {
             setDecimal1(18);
         }
-        return () => {}
+        return () => { }
     }, [token1, setting_click, enable]);
 
     useEffect(() => {
-        if(!walletAccount) return;
+        if (!walletAccount) return;
         checkBalance(token2).then((amount) => {
             setBal2(amount);
         });
@@ -165,23 +166,23 @@ export function L_pool() {
         if (token2 === WETH) {
             setDecimal2(18);
         }
-        return () => {}
+        return () => { }
     }, [token2, setting_click, enable, walletAccount]);
 
     useEffect(() => {
         checkPrice();
-        return () => {}
+        return () => { }
     }, [amount1, amount2, token1, token2]);
 
     useEffect(() => {
-        if(!walletAccount) return;
+        if (!walletAccount) return;
         checkPair().then(() => {
             checkBalance(pair).then((amount) => {
                 setLiquidity_bal(amount);
             });
         });
-        
-        return () => {}
+
+        return () => { }
     }, [liquidity_status, walletAccount]);
 
     const checkBalance = async (token) => {
@@ -233,7 +234,7 @@ export function L_pool() {
             return 0;
         }
     };
-    const approveHanderCallback = async(token) => {
+    const approveHanderCallback = async (token) => {
         setEnable(!enable);
         const allowance = await checkAllowance(token);
         if (token === token1_address) {
@@ -243,7 +244,7 @@ export function L_pool() {
         }
     }
     const approveHandler = async (token) => {
-        approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback);        
+        approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback);
     };
 
     const checkPrice = async () => {
@@ -400,7 +401,7 @@ export function L_pool() {
                 >
                     Add Liquidity
                 </Button>
-                 {"  "}
+                {"  "}
                 <Button
                     variant="outlined"
                     onClick={() => {
@@ -458,7 +459,7 @@ export function L_pool() {
                                                     endAdornment: (
                                                         <InputAdornment
                                                             position="end"
-                                                            // onClick={handleClear}
+                                                        // onClick={handleClear}
                                                         ></InputAdornment>
                                                     )
                                                 }}
@@ -619,7 +620,7 @@ export function L_pool() {
                                                     endAdornment: (
                                                         <InputAdornment
                                                             position="end"
-                                                            // onClick={handleClear}
+                                                        // onClick={handleClear}
                                                         ></InputAdornment>
                                                     )
                                                 }}
@@ -742,7 +743,8 @@ export function L_pool() {
                             <Box display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
                                 {allowance1 <= 0 && walletAccount && (
                                     <Button
-                                        sx={yellowButtonStyle}
+                                    sx={yellowButtonStyle}
+                                    variant="contained"
                                         onClick={() => {
                                             approveHandler(token1);
                                         }}
@@ -752,7 +754,8 @@ export function L_pool() {
                                 )}
                                 {allowance2 <= 0 && walletAccount && (
                                     <Button
-                                        sx={yellowButtonStyle}
+                                    sx={yellowButtonStyle}
+                                    variant="contained"
                                         onClick={() => {
                                             approveHandler(token2);
                                         }}
@@ -761,22 +764,23 @@ export function L_pool() {
                                     </Button>
                                 )}
                             </Box>
-                            <Box display="flex" justifyContent="space-around" alignItems="center" sx={{ mt: 2 }} width="75%">
-                                {!walletAccount ? (
-                                    <Button fullWidth sx={yellowButtonStyle} onClick={showConnectWallet}>
-                                        Connect Wallet
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        fullWidth
-                                        sx={yellowButtonStyle}
-                                        onClick={() => {
-                                            SupplyHandler();
-                                        }}
-                                    >
-                                        Supply
-                                    </Button>
-                                )}
+                            <Box display="flex" justifyContent="space-around" alignItems="center" sx={{ mt: 2 }} width="100%">
+                                {
+                                    !walletAccount
+                                        ?
+                                        <WalletConnectButton showConnectWallet={showConnectWallet} />
+                                        : (
+                                            <Button
+                                                fullWidth
+                                                sx={yellowButtonStyle}
+                                                variant="contained"
+                                                onClick={() => {
+                                                    SupplyHandler();
+                                                }}
+                                            >
+                                                Supply
+                                            </Button>
+                                        )}
                             </Box>
                         </Stack>
                     </Box>

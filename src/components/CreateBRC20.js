@@ -1,14 +1,17 @@
 import { useState, useContext } from "react";
 // Material
-import { Container, Stack, TextField, Button, Typography, FormControl, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Box, Stack, TextField, Button, Typography, FormControl, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
 //component
 import Page from "src/components/Page";
 import MintBRC20Button from "./MintBRC20Button";
+import WalletConnectButton from "./WalletConnectButton";
 
 export default function CreateBRC20() {
-    const { openSnackbar, darkMode } = useContext(AppContext);
+    const { openSnackbar, darkMode, walletContext, modalContext } = useContext(AppContext);
+    const { walletAccount } = walletContext;
+    const { showConnectWallet } = modalContext;
     const [tokenName, setTokenName] = useState("");
     const [tokenSymbol, setTokenSymbol] = useState("");
     const [customCode, setCustomCode] = useState("");
@@ -20,7 +23,7 @@ export default function CreateBRC20() {
     return (
         <Page title="Create">
             <Stack justifyContent="center" alignItems="center" display="flex" minHeight="80vh">
-                <Container maxWidth="md"
+                <Box maxWidth="md"
                     minWidth="35vw"
                     sx={{
                         borderRadius: "10px",
@@ -28,7 +31,7 @@ export default function CreateBRC20() {
                         padding: "20px 30px"
                     }}>
                     <Stack spacing={2} marginBottom={3} marginTop={3}>
-                        <Typography variant="h4">Create New BRC20 Token</Typography>
+                        <Typography variant="h3">Create New BRC20 Token</Typography>
                         <Typography variant="caption">Name</Typography>
                         <TextField
                             required
@@ -103,13 +106,20 @@ export default function CreateBRC20() {
                             </Stack>
                         </>
                     )}
-                    <Stack spacing={2} marginBottom={3} marginTop={3} direction="row">
-                        <MintBRC20Button />
-                        <Button sx={{ padding: 1, width: "35%" }} onClick={() => listBRC20Tokens()} variant="contained">
-                            List Token
-                        </Button>
+                    <Stack display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
+                        {
+                            !walletAccount ?
+                                <WalletConnectButton showConnectWallet={showConnectWallet} />
+                                :
+                                <Stack spacing={2} marginBottom={3} marginTop={3} direction="row" alignItems="center" justifyContent="space-around" display="flex" textAlign="center" width="100%">
+                                    <MintBRC20Button />
+                                    <Button sx={{ padding: 1, width: "35%" }} onClick={() => listBRC20Tokens()} variant="contained">
+                                        List Token
+                                    </Button>
+                                </Stack>
+                        }
                     </Stack>
-                </Container>
+                </Box>
             </Stack>
         </Page>
     );

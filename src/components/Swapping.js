@@ -12,7 +12,7 @@ import router_abi from "src/Contracts/router_abi.json";
 import token_abi from "src/Contracts/token_abi.json";
 // components
 import BootstrapDialogTitle from "src/components/common/BootstrapDialogTitle";
-import SwapConnectButton from "src/components/SwapConnectButton";
+import WalletConnectButton from "src/components/WalletConnectButton";
 import SwapButton from "./SwapButton";
 import SwapSetting from "./SwapSetting";
 // context
@@ -545,7 +545,7 @@ export default function Swapping() {
                             {walletAccount ? (
                                 <SwapButton allowance={allowance} amount1={amount1} approveHandler={approveHandler} swapHandler={swapHandler} />
                             ) : (
-                                <SwapConnectButton showConnectWallet={() => showConnectWallet()} />
+                                <WalletConnectButton showConnectWallet={showConnectWallet} />
                             )}
                         </Box>
                     </Box>

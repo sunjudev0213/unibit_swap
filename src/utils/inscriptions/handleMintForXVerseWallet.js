@@ -1,5 +1,4 @@
-import { createRepeatInscriptions, signTransaction, createTransaction } from "sats-connect";
-import * as btc from "@scure/btc-signer";
+import { createRepeatInscriptions } from "sats-connect";
 import { defaultNetwork } from "../constants";
 
 // pass toast func() and walletAccount(ordinals address)
@@ -11,55 +10,7 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
         tick: "xversetest",
         amt: 1000
     };
-
-    // sign transaction
-    try {
-        const [error, psbtBase64] = await createTransaction({
-            network: defaultNetwork,
-            paymentAddress: walletAccount.paymentAddress,
-            ordinalsAddress: walletAccount.address,
-            paymentPublicKey: walletAccount.paymentPublicKey,
-            ordinalsPublicKey: walletAccount.pubKey
-        });
-
-        if (error) {
-            openSnackbar("Error creating transaction. Check console for error logs!", "error");
-            console.error("Error creating transaction. ", error);
-            return;
-        }
-        await signTransaction({
-            payload: {
-                network: {
-                    type: defaultNetwork
-                },
-                message: "Sign Transaction",
-                psbtBase64,
-                broadcast: false,
-                inputsToSign: [
-                    {
-                        address: walletAccount,
-                        signingIndexes: [0],
-                        sigHash: btc.SignatureHash.SINGLE | btc.SignatureHash.ANYONECANPAY
-                    },
-                    {
-                        address: walletAccount,
-                        signingIndexes: [1],
-                        sigHash: btc.SignatureHash.SINGLE | btc.SignatureHash.ANYONECANPAY
-                    }
-                ]
-            },
-            onFinish: (response) => {
-                openSnackbar("Signing success!", "success");
-                console.log("Sign result of minting brc20 for xverse wallet: ", response);
-            },
-            onCancel: () => {
-                openSnackbar("Inscription sign cancelled!", "warning");
-            }
-        });
-    } catch (error) {
-        console.log("Error while signing for xverse: ", error);
-        openSnackbar("Inscription failed with message while signing: " + error.message);
-    }
+    
     // inscription payload
     const payload = {
         network: {

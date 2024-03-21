@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-const SwapConnectButton = ({ showConnectWallet }) => {
+const WalletConnectButton = ({ showConnectWallet }) => {
     return (
         <Button
             fullWidth
@@ -15,4 +15,4 @@ const SwapConnectButton = ({ showConnectWallet }) => {
     );
 };
 
-export default SwapConnectButton;
+export default WalletConnectButton;
