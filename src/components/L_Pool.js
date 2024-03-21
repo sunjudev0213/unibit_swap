@@ -19,19 +19,23 @@ import factory_abi from "src/Contracts/factory_abi.json";
 import { BootstrapDialog, yellowButtonStyle } from "src/utils/styles";
 import { DEFAULT_TOKENS } from "src/utils/tokenList";
 import getPrice from "src/utils/swapping/getPrice";
+import { 
+    router_address_pool as router_address, 
+    factory_address,
+    ADDR_WETH as WETH,
+    UNIBIT,
+    USDC,
+    USDT,
+    EU_pair,
+    EB_pair
+} from "src/utils/constants"
+import checkBalanceMetamask from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
 
 export function L_pool() {
-    const { darkMode, openSnackbar, modalContext, walletContext } = useContext(AppContext);
+    const { openSnackbar, modalContext, walletContext, darkMode } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount } = walletContext;
-    const router_address = "0x28a1676bcC9b479B49E3c0C6b56e280563D8E47f";
-    const factory_address = "0x1F78A1891383E35BCF89108f40Ae3229372cdC58";
-    const WETH = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
-    const UNIBIT = "0x46d84F7A78D3E5017fd33b990a327F8e2E28f30B";
-    const USDC = "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8";
-    const USDT = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9";
-    const EU_pair = "0x787Ec456d93dc5046167626184a3FD8161ce944A";
-    const EB_pair = "0x5327cc11527c29a9b90754E3D5eF9dd76027ca3D";
+
     const [token1, setToken1] = useState(WETH);
     const [token2, setToken2] = useState(USDC);
 
@@ -126,15 +130,18 @@ export function L_pool() {
     };
 
     useEffect(() => {
+        if(!walletAccount) return;
         checkBalance(EU_pair).then((amount) => {
             setLiquidity_bal1(amount);
         });
         checkBalance(EB_pair).then((amount) => {
             setLiquidity_bal2(amount);
         });
+        return () => {}
     }, [add_click]);
 
     useEffect(() => {
+        if(!walletAccount) return;
         checkBalance(token1).then((amount) => {
             setBal1(amount);
         });
@@ -144,9 +151,11 @@ export function L_pool() {
         if (token1 === WETH) {
             setDecimal1(18);
         }
+        return () => {}
     }, [token1, setting_click, enable]);
 
     useEffect(() => {
+        if(!walletAccount) return;
         checkBalance(token2).then((amount) => {
             setBal2(amount);
         });
@@ -156,62 +165,27 @@ export function L_pool() {
         if (token2 === WETH) {
             setDecimal2(18);
         }
-    }, [token2, setting_click, enable]);
+        return () => {}
+    }, [token2, setting_click, enable, walletAccount]);
 
     useEffect(() => {
         checkPrice();
+        return () => {}
     }, [amount1, amount2, token1, token2]);
 
     useEffect(() => {
+        if(!walletAccount) return;
         checkPair().then(() => {
             checkBalance(pair).then((amount) => {
                 setLiquidity_bal(amount);
             });
         });
-    }, [liquidity_status]);
+        
+        return () => {}
+    }, [liquidity_status, walletAccount]);
 
     const checkBalance = async (token) => {
-        const { ethereum } = window;
-        try {
-            const accounts = await ethereum.request({ method: "eth_accounts" });
-            const account = accounts[0];
-            const provider = new ethers.providers.Web3Provider(ethereum);
-            const { chainId } = await provider.getNetwork();
-            if (chainId != 42161) {
-                const switchNetwork = await window.ethereum.request({
-                    method: "wallet_switchEthereumChain",
-                    params: [{ chainId: Web3.utils.toHex(42161) }]
-                });
-            }
-            if (token === WETH) {
-                let amountETH = await provider.getBalance(account);
-                amountETH = ethers.utils.formatEther(amountETH);
-                return amountETH;
-            } else {
-                const signer = provider.getSigner();
-                const token_contract = new ethers.Contract(token, token_abi, signer);
-                try {
-                    let amount = (await token_contract.balanceOf(account)).toString();
-                    const decimal = await token_contract.decimals();
-                    if (token === token1) {
-                        setDecimal1(decimal.toString());
-                    } else if (token === token2) {
-                        setDecimal2(decimal.toString());
-                    }
-                    if (token === EU_pair || token === EB_pair) {
-                        return Web3.utils.fromWei(amount);
-                    }
-                    amount = amount / 10 ** decimal;
-                    return amount;
-                } catch (e) {
-                    console.log(e);
-                    return 0;
-                }
-            }
-        } catch (e) {
-            console.log("Wallet is not connected", e);
-            return 0;
-        }
+        await checkBalanceMetamask(token, token_abi, token1, token2);
     };
 
     const checkPair = async () => {
@@ -259,33 +233,17 @@ export function L_pool() {
             return 0;
         }
     };
-
-    const approveHandler = async (token) => {
-        try {
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                const token_contract = new ethers.Contract(token, token_abi, signer);
-                let approve = await token_contract.approve(router_address, "0xffffffffffffffffffffffffffffffffffffff");
-                const approve_receipt = await approve.wait();
-                if (approve_receipt && approve_receipt.blockNumber && approve_receipt.status === 1) {
-                    setEnable(!enable);
-                    openSnackbar("Token Approoval transaction successful", "success");
-                    const allowance = await checkAllowance(token);
-                    if (token === token1_address) {
-                        // setAllowance1(allowance)
-                    } else {
-                        // setAllowance2(allowance);
-                    }
-                }
-            } else {
-                console.log("Object does not exist");
-            }
-        } catch (e) {
-            console.log(e);
-            openSnackbar("Approval transaction failed", "error");
+    const approveHanderCallback = async(token) => {
+        setEnable(!enable);
+        const allowance = await checkAllowance(token);
+        if (token === token1_address) {
+            // setAllowance1(allowance)
+        } else {
+            // setAllowance2(allowance);
         }
+    }
+    const approveHandler = async (token) => {
+        approveHandlerMetamask(token, token_abi, router_address, openSnackbar, approveHanderCallback);        
     };
 
     const checkPrice = async () => {
@@ -315,7 +273,6 @@ export function L_pool() {
             name2 = "USD";
         }
         getPrice(name1, name2).then((value) => {
-            console.log(value);
             if (token1 === UNIBIT) {
                 setAmount2((amount1 * 0.05613) / value);
             } else if (token2 === UNIBIT) {
@@ -436,13 +393,16 @@ export function L_pool() {
                 <Typography variant="h3">Setting Liquidity</Typography>
                 <br />
                 <Button
+                    variant="outlined"
                     onClick={() => {
                         setLiquidity_status(true);
                     }}
                 >
                     Add Liquidity
                 </Button>
+                 {"  "}
                 <Button
+                    variant="outlined"
                     onClick={() => {
                         setLiquidity_status(false);
                     }}
@@ -457,7 +417,8 @@ export function L_pool() {
                             direction="column"
                             justifyContent="space-between"
                             sx={{
-                                background: "#614F1555",
+                                background: "none",
+                                border: darkMode ? "solid 1px rgb(255, 255, 255)" : "solid 1px rgb(0, 0, 0, 0.3)",
                                 borderRadius: "10px",
                                 padding: "20px 20px"
                             }}
@@ -622,7 +583,8 @@ export function L_pool() {
                             alignItems="center"
                             justifyContent="space-between"
                             sx={{
-                                background: "#614F1555",
+                                background: "none",
+                                border: darkMode ? "solid 1px rgb(255, 255, 255)" : "solid 1px rgb(0, 0, 0, 0.3)",
                                 borderRadius: "10px",
                                 padding: "20px 20px",
                                 mt: 1
@@ -682,7 +644,7 @@ export function L_pool() {
                                             ) : (
                                                 <>
                                                     {tokens.map((row, idx) => (
-                                                        <MenuItem key={row.id} value={row.id} spacing={2} onClick={() => handleSelect2(row.id)}>
+                                                        <MenuItem key={idx} value={row.id} spacing={2} onClick={() => handleSelect2(row.id)}>
                                                             <Stack direction="row" alignItems="center">
                                                                 <img style={{ height: 23 }} src={row.logo} />
                                                                 <Typography variant="s1" ml={2}>
@@ -929,7 +891,7 @@ export function L_pool() {
                     minWidth="35vw"
                     sx={{
                         borderRadius: "10px",
-                        border: "2px solid rgb(255, 255, 255)",
+                        border: darkMode ? "2px solid rgb(255, 255, 255)" : "2px solid rgb(0, 0, 0, 0.3)",
                         padding: "20px 30px"
                     }}
                 >

@@ -23,13 +23,10 @@ export default function Swap({}) {
                     opacity: `${darkMode ? 0.5 : 0.7}`
                 }}
             />
-
             <Header />
-
             <Container maxWidth="lg">
                 <CreateBRC20 />
             </Container>
-
             <ScrollToTop />
         </OverviewWrapper>
     );

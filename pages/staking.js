@@ -17,20 +17,16 @@ export default function Staking({}) {
     return (
         <OverviewWrapper>
             <Toolbar id="back-to-top-anchor" />
-
             <BackgroundWrapper
                 style={{
                     backgroundImage: `url(/static/background.png)`,
                     opacity: `${darkMode ? 0.4 : 0.6}`
                 }}
             />
-
             <Header />
-
             <Container maxWidth="lg">
                 <StakingComponent />
             </Container>
-
             <ScrollToTop />
         </OverviewWrapper>
     );

@@ -7,24 +7,26 @@ import { Box, MenuItem, Stack, TextField, Typography, Button, Input, InputAdornm
 import SwapVerticalCircleIcon from "@mui/icons-material/SwapVerticalCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
-
+// abi
 import router_abi from "src/Contracts/router_abi.json";
 import token_abi from "src/Contracts/token_abi.json";
-
-import { DEFAULT_TOKENS } from "src/utils/tokenList";
-import { BootstrapDialog } from "src/utils/styles";
-import { ADDR_WETH, router_address } from "src/utils/constants";
+// components
 import BootstrapDialogTitle from "src/components/common/BootstrapDialogTitle";
 import SwapConnectButton from "src/components/SwapConnectButton";
-
-import { AppContext } from "src/AppContext";
 import SwapButton from "./SwapButton";
-//
-import getPrice from "src/utils/swapping/getPrice";
-import getTokeninfo from "src/utils/swapping/getTokenInfo";
 import SwapSetting from "./SwapSetting";
+// context
+import { AppContext } from "src/AppContext";
+// utils
+import { DEFAULT_TOKENS } from "src/utils/tokenList";
+import { ADDR_WETH, router_address } from "src/utils/constants";
+import getPrice from "src/utils/swapping/getPrice";
+import getTokeninfo from "src/utils/swapping/getTokeninfo";
+// styles
+import { BootstrapDialog } from "src/utils/styles";
+
 export default function Swapping() {
-    const { darkMode, openSnackbar, modalContext, walletContext } = useContext(AppContext);
+    const { openSnackbar, modalContext, walletContext, darkMode } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount } = walletContext;
     const [slippage, setSlippage] = useState(0.5);
@@ -203,33 +205,14 @@ export default function Swapping() {
             }
         }
     };
-
+    const approveHanderCallback = async() => {
+        // const allow = await checkAllowance();
+        setAllowance(allow);
+    }
     const approveHandler = async () => {
         const token1 = tokens[select1];
         const addr1 = token1.address;
-
-        try {
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                const token_contract = new ethers.Contract(addr1, token_abi, signer);
-
-                let approve = await token_contract.approve(router_address, "0xffffffffffffffffffffffffffffffffffffff");
-                const approve_receipt = await approve.wait();
-
-                if (approve_receipt && approve_receipt.blockNumber && approve_receipt.status === 1) {
-                    openSnackbar("Approval transaction successful", "success");
-                    // const allow = await checkAllowance();
-                    setAllowance(allow);
-                }
-            } else {
-                console.log("Object does not exist");
-            }
-        } catch (e) {
-            console.log(e);
-            openSnackbar("Approval transaction failed.", "error");
-        }
+        approveHandlerMetamask(addr1, token_abi, router_address, openSnackbar, approveHanderCallback);
     };
 
     const handleSelect1 = (value) => {
@@ -301,7 +284,7 @@ export default function Swapping() {
                     minWidth="38vw"
                     sx={{
                         borderRadius: "10px",
-                        border: "2px solid rgb(255, 255, 255)",
+                        border: darkMode ? "solid 2px rgb(255, 255, 255)" : "solid 2px rgb(0, 0, 0, 0.3)",
                         padding: "15px 35px",
                         mt: 1
                     }}
@@ -317,7 +300,7 @@ export default function Swapping() {
                             alignItems="center"
                             justifyContent="space-between"
                             sx={{
-                                background: "#614F1555",
+                                border: darkMode ? "solid 1px rgb(255, 255, 255)" : "solid 1px rgb(0, 0, 0, 0.3)",
                                 borderRadius: "10px",
                                 padding: "20px 20px"
                             }}
@@ -443,7 +426,7 @@ export default function Swapping() {
                             alignItems="center"
                             justifyContent="space-between"
                             sx={{
-                                background: "#614F1555",
+                                border: darkMode ? "solid 1px rgb(255, 255, 255)" : "solid 1px rgb(0, 0, 0, 0.3)",
                                 borderRadius: "10px",
                                 padding: "20px 20px"
                             }}

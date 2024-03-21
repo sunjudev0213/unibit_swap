@@ -5,7 +5,7 @@ import { Backdrop } from "@mui/material";
 // Loader
 import { PuffLoader } from "react-spinners";
 
-import { useWallet } from "./components/useWallet";
+import { useWallet } from "./hooks/useWallet";
 
 export const AppContext = createContext({});
 
