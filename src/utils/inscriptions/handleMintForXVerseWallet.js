@@ -1,5 +1,6 @@
 import { createRepeatInscriptions } from "sats-connect";
 import { defaultNetwork } from "../constants";
+import getConfig from "../getConfig";
 
 // pass toast func() and walletAccount(ordinals address)
 const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
@@ -14,7 +15,7 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
     // inscription payload
     const payload = {
         network: {
-            type: defaultNetwork
+            type: getConfig().BitcoinDefaultNetwork.name
         },
         repeat: 1,
         contentType: "application/json",

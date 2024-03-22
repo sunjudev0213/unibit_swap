@@ -8,10 +8,10 @@ import Page from "src/components/Page";
 import WalletConnectButton from "./WalletConnectButton";
 import StakingInput from "./StakingInput";
 // constants
-import { UNIBIT, staking_contract_address } from "src/utils/constants";
-import UNIBIT_ABI from "src/Contracts/token_abi.json";
+import { contractAddresses, contractABIs } from "src/Contracts"
 // Utils
 import approveHandlerMetamask from "src/utils/approveHandlers/approveHandlerMetamask";
+import getConfig from "src/utils/getConfig";
 
 export default function StakingComponent() {
     const { openSnackbar, darkMode, walletContext, modalContext, setLoading } = useContext(AppContext);
@@ -38,8 +38,14 @@ export default function StakingComponent() {
             );
             return false;
         }
+        // check network and switch
+        if(window.ethereum.networkVersion !== getConfig().EVMDefaultNetwork.chainId){
+            //switch to 
+            
+        }
         return true;
     };
+
 
     const stakeHandler = async () => {
         openSnackbar("Still under development", "warning");
@@ -59,7 +65,14 @@ export default function StakingComponent() {
         }
         setLoading(true);
         openSnackbar("Staking");
-        approveHandlerMetamask(UNIBIT, UNIBIT_ABI, staking_contract_address, openSnackbar, mode === "stake" ? stakeHandler : claimHandler, setLoading);
+        approveHandlerMetamask(
+            contractAddresses.tokenContractAddress, 
+            contractABIs.UnibitContractABI, 
+            contractAddresses.stakingContractAddress, 
+            openSnackbar, 
+            mode === "stake" ? stakeHandler : claimHandler, 
+            setLoading
+        );
     };
 
     return (
