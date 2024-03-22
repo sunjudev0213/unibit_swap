@@ -884,7 +884,7 @@ export function L_pool() {
                     minWidth="35vw"
                     sx={{
                         borderRadius: "10px",
-                        border: darkMode ? "2px solid rgb(255, 255, 255)" : "2px solid rgb(0, 0, 0, 0.3)",
+                        border: darkMode ? "1px solid rgb(255, 255, 255)" : "1px solid rgb(0, 0, 0, 0.3)",
                         padding: "20px 30px"
                     }}
                 >

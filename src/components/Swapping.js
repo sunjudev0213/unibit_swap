@@ -284,7 +284,7 @@ export default function Swapping() {
                     minWidth="38vw"
                     sx={{
                         borderRadius: "10px",
-                        border: darkMode ? "solid 2px rgb(255, 255, 255)" : "solid 2px rgb(0, 0, 0, 0.3)",
+                        border: darkMode ? "solid 1px rgb(255, 255, 255)" : "solid 1px rgb(0, 0, 0, 0.3)",
                         padding: "15px 35px",
                         mt: 1
                     }}

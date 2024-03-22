@@ -49,6 +49,14 @@ export default function StakingComponent() {
     };
     const stakeOrClaim = async (mode) => {
         if (!checkWalletType()) return;
+        if (balance === 0) {
+            openSnackbar("Not enough balance to stake.", "warning");
+            return;
+        }
+        if (amountin < 100) {
+            openSnackbar("Should stake at least 100 UIBT", "warning");
+            return;
+        }
         setLoading(true);
         openSnackbar("Staking");
         approveHandlerMetamask(UNIBIT, UNIBIT_ABI, staking_contract_address, openSnackbar, mode === "stake" ? stakeHandler : claimHandler, setLoading);
@@ -60,8 +68,8 @@ export default function StakingComponent() {
                 <Box
                     maxWidth="lg"
                     minWidth="35vw"
-                    px={6}
-                    py={5}
+                    px={4}
+                    py={2}
                     sx={{
                         borderRadius: "10px",
                         border: darkMode ? "1px solid rgb(255, 255, 255)" : "1px solid rgb(0, 0, 0, 0.3)"
@@ -69,6 +77,11 @@ export default function StakingComponent() {
                 >
                     <Typography variant="h3">Unibit Staking</Typography>
                     <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
+                        <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
+                            <Typography variant="h4">Select amount</Typography>
+                            <Typography>Balance: {Math.round(balance * 10000000000) / 10000000000}</Typography>
+                        </Box>
+                        <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
                         <Box
                             p={2}
                             sx={{
@@ -94,17 +107,13 @@ export default function StakingComponent() {
                             </Box>
                         </Box>
 
-                        <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
-                            <Typography variant="h4">Select amount</Typography>
-                            <Typography>Balance: {Math.round(balance * 10000000000) / 10000000000}</Typography>
-                        </Box>
-                        <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
+                        
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (
                             <WalletConnectButton showConnectWallet={showConnectWallet} />
                         ) : (
-                            <Box display="flex" width={"100%"} height={50} justifyContent="space-around">
+                            <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
                                 <Button
                                     variant="outlined"
                                     onClick={() => {
