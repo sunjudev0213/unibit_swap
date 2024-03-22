@@ -24,7 +24,8 @@ if (process.env.Environment === "production") {
 }
 
 // export modules
-export default {
+const modules = {
     contractABIs,
     contractAddresses
 };
+export default modules

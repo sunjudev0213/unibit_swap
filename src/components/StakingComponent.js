@@ -8,15 +8,23 @@ import Page from "src/components/Page";
 import WalletConnectButton from "./WalletConnectButton";
 import StakingInput from "./StakingInput";
 // constants
-import { contractAddresses, contractABIs } from "src/Contracts";
+import contractModules from "src/Contracts";
 // Utils
 import approveHandlerMetamask from "src/utils/approveHandlers/approveHandlerMetamask";
 import getConfig from "src/utils/getConfig";
+import switchNetworkTo from "src/utils/switchNetworkToMetamask";
+import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
+import StakingStatistics from "./StakingStatistics";
 
 export default function StakingComponent() {
+    const { contractAddresses, contractABIs} = contractModules;
+    const { tokenContractAddress, stakingContractAddress } = contractAddresses;
+    const { UnibitContractABI } = contractABIs;
+
     const { openSnackbar, darkMode, walletContext, modalContext, setLoading } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount, walletType, WalletTypes } = walletContext;
+    const defaultNetwork = getConfig().EVMDefaultNetwork;
 
     const [balance, setBalance] = useState(0);
     const [reward, setReward] = useState(0);
@@ -26,7 +34,7 @@ export default function StakingComponent() {
         return () => {};
     }, [walletType]);
 
-    const checkWalletType = () => {
+    const checkWalletType = async () => {
         if (walletType === WalletTypes.xverse || walletType === WalletTypes.unisat) {
             openSnackbar(
                 <div>
@@ -39,8 +47,12 @@ export default function StakingComponent() {
             return false;
         }
         // check network and switch
-        if (window.ethereum.networkVersion !== getConfig().EVMDefaultNetwork.chainId) {
-            //switch to
+        if (walletType === WalletTypes.metamask && window.ethereum.networkVersion !== defaultNetwork.chainId) {
+            //switch to deafault network(Arbitrum Goerli)
+            setLoading(true);
+            await switchNetworkTo(defaultNetwork, openSnackbar, setLoading);
+            const _bal = await checkBalanceForToken(tokenContractAddress, UnibitContractABI, walletAccount.address, openSnackbar, setLoading);
+            setBalance(_bal);
         }
         return true;
     };
@@ -64,9 +76,9 @@ export default function StakingComponent() {
         setLoading(true);
         openSnackbar("Staking");
         approveHandlerMetamask(
-            contractAddresses.tokenContractAddress,
-            contractABIs.UnibitContractABI,
-            contractAddresses.stakingContractAddress,
+            tokenContractAddress,
+            UnibitContractABI,
+            stakingContractAddress,
             openSnackbar,
             mode === "stake" ? stakeHandler : claimHandler,
             setLoading
@@ -93,30 +105,7 @@ export default function StakingComponent() {
                             <Typography>Balance: {Math.round(balance * 10000000000) / 10000000000}</Typography>
                         </Box>
                         <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
-                        <Box
-                            p={2}
-                            sx={{
-                                border: darkMode ? "1px solid rgb(255, 255, 255, 0.5)" : "1px solid rgb(0, 0, 0, 0.3)",
-                                borderRadius: "10px"
-                            }}
-                        >
-                            <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
-                                <Typography variant="h4">APY</Typography>
-                                <Typography>299%</Typography>
-                            </Box>
-                            <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
-                                <Typography variant="h4">Liquidity</Typography>
-                                <Typography>746,540.33</Typography>
-                            </Box>
-                            <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
-                                <Typography variant="h4">Staked</Typography>
-                                <Typography>{balance}</Typography>
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
-                                <Typography variant="h4">Pending rewards</Typography>
-                                <Typography>{balance}</Typography>
-                            </Box>
-                        </Box>
+                        <StakingStatistics balance={balance}/>
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (

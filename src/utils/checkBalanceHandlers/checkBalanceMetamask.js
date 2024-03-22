@@ -50,4 +50,20 @@ const checkBalanceMetamask = async (token, token_abi, token1, token2) => {
     }
 };
 
+export const checkBalanceForToken = async(token_address, token_abi, account, openSnackbar, setLoading) => {
+    try {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const token_contract = new ethers.Contract(token_address, token_abi, signer);
+        let amount = (await token_contract.balanceOf(account)).toString();
+        const decimal = await token_contract.decimals();
+        amount = amount / 10 ** decimal;
+        return amount;  
+    } catch (error) {
+        console.log("Error while getting balance: ", error);
+        openSnackbar("Error occured while checking the balance.", "error");
+    }
+    setLoading(false);
+}
+
 export default checkBalanceMetamask;
