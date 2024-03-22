@@ -9,22 +9,22 @@ import StakingContractABIMain from "src/Contracts/ArbitrumOne/StakingContract.js
 
 // for test net
 let contractABIs = {
-  UnibitContractABI: UnibitContractABI.abi,
-  StakingContractABI: StakingContractABI.abi
-}
+    UnibitContractABI: UnibitContractABI.abi,
+    StakingContractABI: StakingContractABI.abi
+};
 let contractAddresses = addresses;
 
 // check env and update if production
 if (process.env.Environment === "production") {
-  contractABIs = {
-    UnibitContractABI: UnibitContractABIMain.abi,
-    StakingContractABI: StakingContractABIMain.abi
-  }
-  contractAddresses = addressesMain
+    contractABIs = {
+        UnibitContractABI: UnibitContractABIMain.abi,
+        StakingContractABI: StakingContractABIMain.abi
+    };
+    contractAddresses = addressesMain;
 }
 
 // export modules
 export default {
-  contractABIs,
-  contractAddresses
-}
+    contractABIs,
+    contractAddresses
+};
