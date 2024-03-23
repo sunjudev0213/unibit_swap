@@ -201,7 +201,10 @@ export default function Swapping() {
                 openSnackbar("Token is not approved yet, Please approve token", "error");
             } else {
                 console.log(e);
-                openSnackbar("Error Occured while exchanging. " + e.message, "error");
+                openSnackbar(<div style={{ maxWidth: 500 }}>
+                    <p>Error occured. </p>
+                    <p>{e.message}</p>
+                </div>, "error");
             }
         }
     };

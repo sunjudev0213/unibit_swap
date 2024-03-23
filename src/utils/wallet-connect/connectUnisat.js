@@ -21,7 +21,10 @@ async function connectUnisat(handleCloseWallet, setWalletAccount, setWalletType,
         openSnackbar("Unisat Wallet is connected!", "success");
     } catch (error) {
         console.error("Error while connecting Unisat wallet: ", error);
-        openSnackbar(error.message, "error");
+        openSnackbar(<div style={{ maxWidth: 500 }}>
+            <p>Error occured. </p>
+            <p>{error.message}</p>
+        </div>, "error");
     }
 }
 

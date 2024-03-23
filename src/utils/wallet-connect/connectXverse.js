@@ -30,7 +30,10 @@ async function connectXverse(handleCloseWallet, setWalletAccount, setWalletType,
         await getAddress(getAddressOptions);
     } catch (error) {
         console.error("Error while connecting Xverse wallet: ", error);
-        openSnackbar(error.message, "error");
+        openSnackbar(<div style={{ maxWidth: 500 }}>
+            <p>Error occured. </p>
+            <p>{error.message}</p>
+        </div>, "error");
     }
 }
 

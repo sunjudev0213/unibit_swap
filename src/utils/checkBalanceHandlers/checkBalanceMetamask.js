@@ -61,7 +61,10 @@ export const checkBalanceForToken = async(token_address, token_abi, account, ope
         return amount;  
     } catch (error) {
         console.log("Error while getting balance: ", error);
-        openSnackbar("Error occured while checking the balance.", "error");
+        openSnackbar(<div style={{ maxWidth: 500 }}>
+            <p>Error occured. </p>
+            <p>{error.message}</p>
+        </div>, "error");
     }
     setLoading(false);
 }

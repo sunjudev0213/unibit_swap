@@ -15,6 +15,7 @@ import getConfig from "src/utils/getConfig";
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
 import StakingStatistics from "./StakingStatistics";
+import { stakeUIBT } from "src/utils/stakingHandlers";
 
 export default function StakingComponent() {
     const { contractAddresses, contractABIs} = contractModules;
@@ -44,45 +45,63 @@ export default function StakingComponent() {
                 </div>,
                 "warning"
             );
-            return false;
-        }
-        // check network and switch
-        if (walletType === WalletTypes.metamask && window.ethereum.networkVersion !== defaultNetwork.chainId) {
-            //switch to deafault network(Arbitrum Goerli)
-            setLoading(true);
-            await switchNetworkTo(defaultNetwork, openSnackbar, setLoading);
+        } else if (walletType === WalletTypes.metamask) {
+            if (window.ethereum.networkVersion !== defaultNetwork.chainId) {
+                setLoading(true);
+                await switchNetworkTo(defaultNetwork, openSnackbar, setLoading);
+            }
             const _bal = await checkBalanceForToken(tokenContractAddress, UnibitContractABI, walletAccount.address, openSnackbar, setLoading);
             setBalance(_bal);
+            return true;
         }
-        return true;
+        
+        setBalance(0);
+        return false;
     };
 
     const stakeHandler = async () => {
-        openSnackbar("Still under development", "warning");
-    };
-    const claimHandler = async () => {
-        openSnackbar("Still under development", "warning");
-    };
-    const stakeOrClaim = async (mode) => {
-        if (!checkWalletType()) return;
-        if (balance === 0) {
-            openSnackbar("Not enough balance to stake.", "warning");
-            return;
-        }
         if (amountin < 100) {
             openSnackbar("Should stake at least 100 UIBT", "warning");
+            setLoading(false);
+            return;
+        } else if (amountin > balance) {
+            openSnackbar("Can't stake more than you have.", "warning");
+            setLoading(false);
+            return;
+        } else if (balance === 0) {
+            openSnackbar("Not enough balance to stake.", "warning");
+            setLoading(false);
             return;
         }
-        setLoading(true);
-        openSnackbar("Staking");
-        approveHandlerMetamask(
-            tokenContractAddress,
-            UnibitContractABI,
-            stakingContractAddress,
-            openSnackbar,
-            mode === "stake" ? stakeHandler : claimHandler,
-            setLoading
-        );
+        try {
+            await stakeUIBT(amountin.toString());
+        } catch (error) {
+            openSnackbar(<div style={{ maxWidth: 500 }}>
+                <p>Error occured while staking. </p>
+                <p>{error.message}</p>
+            </div>, "error");
+        }
+        setLoading(false);
+    };
+    const claimHandler = async () => {
+        try {
+            
+        } catch (error) {
+            openSnackbar(<div style={{ maxWidth: 500 }}>
+                <p>Error occured while staking. </p>
+                <p>{error.message}</p>
+            </div>, "error");
+        }
+        setLoading(false);
+    };
+    const stakeOrClaim = async (mode) => {
+        if (!checkWalletType()) return;  
+        setLoading(true);      
+        if (mode === "stake") {
+            stakeHandler();
+        } else {
+            claimHandler();
+        }
     };
 
     return (
@@ -102,10 +121,10 @@ export default function StakingComponent() {
                     <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
                         <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
                             <Typography variant="h4">Select amount</Typography>
-                            <Typography>Balance: {Math.round(balance * 10000000000) / 10000000000}</Typography>
+                            <Typography>Balance: {balance}</Typography>
                         </Box>
                         <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
-                        <StakingStatistics balance={balance}/>
+                        <StakingStatistics balance={balance} reward={reward} setReward={setReward}/>
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (

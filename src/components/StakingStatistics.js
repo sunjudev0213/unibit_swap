@@ -4,9 +4,10 @@ import { Box, Typography } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
 // Utils
-import { getDataForStaking } from "src/utils/staking/getStatistics";
+import { getDataForStaking } from "src/utils/stakingHandlers";
+import { ethers } from "ethers";
 
-export default function StakingStatistics({ balance }) {
+export default function StakingStatistics({ balance, reward, setReward }) {
   const { openSnackbar, darkMode, walletContext } = useContext(AppContext);
   const { walletAccount } = walletContext;
   const [APY, setAPY] = useState(0);
@@ -14,10 +15,14 @@ export default function StakingStatistics({ balance }) {
   const [claimed, setClaimed] = useState(0);
   const [earned, setEarned] = useState(0);
   const getDatahandler = async() => {
+    if (!walletAccount) {
+      setStaked(0);
+      setEarned(0);
+      setClaimed(0);
+      return;
+    }
+
     try {
-      const _apy = await getDataForStaking(walletAccount, "apy", balance);
-      setAPY(_apy);
-      if (!walletAccount) return;
       const _staked = await getDataForStaking(walletAccount, "staked");
       setStaked(_staked);
       const _earned = await getDataForStaking(walletAccount, "earned");
@@ -25,7 +30,10 @@ export default function StakingStatistics({ balance }) {
       const _claimed = await getDataForStaking(walletAccount, "withdrawn");
       setClaimed(_claimed);
     } catch (error) {
-      openSnackbar(error.message, "error");
+      openSnackbar(<div style={{ maxWidth: 500 }}>
+        <p>Error occured. </p>
+        <p>{error.message}</p>
+    </div>, "error");
       console.error(error);
     }
   }
@@ -33,6 +41,20 @@ export default function StakingStatistics({ balance }) {
     getDatahandler();
     return () => {}
   }, [balance])
+
+  useEffect(() => {
+    const getAPY = async() => {
+      const _apy = await getDataForStaking(walletAccount, "apy", staked);
+      setAPY(_apy);
+    }
+    getAPY();
+  }, [staked])
+
+  useEffect(() => {
+    setReward(
+      ethers.utils.formatEther(earned) - ethers.utils.formatEther(claimed)
+    )
+  }, [claimed, earned])
 
   return (
     <Box
@@ -44,7 +66,9 @@ export default function StakingStatistics({ balance }) {
     >
         <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">APY</Typography>
-            <Typography>{APY}</Typography>
+            <Typography>{ethers.utils.formatEther(APY)}
+              { balance === 0 && <>(per 100)</>}
+            </Typography>
         </Box>
         <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Liquidity</Typography>
@@ -52,11 +76,11 @@ export default function StakingStatistics({ balance }) {
         </Box>
         <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Staked</Typography>
-            <Typography>{staked}</Typography>
+            <Typography>{ethers.utils.formatEther(staked)}</Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
             <Typography variant="h4">Pending rewards</Typography>
-            <Typography>{earned - claimed}</Typography>
+            <Typography>{ reward }</Typography>
         </Box>
     </Box>
   )

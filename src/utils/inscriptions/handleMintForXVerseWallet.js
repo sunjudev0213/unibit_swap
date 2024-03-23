@@ -41,7 +41,10 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount) => {
         });
     } catch (error) {
         console.log("Error while inscription for xverse: ", error);
-        openSnackbar("Inscription failed with message: " + error.message);
+        openSnackbar(<div style={{ maxWidth: 500 }}>
+            <p>Error occured. </p>
+            <p>{error.message}</p>
+        </div>, "error");
     }
 };
 

@@ -8,8 +8,11 @@ const switchNetworkTo = async(network, openSnackbar, setLoading) => {
         }]
     })
   } catch (error) {
-      openSnackbar("Error occured: " + error.message, "error");
       console.log("Error while switching network: ", error);
+      openSnackbar(<div style={{ maxWidth: 500 }}>
+        <p>Error occured. </p>
+        <p>{error.message}</p>
+    </div>, "error");
   }
   setLoading(false);
 }
