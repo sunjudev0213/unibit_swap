@@ -7,21 +7,21 @@ import { AppContext } from "src/AppContext";
 import { getDataForStaking } from "src/utils/stakingHandlers";
 import { ethers } from "ethers";
 
-export default function StakingStatistics({ balance, reward, setReward }) {
-  const { openSnackbar, darkMode, walletContext } = useContext(AppContext);
+export default function StakingStatistics({ balance, reward, setReward, staked, setStaked }) {
+  const { openSnackbar, darkMode, walletContext, loading, setLoading } = useContext(AppContext);
   const { walletAccount } = walletContext;
+
   const [APY, setAPY] = useState(0);
-  const [staked, setStaked] = useState(0);
   const [claimed, setClaimed] = useState(0);
   const [earned, setEarned] = useState(0);
-  const getDatahandler = async() => {
+  const getDatahandler = async () => {
     if (!walletAccount) {
       setStaked(0);
       setEarned(0);
       setClaimed(0);
       return;
     }
-
+    setLoading(true);
     try {
       const _staked = await getDataForStaking(walletAccount, "staked");
       setStaked(_staked);
@@ -33,17 +33,18 @@ export default function StakingStatistics({ balance, reward, setReward }) {
       openSnackbar(<div style={{ maxWidth: 500 }}>
         <p>Error occured. </p>
         <p>{error.message}</p>
-    </div>, "error");
+      </div>, "error");
       console.error(error);
     }
+    setLoading(false);
   }
   useEffect(() => {
     getDatahandler();
-    return () => {}
+    return () => { }
   }, [balance])
 
   useEffect(() => {
-    const getAPY = async() => {
+    const getAPY = async () => {
       const _apy = await getDataForStaking(walletAccount, "apy", staked);
       setAPY(_apy);
     }
@@ -58,30 +59,36 @@ export default function StakingStatistics({ balance, reward, setReward }) {
 
   return (
     <Box
-        p={2}
-        sx={{
-            border: darkMode ? "1px solid rgb(255, 255, 255, 0.5)" : "1px solid rgb(0, 0, 0, 0.3)",
-            borderRadius: "10px"
-        }}
+      p={2}
+      sx={{
+        border: darkMode ? "1px solid rgb(255, 255, 255, 0.5)" : "1px solid rgb(0, 0, 0, 0.3)",
+        borderRadius: "10px"
+      }}
     >
-        <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
+      {loading ? <h2>Getting data...</h2>
+        :
+        <>
+          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">APY</Typography>
             <Typography>{ethers.utils.formatEther(APY)}
-              { balance === 0 && <>(per 100)</>}
+              {balance === 0 && <>(per 100)</>}
             </Typography>
-        </Box>
-        <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
+          </Box>
+          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Liquidity</Typography>
             <Typography>746,540.33</Typography>
-        </Box>
-        <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
+          </Box>
+          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Staked</Typography>
             <Typography>{ethers.utils.formatEther(staked)}</Typography>
-        </Box>
-        <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
+          </Box>
+          <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
             <Typography variant="h4">Pending rewards</Typography>
-            <Typography>{ reward }</Typography>
-        </Box>
+            <Typography>{reward}</Typography>
+          </Box>
+        </>
+      }
+
     </Box>
   )
 }

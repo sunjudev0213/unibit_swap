@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { BigNumber } from "ethers/lib";
 
 import contractModules from "src/Contracts";
 // Utils
@@ -17,9 +18,8 @@ export const getDataForStaking = async(walletAccount, fetchItem, balance) => {
   } else if (fetchItem === "apy") {
     let param = balance;
     if (balance === 0) {
-      param = 100;
+      param = ethers.utils.parseEther("100");
     }
-    param = ethers.utils.parseEther(param.toString());
     result = (await stakingContract.getAPY(param)).toString();
   } else if (fetchItem === "earned") {
     result = (await stakingContract.earned(walletAccount.address)).toString();
@@ -38,6 +38,24 @@ export const stakeUIBT = async(amountin) => {
   const approve = await tokenContract.approve(stakingContractAddress, ethers.utils.parseEther(amountin));
   await approve.wait();
   // stake
-  const stake = await stakingContract.stake(ethers.utils.parseEther(amountin));
-  await stake.wait();
+  const action = await stakingContract.stake(ethers.utils.parseEther(amountin));
+  await action.wait();
+}
+
+export const unStake = async(amount) => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+   // unstake
+   const action = await stakingContract.withdraw(ethers.utils.parseEther(amount));
+   await action.wait();
+}
+
+export const claimReward = async() => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+   // unstake
+   const action = await stakingContract.claimReward();
+   await action.wait();
 }

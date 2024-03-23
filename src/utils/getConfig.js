@@ -9,7 +9,8 @@ const getConfig = () => {
             metamask: 1,
             xverse: 2,
             unisat: 3
-        }
+        },
+        StakingDefaultAPY: "50"
     };
 
     if (process.env.Environment === "production") {

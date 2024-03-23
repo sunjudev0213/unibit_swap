@@ -1,6 +1,6 @@
 import { getAddress } from "sats-connect";
-
-async function connectXverse(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar) {
+import getConfig from "../getConfig";
+async function connectXverse(handleCloseWallet, setWalletAccount, setWalletType, WalletTypes, openSnackbar) {    
     const getAddressOptions = {
         payload: {
             purposes: ["ordinals", "payment"],
@@ -9,7 +9,7 @@ async function connectXverse(handleCloseWallet, setWalletAccount, setWalletType,
                 type: getConfig().BitcoinDefaultNetwork.name
             }
         },
-        onFinish: (response) => {
+        onFinish: (response) => {            
             const addresses = response.addresses;
             console.info("XVerse Wallet: ", addresses);
             setWalletAccount({

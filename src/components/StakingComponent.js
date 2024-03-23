@@ -1,38 +1,44 @@
 import React, { useState, useContext, useEffect } from "react";
 // Material
-import { Button, Stack, Box, Typography } from "@mui/material";
+import { Button, Stack, Box, Typography, Input } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
+import getConfig from "src/utils/getConfig";
 //component
 import Page from "src/components/Page";
 import WalletConnectButton from "./WalletConnectButton";
 import StakingInput from "./StakingInput";
+import StakingStatistics from "./StakingStatistics";
 // constants
 import contractModules from "src/Contracts";
 // Utils
-import approveHandlerMetamask from "src/utils/approveHandlers/approveHandlerMetamask";
-import getConfig from "src/utils/getConfig";
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
-import StakingStatistics from "./StakingStatistics";
-import { stakeUIBT } from "src/utils/stakingHandlers";
+import { claimReward, stakeUIBT, unStake } from "src/utils/stakingHandlers";
 
 export default function StakingComponent() {
-    const { contractAddresses, contractABIs} = contractModules;
-    const { tokenContractAddress, stakingContractAddress } = contractAddresses;
+    const { contractAddresses, contractABIs } = contractModules;
+    const { tokenContractAddress } = contractAddresses;
     const { UnibitContractABI } = contractABIs;
 
-    const { openSnackbar, darkMode, walletContext, modalContext, setLoading } = useContext(AppContext);
+    const { openSnackbar, darkMode, walletContext, modalContext, loading, setLoading } = useContext(AppContext);
     const { showConnectWallet } = modalContext;
     const { walletAccount, walletType, WalletTypes } = walletContext;
     const defaultNetwork = getConfig().EVMDefaultNetwork;
 
     const [balance, setBalance] = useState(0);
-    const [reward, setReward] = useState(0);
+    const [waleltReady, setWalletReady] = useState(false);
     const [amountin, setAmountin] = useState(0);
+    const [reward, setReward] = useState(0);
+    const [staked, setStaked] = useState(0);
+    const [amountOut, setAmountOut] = useState(0);
     useEffect(() => {
-        checkWalletType();
-        return () => {};
+        const handler = async () => {
+            const ready = await checkWalletType();
+            setWalletReady(ready);
+        }
+        handler();
+        return () => { };
     }, [walletType]);
 
     const checkWalletType = async () => {
@@ -54,7 +60,7 @@ export default function StakingComponent() {
             setBalance(_bal);
             return true;
         }
-        
+
         setBalance(0);
         return false;
     };
@@ -62,17 +68,15 @@ export default function StakingComponent() {
     const stakeHandler = async () => {
         if (amountin < 100) {
             openSnackbar("Should stake at least 100 UIBT", "warning");
-            setLoading(false);
             return;
         } else if (amountin > balance) {
             openSnackbar("Can't stake more than you have.", "warning");
-            setLoading(false);
             return;
         } else if (balance === 0) {
             openSnackbar("Not enough balance to stake.", "warning");
-            setLoading(false);
             return;
         }
+        setLoading(true);
         try {
             await stakeUIBT(amountin.toString());
         } catch (error) {
@@ -84,8 +88,9 @@ export default function StakingComponent() {
         setLoading(false);
     };
     const claimHandler = async () => {
+        setLoading(true);
         try {
-            
+            await claimReward();
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
                 <p>Error occured while staking. </p>
@@ -94,15 +99,23 @@ export default function StakingComponent() {
         }
         setLoading(false);
     };
-    const stakeOrClaim = async (mode) => {
-        if (!checkWalletType()) return;  
-        setLoading(true);      
-        if (mode === "stake") {
-            stakeHandler();
-        } else {
-            claimHandler();
+
+    const unStakeHandler = async () => {
+        if (amountOut > (staked / 1e18)) {
+            openSnackbar("Can not withdraw more than you staked.", "warning");
+            return;
         }
-    };
+        setLoading(true);
+        try {
+            await unStake(amountOut.toString());
+        } catch (error) {
+            openSnackbar(<div style={{ maxWidth: 500 }}>
+                <p>Error occured while staking. </p>
+                <p>{error.message}</p>
+            </div>, "error");
+        }
+        setLoading(false);
+    }
 
     return (
         <Page title="Create">
@@ -124,31 +137,66 @@ export default function StakingComponent() {
                             <Typography>Balance: {balance}</Typography>
                         </Box>
                         <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
-                        <StakingStatistics balance={balance} reward={reward} setReward={setReward}/>
+                        {waleltReady && <StakingStatistics balance={balance} reward={reward} setReward={setReward} staked={staked} setStaked={setStaked} />}
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (
                             <WalletConnectButton showConnectWallet={showConnectWallet} />
                         ) : (
-                            <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
-                                <Button
-                                    variant="outlined"
-                                    onClick={() => {
-                                        stakeOrClaim("stake");
-                                    }}
-                                >
-                                    <h3>Stake UIBT</h3>
-                                </Button>
-                                <Button
-                                    disabled={reward > 0 ? false : true}
-                                    variant="outlined"
-                                    onClick={() => {
-                                        stakeOrClaim("claim");
-                                    }}
-                                >
-                                    <h3>Claim Reward</h3>
-                                </Button>
-                            </Box>
+                            loading ?
+                                <h3>Please wait...</h3>
+                                :
+                                <>
+                                {staked > 0 &&  <Box display="flex" width={"100%"} height={50} mt={1} gap={1}>
+                                        <Input
+                                            fullWidth
+                                            placeholder="0.0"
+                                            value={amountOut}
+                                            onChange={(e) => {
+                                                setAmountOut(e.target.value);
+                                            }}
+                                            disableUnderline
+                                            sx={{
+                                                width: "100%",
+                                                input: {
+                                                    padding: "15px 15px",
+                                                    fontSize: "12px",
+                                                    textAlign: "start",
+                                                    appearance: "none",
+                                                    border: "solid 1px",
+                                                    borderRadius: 1,
+                                                    fontWeight: 700
+                                                }
+                                            }}
+                                        />
+                                        <Button
+                                            variant="outlined"
+                                            onClick={unStakeHandler}
+                                        >
+                                            Unstake
+                                        </Button>
+                                    </Box>} 
+                                   
+
+                                    <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
+
+                                        <Button
+                                            variant="outlined"
+                                            onClick={stakeHandler}
+                                        >
+                                            <h3>Stake UIBT</h3>
+                                        </Button>
+                                        <Button
+                                            disabled={reward > 0 ? false : true}
+                                            variant="outlined"
+                                            onClick={() => {
+                                                claimHandler();
+                                            }}
+                                        >
+                                            <h3>Claim Reward</h3>
+                                        </Button>
+                                    </Box>
+                                </>
                         )}
                     </Stack>
                 </Box>
