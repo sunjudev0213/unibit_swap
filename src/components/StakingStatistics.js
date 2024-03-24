@@ -7,7 +7,7 @@ import { AppContext } from "src/AppContext";
 import { getDataForStaking } from "src/utils/stakingHandlers";
 import { ethers } from "ethers";
 
-export default function StakingStatistics({ balance, reward, setReward, staked, setStaked }) {
+export default function StakingStatistics({ balance, reward, setReward, staked, setStaked, reload }) {
   const { openSnackbar, darkMode, walletContext, loading, setLoading } = useContext(AppContext);
   const { walletAccount } = walletContext;
 
@@ -41,7 +41,7 @@ export default function StakingStatistics({ balance, reward, setReward, staked, 
   useEffect(() => {
     getDatahandler();
     return () => { }
-  }, [balance])
+  }, [balance, reload])
 
   useEffect(() => {
     const getAPY = async () => {

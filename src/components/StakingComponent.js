@@ -32,6 +32,7 @@ export default function StakingComponent() {
     const [reward, setReward] = useState(0);
     const [staked, setStaked] = useState(0);
     const [amountOut, setAmountOut] = useState(0);
+    const [reload, setReload] = useState(0);
     useEffect(() => {
         const handler = async () => {
             const ready = await checkWalletType();
@@ -86,6 +87,7 @@ export default function StakingComponent() {
             </div>, "error");
         }
         setLoading(false);
+        setReload(reload + 1);
     };
     const claimHandler = async () => {
         setLoading(true);
@@ -98,6 +100,7 @@ export default function StakingComponent() {
             </div>, "error");
         }
         setLoading(false);
+        setReload(reload + 1);
     };
 
     const unStakeHandler = async () => {
@@ -115,6 +118,7 @@ export default function StakingComponent() {
             </div>, "error");
         }
         setLoading(false);
+        setReload(reload + 1);
     }
 
     return (
@@ -137,7 +141,7 @@ export default function StakingComponent() {
                             <Typography>Balance: {balance}</Typography>
                         </Box>
                         <StakingInput amountin={amountin} setAmountin={setAmountin} balance={balance} />
-                        {waleltReady && <StakingStatistics balance={balance} reward={reward} setReward={setReward} staked={staked} setStaked={setStaked} />}
+                        {waleltReady && <StakingStatistics balance={balance} reward={reward} setReward={setReward} staked={staked} setStaked={setStaked} reload={reload}/>}
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (
