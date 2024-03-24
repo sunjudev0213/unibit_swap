@@ -40,7 +40,7 @@ export default function StakingComponent() {
         }
         handler();
         return () => { };
-    }, [walletType]);
+    }, [walletType, reload]);
 
     const checkWalletType = async () => {
         if (walletType === WalletTypes.xverse || walletType === WalletTypes.unisat) {
