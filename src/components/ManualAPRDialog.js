@@ -6,7 +6,7 @@ export default function ManualAPRDialog({ open, setOpen, manualAPR, setManualAPR
   return (
     <Dialog open={open} onClose={() => setOpen(false)} >
       <BootstrapDialogTitle id="customized-dialog-title" onClose={() => setOpen(false)}>
-        <Typography variant='h2'>Set APR</Typography>
+        <h2>Set APR</h2>
       </BootstrapDialogTitle>
       <DialogContent style={{ margin: 12 }}>
         <Input fullWidth type='number' value={manualAPR} onChange={(e) => setManualAPR(e.target.value)} />

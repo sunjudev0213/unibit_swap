@@ -15,8 +15,6 @@ import contractModules from "src/Contracts";
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
 import { claimReward, isOwner, setAPR, stakeUIBT, unStake } from "src/utils/stakingHandlers";
-import { ethers } from "ethers";
-import { DialerSip } from "@mui/icons-material";
 import ManualAPRDialog from "./ManualAPRDialog";
 
 export default function StakingComponent() {
@@ -173,7 +171,7 @@ export default function StakingComponent() {
                 >
                     <div style={{ display: "flex", justifyContent: "space-between"}}>
                     <Typography variant="h3">Unibit Staking</Typography>
-                    {isAdmin && <div style={{ alignItems: "center"}}>
+                    {waleltReady && isAdmin && <div style={{ alignItems: "center"}}>
                         
                         <Button variant="outlined" onClick={() => setAPROpen(true)}>Set APR</Button>
                         <ManualAPRDialog open={aprOpen} setOpen={setAPROpen} manualAPR={manualAPR} setManualAPR={setManualAPR} onOK={setAPRHandler}/>

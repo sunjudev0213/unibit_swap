@@ -71,5 +71,6 @@ export const isOwner = async() => {
 
    // unstake
    const result = await stakingContract.isOwner();
+   console.log("isOwner returns: ", result)
    return result;
 }
