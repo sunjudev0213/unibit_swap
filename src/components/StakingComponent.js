@@ -14,7 +14,7 @@ import contractModules from "src/Contracts";
 // Utils
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
-import { claimReward, stakeUIBT, unStake } from "src/utils/stakingHandlers";
+import { claimReward, isOwner, setAPR, stakeUIBT, unStake } from "src/utils/stakingHandlers";
 
 export default function StakingComponent() {
     const { contractAddresses, contractABIs } = contractModules;
@@ -33,6 +33,7 @@ export default function StakingComponent() {
     const [staked, setStaked] = useState(0);
     const [amountOut, setAmountOut] = useState(0);
     const [reload, setReload] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         const handler = async () => {
             const ready = await checkWalletType();
@@ -59,6 +60,7 @@ export default function StakingComponent() {
             }
             const _bal = await checkBalanceForToken(tokenContractAddress, UnibitContractABI, walletAccount.address, openSnackbar, setLoading);
             setBalance(_bal);
+            await checkAdmin();
             return true;
         }
 
@@ -121,6 +123,32 @@ export default function StakingComponent() {
         setReload(reload + 1);
     }
 
+    const setAPRHandler = async() => {
+        try {
+            await setAPR(150);
+        } catch (error) {
+            openSnackbar(<div style={{ maxWidth: 500 }}>
+                <p>Error occured while staking. </p>
+                <p>{error.message}</p>
+            </div>, "error");
+        }
+    }
+
+    const checkAdmin = async() => {
+        try {
+            const res = await isOwner();
+            setIsAdmin(res);
+        } catch (error) { 
+            openSnackbar(<div style={{ maxWidth: 500 }}>
+            <p>Error occured while checking admin. </p>
+            <p>{error.message}</p>
+        </div>, "error");
+            
+        }
+    }
+
+    
+
     return (
         <Page title="Create">
             <Stack justifyContent="center" alignItems="center" display="flex" minHeight="80vh">
@@ -135,6 +163,8 @@ export default function StakingComponent() {
                     }}
                 >
                     <Typography variant="h3">Unibit Staking</Typography>
+                    {isAdmin && <Button variant="outlined" onClick={setAPRHandler}>Manual Set APR</Button>}
+                    
                     <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
                         <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
                             <Typography variant="h4">Select amount</Typography>

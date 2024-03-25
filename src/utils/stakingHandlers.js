@@ -53,3 +53,23 @@ export const claimReward = async() => {
    const action = await stakingContract.claimReward();
    await action.wait();
 }
+
+export const setAPR = async(apr) => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+
+   // unstake
+   const action = await stakingContract.setAPR(apr * 100);
+   await action.wait();
+}
+
+export const isOwner = async() => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+
+   // unstake
+   const result = await stakingContract.isOwner();
+   return result;
+}
