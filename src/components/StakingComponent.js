@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 // Material
-import { Button, Stack, Box, Typography, Input } from "@mui/material";
+import { Button, Stack, Box, Typography, Input, Dialog } from "@mui/material";
 // Context
 import { AppContext } from "src/AppContext";
 import getConfig from "src/utils/getConfig";
@@ -15,6 +15,9 @@ import contractModules from "src/Contracts";
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
 import { claimReward, isOwner, setAPR, stakeUIBT, unStake } from "src/utils/stakingHandlers";
+import { ethers } from "ethers";
+import { DialerSip } from "@mui/icons-material";
+import ManualAPRDialog from "./ManualAPRDialog";
 
 export default function StakingComponent() {
     const { contractAddresses, contractABIs } = contractModules;
@@ -33,6 +36,8 @@ export default function StakingComponent() {
     const [staked, setStaked] = useState(0);
     const [amountOut, setAmountOut] = useState(0);
     const [reload, setReload] = useState(0);
+    const [manualAPR, setManualAPR] = useState(0);
+    const [aprOpen, setAPROpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         const handler = async () => {
@@ -124,26 +129,30 @@ export default function StakingComponent() {
     }
 
     const setAPRHandler = async() => {
+        setLoading(true);
         try {
-            await setAPR(150);
+            await setAPR(manualAPR * 100 );
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while staking. </p>
+                <p>Error occured while setting APR. </p>
                 <p>{error.message}</p>
             </div>, "error");
+            console.log(error)
         }
+        setReload(reload + 1);
+        setLoading(false);
     }
 
     const checkAdmin = async() => {
         try {
             const res = await isOwner();
             setIsAdmin(res);
+            console.log(res);
         } catch (error) { 
             openSnackbar(<div style={{ maxWidth: 500 }}>
             <p>Error occured while checking admin. </p>
             <p>{error.message}</p>
-        </div>, "error");
-            
+        </div>, "error");            
         }
     }
 
@@ -162,8 +171,15 @@ export default function StakingComponent() {
                         border: darkMode ? "1px solid rgb(255, 255, 255)" : "1px solid rgb(0, 0, 0, 0.3)"
                     }}
                 >
+                    <div style={{ display: "flex", justifyContent: "space-between"}}>
                     <Typography variant="h3">Unibit Staking</Typography>
-                    {isAdmin && <Button variant="outlined" onClick={setAPRHandler}>Manual Set APR</Button>}
+                    {isAdmin && <div style={{ alignItems: "center"}}>
+                        
+                        <Button variant="outlined" onClick={() => setAPROpen(true)}>Set APR</Button>
+                        <ManualAPRDialog open={aprOpen} setOpen={setAPROpen} manualAPR={manualAPR} setManualAPR={setManualAPR} onOK={setAPRHandler}/>
+                    </div>}
+                    </div>
+                    
                     
                     <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
                         <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>

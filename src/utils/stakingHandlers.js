@@ -60,7 +60,7 @@ export const setAPR = async(apr) => {
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
 
    // unstake
-   const action = await stakingContract.setAPR(apr * 100);
+   const action = await stakingContract.setAPR(apr);
    await action.wait();
 }
 
