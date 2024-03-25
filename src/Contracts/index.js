@@ -1,7 +1,7 @@
-// testnet address and artifacts
-import addresses from "src/Contracts/ArbitrumGoerli/contract_addresses.json";
-import UnibitContractABI from "src/Contracts/ArbitrumGoerli/UIBT.json";
-import StakingContractABI from "src/Contracts/ArbitrumGoerli/StakingContract.json";
+// testnet address and artifacts --- AribitrumGoerli is not being used now
+import addresses from "src/Contracts/EthereumSepolia/contract_addresses.json";//
+import UnibitContractABI from "src/Contracts/EthereumSepolia/UIBT.json";
+import StakingContractABI from "src/Contracts/EthereumSepolia/StakingContract.json";
 // mainnet
 import addressesMain from "src/Contracts/ArbitrumOne/contract_addresses.json";
 import UnibitContractABIMain from "src/Contracts/ArbitrumOne/UIBT.json";

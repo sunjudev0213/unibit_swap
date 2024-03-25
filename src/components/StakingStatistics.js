@@ -72,7 +72,7 @@ export default function StakingStatistics({ balance, reward, setReward, staked, 
           </Box>
           <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
             <Typography variant="h4">Pending rewards</Typography>
-            <Typography>{reward}</Typography>
+            <Typography>{ethers.utils.formatEther(reward)}</Typography>
           </Box>
         </>
       }
