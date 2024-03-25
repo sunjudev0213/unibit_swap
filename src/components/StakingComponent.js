@@ -179,9 +179,7 @@ export default function StakingComponent() {
                                         >
                                             Unstake
                                         </Button>
-                                    </Box>} 
-                                   
-
+                                    </Box>}
                                     <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
 
                                         <Button

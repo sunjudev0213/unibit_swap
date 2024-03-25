@@ -6,17 +6,19 @@ const { contractAddresses, contractABIs} = contractModules;
 const { stakingContractAddress, tokenContractAddress } = contractAddresses;
 const { StakingContractABI, UnibitContractABI } = contractABIs;
 
-export const getDataForStaking = async(walletAccount, fetchItem) => {
+export const getDataForStaking = async(walletAccount, fetchItem, balance) => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
   let result = "";
   if (fetchItem === "staked") {
-    result = (await stakingContract.getStaked()).toString();
+    result = (await stakingContract.getStaked(walletAccount.address)).toString();
   } else if (fetchItem === "apy") {
-    result = (await stakingContract.getRewardRate()).toString();
+    result = (await stakingContract.getAPR()).toString();
   } else if (fetchItem === "earned") {
     result = (await stakingContract.earned(walletAccount.address)).toString();
+  } else if (fetchItem ===  "withdrawn") {
+    result = (await stakingContract.getClaimed(walletAccount.address)).toString();
   }
   return result;
 }
