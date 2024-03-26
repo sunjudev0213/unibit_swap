@@ -68,7 +68,7 @@ export default function StakingStatistics({ balance, userStaking, setUserStaking
         </>}          
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Staked</Typography>
-            <Typography>{ethers.utils.formatEther(userStaking.balance)}</Typography>
+            <Typography>{ethers.utils.formatEther(userStaking.balance)} ({userStaking.stakingTypes.length} time(s))</Typography>
           </Box>
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Claimed</Typography>
