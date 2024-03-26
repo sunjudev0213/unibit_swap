@@ -44,12 +44,12 @@ export const unStake = async(amount) => {
 }
 
 export const claimReward = async() => {
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const signer = provider.getSigner();
-  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
-   // unstake
-   const action = await stakingContract.claimReward();
-   await action.wait();
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+    // unstake
+    const action = await stakingContract.claimReward();
+    await action.wait();
 }
 
 export const setAPR = async(type, rate) => {

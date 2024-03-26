@@ -24,9 +24,7 @@ export default function StakingStatistics({ balance, userStaking, setUserStaking
       setUserStaking({
         balance: segs[0],
         claimed: segs[1],
-        rewards: segs[2],
-        lockTime: segs[3],
-        stakingType: segs[4]
+        stakingTypes: segs.slice(2),
       });
       const ee = await getDataForStaking(walletAccount, "earned");
       setReward(ee.toString());
@@ -61,11 +59,11 @@ export default function StakingStatistics({ balance, userStaking, setUserStaking
         { userStaking.balance > 0 && <>
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">APR(Daily)</Typography>
-            <Typography>{rates[0].rate / MULTIPLYER}%</Typography>
+            <Typography>{userStaking.stakingTypes.map((type) => rates[type].rate / MULTIPLYER).join("%, ")}%</Typography>
           </Box>          
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Lock Period</Typography>
-            <Typography>{rates[0].period} days</Typography>
+            <Typography>{userStaking.stakingTypes.map((type, idx) => rates[type].period).join(" days, ")} days</Typography>
           </Box>
         </>}          
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>

@@ -20,6 +20,7 @@ import StakingTypeSelect from "./StakingTypeSelect";
 import StakingInputNew from "./StakingInputNew";
 import StakingWelcomePage from "./StakingWelcomePage";
 import { ethers } from "ethers";
+import errorMessageParser from "src/utils/errorMessageParser";
 
 export default function StakingComponent() {
     const { contractAddresses, contractABIs } = contractModules;
@@ -32,7 +33,7 @@ export default function StakingComponent() {
     const defaultNetwork = getConfig().EVMDefaultNetwork;
 
     const [balance, setBalance] = useState(0);
-    const [waleltReady, setWalletReady] = useState(false);
+    const [walletReady, setWalletReady] = useState(false);
     const [amountin, setAmountin] = useState(0);//stake amount
     const [amountOut, setAmountOut] = useState(0);// unstake amount
     const [userStaking, setUserStaking] = useState(null);
@@ -65,14 +66,15 @@ export default function StakingComponent() {
                 "warning"
             );
         } else if (walletType === WalletTypes.metamask) {
+            setLoading(true);
             if (window.ethereum.networkVersion !== defaultNetwork.chainId) {
-                setLoading(true);
                 await switchNetworkTo(defaultNetwork, openSnackbar, setLoading);
             }
             const _bal = await checkBalanceForToken(tokenContractAddress, UnibitContractABI, walletAccount.address, openSnackbar, setLoading);
             setBalance(_bal);
             await getRates();
             await checkAdmin();
+            setLoading(false);
             return true;
         }
 
@@ -97,7 +99,7 @@ export default function StakingComponent() {
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
                 <p>Error occured while staking. </p>
-                <p>{error.message}</p>
+                <p>{errorMessageParser(error.message)}</p>
             </div>, "error");
         }
         setLoading(false);
@@ -109,8 +111,8 @@ export default function StakingComponent() {
             await claimReward();
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while staking. </p>
-                <p>{error.message}</p>
+                <p>Error occured while claiming reward. </p>
+                <p>{errorMessageParser(error.message)}</p>
             </div>, "error");
         }
         setLoading(false);
@@ -127,8 +129,8 @@ export default function StakingComponent() {
             await unStake(amountOut.toString());
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while staking. </p>
-                <p>{error.message}</p>
+                <p>Error occured while withdrawing. </p>
+                <p>{errorMessageParser(error.message)}</p>
             </div>, "error");
         }
         setLoading(false);
@@ -157,7 +159,7 @@ export default function StakingComponent() {
         } catch (error) {
             openSnackbar(<div style={{ maxWidth: 500 }}>
                 <p>Error occured while checking admin. </p>
-                <p>{error.message}</p>
+                <p>{errorMessageParser(error.message)}</p>
             </div>, "error");
         }
     }
@@ -176,7 +178,7 @@ export default function StakingComponent() {
             console.log("Error: ", error);
             openSnackbar(<div style={{ maxWidth: 500 }}>
                 <p>Error occured while getting rates. </p>
-                <p>{error.message}</p>
+                <p>{errorMessageParser(error.message)}</p>
             </div>, "error");
         }
     }
@@ -196,19 +198,20 @@ export default function StakingComponent() {
                 >
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h3">Unibit Staking</Typography>
-                        {waleltReady && isAdmin && <div style={{ alignItems: "center" }}>
+                        <div><Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
+                            <Typography variant="h4"></Typography>
+                            <Typography>Balance: {balance}</Typography>
+                        </Box></div>
+                        {/* {walletReady && isAdmin && <div style={{ alignItems: "center" }}>
 
                             <Button variant="outlined" onClick={() => setAPROpen(true)}>Set APR</Button>
                             <ManualAPRDialog open={aprOpen} setOpen={setAPROpen} manualAPR={manualAPR} setManualAPR={setManualAPR} onOK={setAPRHandler} />
-                        </div>}
+                        </div>} */}
                     </div>
 
-                    {waleltReady ? 
+                    {walletReady && !loading ? 
                     <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
-                        {/* <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
-                            <Typography variant="h4"></Typography>
-                            <Typography>Balance: {balance}</Typography>
-                        </Box> */}
+                        
                         <Box display="flex" justifyContent="space-between" gap={1} textAlign="center" my={1}>
                             <StakingInputNew amountin={amountin}
                                 setAmountin={setAmountin}
@@ -229,7 +232,7 @@ export default function StakingComponent() {
                     </Stack>
                     :
                     <Stack justifyContent="center" alignItems="center" display="flex" sx={{ mt: 3 }}>
-                    <StakingWelcomePage />
+                        <StakingWelcomePage />
                     </Stack>
                     }
                     <Stack justifyContent="center" alignItems="center" display="flex">
@@ -238,7 +241,7 @@ export default function StakingComponent() {
                         ) : (
                             loading ?
                                 <h3>Please wait...</h3>
-                                :
+                                : walletReady &&
                                 <>
                                     {userStaking && userStaking.balance > 0 && <Box display="flex" width={"100%"} justifyContent={"space-between"} height={50} my={2} gap={1}>
                                         <StakingInputNew 
