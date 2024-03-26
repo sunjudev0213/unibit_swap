@@ -11,19 +11,17 @@ export const getDataForStaking = async(walletAccount, fetchItem, balance) => {
   const signer = provider.getSigner();
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
   let result = "";
-  if (fetchItem === "staked") {
-    result = (await stakingContract.getStaked(walletAccount.address)).toString();
-  } else if (fetchItem === "apy") {
-    result = (await stakingContract.getAPR()).toString();
+  if (fetchItem === "userStaking") {
+    result = (await stakingContract.userStakingStatus());
+  } else if (fetchItem === "rates") {
+    result = (await stakingContract.getRewardRates());
   } else if (fetchItem === "earned") {
-    result = (await stakingContract.earned(walletAccount.address)).toString();
-  } else if (fetchItem ===  "withdrawn") {
-    result = (await stakingContract.getClaimed(walletAccount.address)).toString();
+    result = (await stakingContract.earned(walletAccount.address));
   }
   return result;
 }
 
-export const stakeUIBT = async(amountin) => {
+export const stakeUIBT = async(amountin, type) => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
@@ -32,7 +30,7 @@ export const stakeUIBT = async(amountin) => {
   const approve = await tokenContract.approve(stakingContractAddress, ethers.utils.parseEther(amountin));
   await approve.wait();
   // stake
-  const action = await stakingContract.stake(ethers.utils.parseEther(amountin));
+  const action = await stakingContract.stake(ethers.utils.parseEther(amountin), type);
   await action.wait();
 }
 
@@ -54,13 +52,13 @@ export const claimReward = async() => {
    await action.wait();
 }
 
-export const setAPR = async(apr) => {
+export const setAPR = async(type, rate) => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
 
    // unstake
-   const action = await stakingContract.setAPR(apr);
+   const action = await stakingContract.updateRewardRate(type, rate);
    await action.wait();
 }
 
@@ -71,6 +69,5 @@ export const isOwner = async() => {
 
    // unstake
    const result = await stakingContract.isOwner();
-   console.log("isOwner returns: ", result)
    return result;
 }

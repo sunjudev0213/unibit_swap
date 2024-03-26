@@ -7,29 +7,30 @@ import { AppContext } from "src/AppContext";
 import { getDataForStaking } from "src/utils/stakingHandlers";
 import { ethers } from "ethers";
 
-export default function StakingStatistics({ balance, reward, setReward, staked, setStaked, reload }) {
+export default function StakingStatistics({ balance, userStaking, setUserStaking, reload, reward, setReward, rates, MULTIPLYER }) {
   const { openSnackbar, darkMode, walletContext, loading, setLoading } = useContext(AppContext);
   const { walletAccount } = walletContext;
 
-  const [APY, setAPY] = useState(0);
-  const [claimed, setClaimed] = useState(0);
   const getDatahandler = async () => {
     if (!walletAccount) {
-      setStaked(0);
+      setUserStaking(null);
       setReward(0);
-      setClaimed(0);
       return;
     }
     setLoading(true);
     try {
-      const _apy = await getDataForStaking(walletAccount, "apy", staked);
-      setAPY(_apy);
-      const _staked = await getDataForStaking(walletAccount, "staked");
-      setStaked(_staked);
-      const _earned = await getDataForStaking(walletAccount, "earned");
-      setReward(_earned);
-      const _claimed = await getDataForStaking(walletAccount, "withdrawn");
-      setClaimed(_claimed);
+      const data = await getDataForStaking(walletAccount, "userStaking");
+      const segs = data.toString().split(",");
+      setUserStaking({
+        balance: segs[0],
+        claimed: segs[1],
+        rewards: segs[2],
+        lockTime: segs[3],
+        stakingType: segs[4]
+      });
+      const ee = await getDataForStaking(walletAccount, "earned");
+      setReward(ee.toString());
+      
     } catch (error) {
       openSnackbar(<div style={{ maxWidth: 500 }}>
         <p>Error occured. </p>
@@ -55,20 +56,25 @@ export default function StakingStatistics({ balance, reward, setReward, staked, 
     >
       {loading ? <h2>Getting data...</h2>
         :
+        userStaking !== null &&
         <>
+        { userStaking.balance > 0 && <>
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
-            <Typography variant="h4">APR</Typography>
-            <Typography>{APY/100}%
-              {balance === 0 && <>(per 100)</>}
-            </Typography>
+            <Typography variant="h4">APR(Daily)</Typography>
+            <Typography>{rates[0].rate / MULTIPLYER}%</Typography>
+          </Box>          
+          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
+            <Typography variant="h4">Lock Period</Typography>
+            <Typography>{rates[0].period} days</Typography>
+          </Box>
+        </>}          
+          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
+            <Typography variant="h4">Staked</Typography>
+            <Typography>{ethers.utils.formatEther(userStaking.balance)}</Typography>
           </Box>
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Claimed</Typography>
-            <Typography>{ethers.utils.formatEther(claimed)}</Typography>
-          </Box>
-          <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
-            <Typography variant="h4">Staked</Typography>
-            <Typography>{ethers.utils.formatEther(staked)}</Typography>
+            <Typography>{ethers.utils.formatEther(userStaking.claimed)}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between" mt={1} mb={1}>
             <Typography variant="h4">Pending rewards</Typography>
