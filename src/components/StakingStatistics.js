@@ -59,7 +59,7 @@ export default function StakingStatistics({ balance, userStaking, setUserStaking
         { userStaking.balance > 0 && <>
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">APR(Daily)</Typography>
-            <Typography>{userStaking.stakingTypes.map((type) => rates[type].rate / MULTIPLYER).join("%, ")}%</Typography>
+            <Typography>{userStaking.stakingTypes.map((type) => rates[type].rate * 365/ MULTIPLYER).join("%, ")}%</Typography>
           </Box>          
           <Box display="flex" mb={1} justifyContent="space-between" mt={1}>
             <Typography variant="h4">Lock Period</Typography>
