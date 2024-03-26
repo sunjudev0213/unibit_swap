@@ -19,7 +19,7 @@ export default function StakingInputNew({ amountin, setAmountin, balance }) {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <img src="logo/coin.png" style={{ height: "40px", marginLeft: "3px" }} />
+              <img src="logo/coin.png" style={{ height: "30px", marginLeft: "3px" }} />
             </InputAdornment>
           ),
           endAdornment: (
