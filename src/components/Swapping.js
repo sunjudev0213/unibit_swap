@@ -1,3 +1,6 @@
+/******************************
+ * This component needs to be refactored
+ */
 import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import Decimal from "decimal.js";
@@ -32,8 +35,8 @@ export default function Swapping() {
     const [slippage, setSlippage] = useState(0.5);
 
     const [tokens, setTokens] = useState(DEFAULT_TOKENS);
-    const [select1, setSelect1] = useState(1); // 
-    const [select2, setSelect2] = useState(2); // 
+    const [select1, setSelect1] = useState(1); //
+    const [select2, setSelect2] = useState(2); //
 
     const [amount1, setAmount1] = useState(0);
     const [amount2, setAmount2] = useState(0);
@@ -42,11 +45,11 @@ export default function Swapping() {
     const [bal2, setBal2] = useState(0);
 
     const [swapPrice, setSwapPrice] = useState(0);
-    
-    const checkBalance = async(address) => {
+
+    const checkBalance = async (address) => {
         // TODO:
         return 1000;
-    }
+    };
 
     useEffect(() => {
         const token = tokens[select1];
@@ -80,9 +83,7 @@ export default function Swapping() {
         setAmount2(amount1);
     };
 
-    const swapHandler = async () => {
-        
-    };
+    const swapHandler = async () => {};
 
     return (
         <Box>
@@ -113,9 +114,15 @@ export default function Swapping() {
                             }}
                         >
                             <Stack>
-                                <Button id="token1" value={select1} variant="outlined" onClick={() => {
-                                    //
-                                }} sx={{ minWidth: 120, padding: "10px 0px" }}>
+                                <Button
+                                    id="token1"
+                                    value={select1}
+                                    variant="outlined"
+                                    onClick={() => {
+                                        //
+                                    }}
+                                    sx={{ minWidth: 120, padding: "10px 0px" }}
+                                >
                                     <Stack direction="row" spacing={0.8} alignItems="center">
                                         <img style={{ height: 23 }} src={DEFAULT_TOKENS[select1].logo} />
                                         <Typography variant="s4">{DEFAULT_TOKENS[select1].symbol}</Typography>
@@ -183,9 +190,15 @@ export default function Swapping() {
                             }}
                         >
                             <Stack>
-                                <Button id="token2" value={select2} variant="outlined" onClick={() => {
-                                    //
-                                }} sx={{ minWidth: 120, padding: "10px 0px" }}>
+                                <Button
+                                    id="token2"
+                                    value={select2}
+                                    variant="outlined"
+                                    onClick={() => {
+                                        //
+                                    }}
+                                    sx={{ minWidth: 120, padding: "10px 0px" }}
+                                >
                                     <Stack direction="row" spacing={0.8} alignItems="center">
                                         <img style={{ height: 23 }} src={DEFAULT_TOKENS[select2].logo} />
                                         <Typography variant="s4">{DEFAULT_TOKENS[select2].symbol}</Typography>
@@ -237,11 +250,7 @@ export default function Swapping() {
                             </Stack>
                         </Box>
                         <Box display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
-                            {walletAccount ? (
-                                <SwapButton amount1={amount1} swapHandler={swapHandler} />
-                            ) : (
-                                <WalletConnectButton showConnectWallet={showConnectWallet} />
-                            )}
+                            {walletAccount ? <SwapButton amount1={amount1} swapHandler={swapHandler} /> : <WalletConnectButton showConnectWallet={showConnectWallet} />}
                         </Box>
                     </Box>
                 </Box>

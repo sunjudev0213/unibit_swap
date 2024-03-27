@@ -1,5 +1,7 @@
+/******************************
+ * This component needs to be refactored
+ */
 import { useContext, useState, useEffect } from "react";
-import axios from "axios";
 import { ethers } from "ethers";
 import Web3 from "web3";
 // Material

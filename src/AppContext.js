@@ -1,14 +1,9 @@
 import { useState, createContext, useEffect } from "react";
-
 import { Backdrop } from "@mui/material";
-
 // Loader
 import { PuffLoader } from "react-spinners";
-
 import { useWallet } from "./hooks/useWallet";
-
 export const AppContext = createContext({});
-
 export function ContextProvider({ children, openSnackbar }) {
     const [loading, setLoading] = useState(false);
     const [darkMode, setDarkMode] = useState(true);

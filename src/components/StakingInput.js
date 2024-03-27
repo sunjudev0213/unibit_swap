@@ -1,3 +1,6 @@
+/******************************
+ * This component is not used now
+ */
 import React, { useContext } from "react";
 import { Box, Input, Button } from "@mui/material";
 import { AppContext } from "src/AppContext";

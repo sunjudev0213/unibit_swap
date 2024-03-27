@@ -1,3 +1,6 @@
+/******************************
+ * This component needs to be refactored
+ */
 import React, { useState } from "react";
 import { Box, Stack, Typography, Button, Input, IconButton, FormControlLabel, DialogActions, InputAdornment } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";

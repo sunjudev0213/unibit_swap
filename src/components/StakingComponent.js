@@ -32,18 +32,18 @@ export default function StakingComponent() {
 
     const [balance, setBalance] = useState(0);
     const [walletReady, setWalletReady] = useState(false);
-    const [amountin, setAmountin] = useState(0);//stake amount
+    const [amountin, setAmountin] = useState(0); //stake amount
     const [reload, setReload] = useState(0);
     const [rates, setRates] = useState(null);
-    const [rateIndex, setRateIndex] = useState(0);// for staking
+    const [rateIndex, setRateIndex] = useState(0); // for staking
     const MULTIPLYER = 1000;
     useEffect(() => {
         const handler = async () => {
             const ready = await checkWalletType();
             setWalletReady(ready);
-        }
+        };
         handler();
-        return () => { };
+        return () => {};
     }, [walletType, reload]);
 
     const checkWalletType = async () => {
@@ -87,10 +87,13 @@ export default function StakingComponent() {
         try {
             await stakeUIBT(amountin.toString(), rateIndex);
         } catch (error) {
-            openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while staking. </p>
-                <p>{errorMessageParser(error.message)}</p>
-            </div>, "error");
+            openSnackbar(
+                <div style={{ maxWidth: 500 }}>
+                    <p>Error occured while staking. </p>
+                    <p>{errorMessageParser(error.message)}</p>
+                </div>,
+                "error"
+            );
         }
         setLoading(false);
         setReload(reload + 1);
@@ -104,16 +107,19 @@ export default function StakingComponent() {
                 { period: "45", rate: r[1] },
                 { period: "90", rate: r[2] },
                 { period: "120", rate: r[3] },
-                { period: "365", rate: r[4] },
+                { period: "365", rate: r[4] }
             ]);
         } catch (error) {
             console.log("Error: ", error);
-            openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while getting rates. </p>
-                <p>{errorMessageParser(error.message)}</p>
-            </div>, "error");
+            openSnackbar(
+                <div style={{ maxWidth: 500 }}>
+                    <p>Error occured while getting rates. </p>
+                    <p>{errorMessageParser(error.message)}</p>
+                </div>,
+                "error"
+            );
         }
-    }
+    };
 
     return (
         <Page title="Create">
@@ -130,56 +136,45 @@ export default function StakingComponent() {
                 >
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h3">Unibit Staking</Typography>
-                        <div><Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
-                            <Typography variant="h4"></Typography>
-                            <Typography>Balance: {balance}</Typography>
-                        </Box></div>
+                        <div>
+                            <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
+                                <Typography variant="h4"></Typography>
+                                <Typography>Balance: {balance}</Typography>
+                            </Box>
+                        </div>
                     </div>
 
-                    {walletReady && !loading ?
+                    {walletReady && !loading ? (
                         <Stack justifyContent="center" alignItems="left" display="flex" sx={{ mt: 1 }}>
-
                             <Box display="flex" justifyContent="space-between" gap={1} textAlign="center" my={1}>
-                                <StakingInputNew amountin={amountin}
-                                    setAmountin={setAmountin}
-                                    balance={balance}
-                                    rates={rates} />
+                                <StakingInputNew amountin={amountin} setAmountin={setAmountin} balance={balance} rates={rates} />
                                 <StakingTypeSelect rates={rates} rateIndex={rateIndex} setRateIindex={setRateIndex} MULTIPLYER={MULTIPLYER} />
                             </Box>
-                            <StakingPreview
-                                rates={rates}
-                                amountin={amountin}
-                                rateIndex={rateIndex}
-                                MULTIPLYER={MULTIPLYER}
-                            />
+                            <StakingPreview rates={rates} amountin={amountin} rateIndex={rateIndex} MULTIPLYER={MULTIPLYER} />
                         </Stack>
-                        :
+                    ) : (
                         <Stack justifyContent="center" alignItems="center" display="flex" sx={{ mt: 3 }}>
                             <StakingWelcomePage />
                         </Stack>
-                    }
+                    )}
                     <Stack justifyContent="center" alignItems="center" display="flex">
                         {!walletAccount ? (
                             <WalletConnectButton showConnectWallet={showConnectWallet} />
+                        ) : loading ? (
+                            <h3>Please wait...</h3>
                         ) : (
-                            loading ?
-                                <h3>Please wait...</h3>
-                                : walletReady &&
+                            walletReady && (
                                 <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
-                                    <Button
-                                        variant="outlined"
-                                        onClick={stakeHandler}
-                                    >
+                                    <Button variant="outlined" onClick={stakeHandler}>
                                         <h3>Stake UIBT</h3>
                                     </Button>
                                 </Box>
+                            )
                         )}
                     </Stack>
                 </Box>
-                
-                {walletReady && !loading && 
-                    <StakingRecords reload={reload} rates={rates} MULTIPLYER={MULTIPLYER} />
-                }
+
+                {walletReady && !loading && <StakingRecords reload={reload} rates={rates} MULTIPLYER={MULTIPLYER} />}
             </Stack>
         </Page>
     );

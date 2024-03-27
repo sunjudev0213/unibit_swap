@@ -1,3 +1,6 @@
+/******************************
+ * This component is not used
+ */
 import { Box, Stack } from "@mui/material";
 
 function Popup() {

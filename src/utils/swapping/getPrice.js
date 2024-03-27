@@ -9,7 +9,6 @@ const getPrice = async (name1, name2) => {
         }
     } catch (err) {
         console.log("Error on getting price", err);
-       
     }
     return 0;
 };

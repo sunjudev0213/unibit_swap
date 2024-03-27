@@ -1,3 +1,6 @@
+/******************************
+ * This needs to be refactored
+ */
 import { ethers } from "ethers";
 import Web3 from "web3";
 
@@ -50,7 +53,7 @@ const checkBalanceMetamask = async (token, token_abi, token1, token2) => {
     }
 };
 
-export const checkBalanceForToken = async(token_address, token_abi, account, openSnackbar, setLoading) => {
+export const checkBalanceForToken = async (token_address, token_abi, account, openSnackbar, setLoading) => {
     try {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -58,15 +61,18 @@ export const checkBalanceForToken = async(token_address, token_abi, account, ope
         let amount = (await token_contract.balanceOf(account)).toString();
         const decimal = await token_contract.decimals();
         amount = amount / 10 ** decimal;
-        return amount;  
+        return amount;
     } catch (error) {
         console.log("Error while getting balance: ", error);
-        openSnackbar(<div style={{ maxWidth: 500 }}>
-            <p>Error occured. </p>
-            <p>{error.message}</p>
-        </div>, "error");
+        openSnackbar(
+            <div style={{ maxWidth: 500 }}>
+                <p>Error occured. </p>
+                <p>{error.message}</p>
+            </div>,
+            "error"
+        );
     }
     setLoading(false);
-}
+};
 
 export default checkBalanceMetamask;

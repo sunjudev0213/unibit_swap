@@ -22,10 +22,13 @@ async function connectMetamask(handleCloseWallet, setWalletAccount, setWalletTyp
         openSnackbar("Metamask Wallet is connected!", "success");
     } catch (error) {
         console.error("Error while connecting metamask wallet: ", error);
-        openSnackbar(<div style={{ maxWidth: 500 }}>
-            <p>Error occured. </p>
-            <p>{error.message}</p>
-        </div>, "error");
+        openSnackbar(
+            <div style={{ maxWidth: 500 }}>
+                <p>Error occured. </p>
+                <p>{error.message}</p>
+            </div>,
+            "error"
+        );
     }
 }
 

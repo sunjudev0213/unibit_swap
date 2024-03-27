@@ -1,5 +1,5 @@
 // Material
-import { useTheme, useMediaQuery, Box, Link } from "@mui/material";
+import { useTheme, Box, Link } from "@mui/material";
 
 // Context
 import { useContext } from "react";

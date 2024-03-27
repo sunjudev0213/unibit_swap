@@ -1,5 +1,5 @@
 // testnet address and artifacts --- AribitrumGoerli is not being used now
-import addresses from "src/Contracts/EthereumSepolia/contract_addresses.json";//
+import addresses from "src/Contracts/EthereumSepolia/contract_addresses.json"; //
 import UnibitContractABI from "src/Contracts/EthereumSepolia/UIBT.json";
 import StakingContractABI from "src/Contracts/EthereumSepolia/StakingContract.json";
 // mainnet
@@ -28,4 +28,4 @@ const modules = {
     contractABIs,
     contractAddresses
 };
-export default modules
+export default modules;
