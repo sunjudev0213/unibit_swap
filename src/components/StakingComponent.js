@@ -19,6 +19,7 @@ import StakingInputNew from "./StakingInputNew";
 import StakingWelcomePage from "./StakingWelcomePage";
 import { ethers } from "ethers";
 import errorMessageParser from "src/utils/errorMessageParser";
+import StakingPreview from "./StakingPreview";
 
 export default function StakingComponent() {
     const { contractAddresses, contractABIs } = contractModules;
@@ -181,16 +182,12 @@ export default function StakingComponent() {
                                 rates={rates}/>
                             <StakingTypeSelect rates={rates} rateIndex={rateIndex} setRateIindex={setRateIndex} MULTIPLYER={MULTIPLYER} />
                         </Box>
-                        
-                        <StakingStatistics
+                        <StakingPreview
                             rates={rates}
+                            amountin={amountin}
+                            rateIndex={rateIndex}
                             MULTIPLYER={MULTIPLYER}
-                            balance={balance}
-                            userStaking={userStaking}
-                            setUserStaking={setUserStaking}
-                            reward={reward}
-                            setReward={setReward}
-                            reload={reload} />
+                        />
                     </Stack>
                     :
                     <Stack justifyContent="center" alignItems="center" display="flex" sx={{ mt: 3 }}>
@@ -204,20 +201,6 @@ export default function StakingComponent() {
                             loading ?
                                 <h3>Please wait...</h3>
                                 : walletReady &&
-                                <>
-                                    {userStaking && userStaking.balance > 0 && <Box display="flex" width={"100%"} justifyContent={"space-between"} height={50} my={2} gap={1}>
-                                        <StakingInputNew 
-                                            amountin={amountOut}
-                                            balance={ethers.utils.formatEther(userStaking.balance)}
-                                            setAmountin={setAmountOut}
-                                        />                                        
-                                        <Button
-                                            variant="outlined"
-                                            onClick={unStakeHandler}
-                                        >
-                                            Unstake
-                                        </Button>
-                                    </Box>}
                                     <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
                                         <Button
                                             variant="outlined"
@@ -225,17 +208,7 @@ export default function StakingComponent() {
                                         >
                                             <h3>Stake UIBT</h3>
                                         </Button>
-                                        <Button
-                                            disabled={reward > 0 ? false : true}
-                                            variant="outlined"
-                                            onClick={() => {
-                                                claimHandler();
-                                            }}
-                                        >
-                                            <h3>Claim Reward</h3>
-                                        </Button>
                                     </Box>
-                                </>
                         )}
                     </Stack>
                 </Box>
