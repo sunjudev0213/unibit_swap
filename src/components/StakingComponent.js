@@ -137,10 +137,12 @@ export default function StakingComponent() {
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h3">Unibit Staking</Typography>
                         <div>
+                        {walletReady && !loading && 
                             <Box display="flex" justifyContent="space-between" textAlign="center" m={1} mt={1}>
                                 <Typography variant="h4"></Typography>
                                 <Typography>Balance: {balance}</Typography>
                             </Box>
+                        }
                         </div>
                     </div>
 
