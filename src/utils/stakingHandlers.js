@@ -52,6 +52,7 @@ export const claimReward = async() => {
     await action.wait();
 }
 
+
 export const setAPR = async(type, rate) => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
@@ -69,5 +70,25 @@ export const isOwner = async() => {
 
    // unstake
    const result = await stakingContract.isOwner();
+   return result;
+}
+
+export const getLockTimes = async() => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+
+   // get the array of lockTimes
+   const result = await stakingContract.userStakingStatusRecords();
+   return result;
+}
+
+export const getDetails = async() => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+
+   // get the array of lockTimes
+   const result = await stakingContract.userStakingRecordDetails();
    return result;
 }

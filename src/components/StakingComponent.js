@@ -7,15 +7,13 @@ import getConfig from "src/utils/getConfig";
 //component
 import Page from "src/components/Page";
 import WalletConnectButton from "./WalletConnectButton";
-import StakingInput from "./StakingInput";
 import StakingStatistics from "./StakingStatistics";
 // constants
 import contractModules from "src/Contracts";
 // Utils
 import switchNetworkTo from "src/utils/switchNetworkToMetamask";
 import { checkBalanceForToken } from "src/utils/checkBalanceHandlers/checkBalanceMetamask";
-import { claimReward, getDataForStaking, isOwner, setAPR, stakeUIBT, unStake } from "src/utils/stakingHandlers";
-import ManualAPRDialog from "./ManualAPRDialog";
+import { claimReward, getDataForStaking, isOwner, stakeUIBT, unStake } from "src/utils/stakingHandlers";
 import StakingTypeSelect from "./StakingTypeSelect";
 import StakingInputNew from "./StakingInputNew";
 import StakingWelcomePage from "./StakingWelcomePage";
@@ -41,10 +39,6 @@ export default function StakingComponent() {
     const [reload, setReload] = useState(0);
     const [rates, setRates] = useState(null);
     const [rateIndex, setRateIndex] = useState(0);// for staking
-
-    const [manualAPR, setManualAPR] = useState(0);
-    const [aprOpen, setAPROpen] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
     const MULTIPLYER = 1000;
     useEffect(() => {
         const handler = async () => {
@@ -73,7 +67,6 @@ export default function StakingComponent() {
             const _bal = await checkBalanceForToken(tokenContractAddress, UnibitContractABI, walletAccount.address, openSnackbar, setLoading);
             setBalance(_bal);
             await getRates();
-            await checkAdmin();
             setLoading(false);
             return true;
         }
@@ -105,6 +98,7 @@ export default function StakingComponent() {
         setLoading(false);
         setReload(reload + 1);
     };
+
     const claimHandler = async () => {
         setLoading(true);
         try {
@@ -137,34 +131,7 @@ export default function StakingComponent() {
         setReload(reload + 1);
     }
 
-    const setAPRHandler = async () => {
-        setLoading(true);
-        try {
-            await setAPR(manualAPR * 100);
-        } catch (error) {
-            openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while setting APR. </p>
-                <p>{error.message}</p>
-            </div>, "error");
-            console.log(error)
-        }
-        setReload(reload + 1);
-        setLoading(false);
-    }
-
-    const checkAdmin = async () => {
-        try {
-            const res = await isOwner();
-            setIsAdmin(res);
-        } catch (error) {
-            openSnackbar(<div style={{ maxWidth: 500 }}>
-                <p>Error occured while checking admin. </p>
-                <p>{errorMessageParser(error.message)}</p>
-            </div>, "error");
-        }
-    }
-
-    const getRates = async () => {
+     const getRates = async () => {
         try {
             const r = await getDataForStaking(walletAccount, "rates");
             setRates([
@@ -202,11 +169,6 @@ export default function StakingComponent() {
                             <Typography variant="h4"></Typography>
                             <Typography>Balance: {balance}</Typography>
                         </Box></div>
-                        {/* {walletReady && isAdmin && <div style={{ alignItems: "center" }}>
-
-                            <Button variant="outlined" onClick={() => setAPROpen(true)}>Set APR</Button>
-                            <ManualAPRDialog open={aprOpen} setOpen={setAPROpen} manualAPR={manualAPR} setManualAPR={setManualAPR} onOK={setAPRHandler} />
-                        </div>} */}
                     </div>
 
                     {walletReady && !loading ? 
@@ -257,7 +219,6 @@ export default function StakingComponent() {
                                         </Button>
                                     </Box>}
                                     <Box display="flex" width={"100%"} height={50} mt={1} justifyContent="space-around">
-
                                         <Button
                                             variant="outlined"
                                             onClick={stakeHandler}

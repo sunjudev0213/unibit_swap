@@ -81,64 +81,7 @@ export default function Swapping() {
     };
 
     const swapHandler = async () => {
-        // const value = new Decimal(amount || 0).toNumber();
-        // const token1 = tokens[select1];
-        // const token2 = tokens[select2];
-        // const addr1 = token1.address;
-        // const addr2 = token2.address;
-        // const decimal1 = token1.decimal;
-        // const decimal2 = token2.decimal;
-        // try {
-        //     const { ethereum } = window;
-        //     if (ethereum) {
-        //         const provider = new ethers.providers.Web3Provider(ethereum);
-        //         const signer = provider.getSigner();
-        //         const accounts = await ethereum.request({ method: "eth_accounts" });
-        //         const account = accounts[0];
-        //         const router_contract = new ethers.Contract(router_address, router_abi, signer);
-        //         const amount_in = (amount1 * 10 ** decimal1).toString();
-        //         let amount_out = swapPrice * amount1 * 10 ** decimal2;
-        //         amount_out = Math.round((amount_out * (100 - slippage)) / 100).toString();
-
-        //         if (addr1 === ADDR_WETH) {
-        //             let swap = await router_contract.swapExactNATIVEForTokens(amount_out, [[15], [2], [addr1, addr2]], account, Date.now() + 10 * 60, {
-        //                 value: amount_in
-        //             });
-        //             const swap_receipt = await swap.wait();
-        //             if (swap_receipt && swap_receipt.blockNumber && swap_receipt.status === 1) {
-        //                 openSnackbar("Swapping transaction successful", "success");
-        //             }
-        //         } else if (addr2 === ADDR_WETH) {
-        //             let swap = await router_contract.swapExactTokensForNATIVE(amount_in, amount_out, [[15], [2], [addr1, addr2]], account, Date.now() + 10 * 60);
-        //             const swap_receipt = await swap.wait();
-        //             if (swap_receipt && swap_receipt.blockNumber && swap_receipt.status === 1) {
-        //                 openSnackbar("Swapping transaction successful", "success");
-        //             }
-        //         } else {
-        //             let swap = await router_contract.swapExactTokensForTokens(amount1, amount_out, [[15], [2], [addr1, addr2]], account, Date.now() + 10 * 60);
-        //             const swap_receipt = await swap.wait();
-        //             if (swap_receipt && swap_receipt.blockNumber && swap_receipt.status === 1) {
-        //                 openSnackbar("Swapping transaction successful", "success");
-        //             }
-        //         }
-        //     } else {
-        //         console.log("Object does not exist");
-        //     }
-        // } catch (e) {
-        //     if (e.reason === "insufficient funds for intrinsic transaction cost") {
-        //         openSnackbar("Insufficient funds for intrinsic transaction cost!", "error");
-        //     } else if (e.reason === "invalid BigNumber string") {
-        //         openSnackbar("Transaction will be failed, Please increase Slippage", "error");
-        //     } else if (e.reason === "missing revert data in call exception") {
-        //         openSnackbar("Token is not approved yet, Please approve token", "error");
-        //     } else {
-        //         console.log(e);
-        //         openSnackbar(<div style={{ maxWidth: 500 }}>
-        //             <p>Error occured. </p>
-        //             <p>{e.message}</p>
-        //         </div>, "error");
-        //     }
-        // }
+        
     };
 
     return (
