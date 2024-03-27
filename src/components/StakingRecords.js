@@ -49,7 +49,7 @@ export default function StakingRecords({ reload, rates, MULTIPLYER }) {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Staked Amount</TableCell>
-                                <TableCell align="center">APR(%)</TableCell>
+                                <TableCell align="center">APR(Daily)</TableCell>
                                 <TableCell align="center">Lock Period</TableCell>
                                 <TableCell align="center">Unlocked on</TableCell>
                                 <TableCell align="center">Rewards</TableCell>
