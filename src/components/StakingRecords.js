@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import StakingRecord from './StakingRecord'
 import { AppContext } from "src/AppContext";
 import { ethers } from "ethers";
@@ -13,8 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-export default function StakingRecords() {
-  const { openSnackbar, darkMode, walletContext, loading, setLoading } = useContext(AppContext);
+export default function StakingRecords({ reload, rates, MULTIPLYER }) {
+  const { openSnackbar, walletContext } = useContext(AppContext);
   const { walletAccount } = walletContext;
   const [lockTimes, setLockTimes] = useState([]);
   const getDataHander = async() => {
@@ -38,27 +38,30 @@ export default function StakingRecords() {
 
   useEffect(() => {
     getDataHander();
-  }, [])
+  }, [reload])
 
   return (
-    <TableContainer component={Paper}>
+    <div style={{ marginTop: 12 }}>
+      { lockTimes.length > 0 && <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Staked Amount</TableCell>
-            <TableCell align="right">APR(%)</TableCell>
-            <TableCell align="right">Lock Period(days)</TableCell>
-            <TableCell align="right">Unlocked on</TableCell>
-            <TableCell align="right">Rewards</TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="center">APR(%)</TableCell>
+            <TableCell align="center">Lock Period</TableCell>
+            <TableCell align="center">Unlocked on</TableCell>
+            <TableCell align="center">Rewards</TableCell>
+            <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {lockTimes.map((time, idx) => (
-            <StakingRecord lockTime={time} key={idx}/>
+            <StakingRecord lockTime={time} key={idx} rates={rates} MULTIPLYER={MULTIPLYER}/>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer>}
+    </div>
+    
   )
 }

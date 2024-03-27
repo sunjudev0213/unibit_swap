@@ -20,7 +20,7 @@ export default function StakingTypeSelect({ rates, setRateIindex, rateIndex, MUL
         onChange={handleChange}
       >
         {
-          rates.map((r, i) => <MenuItem key={i} value={i}>{r.period} days({r.rate * 365 / MULTIPLYER}%)</MenuItem>)
+          rates.map((r, i) => <MenuItem key={i} value={i}>{r.period} days</MenuItem>)
         }       
       </Select>
     </FormControl>

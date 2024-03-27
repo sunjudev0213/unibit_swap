@@ -83,12 +83,22 @@ export const getLockTimes = async() => {
    return result;
 }
 
-export const getDetails = async() => {
+export const getDetails = async(lockTime) => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
 
    // get the array of lockTimes
-   const result = await stakingContract.userStakingRecordDetails();
+   const result = await stakingContract.userStakingRecordDetails(lockTime);
    return result;
+}
+
+export const claimAndWithdraw = async(lockTime) => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const stakingContract = new ethers.Contract(stakingContractAddress, StakingContractABI, signer);
+
+   // get the array of lockTimes
+   const action = await stakingContract.claimRewardAndUnstake(lockTime);
+   await action.wait();
 }
