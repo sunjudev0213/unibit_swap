@@ -1,9 +1,9 @@
-import { bitcoinNetworks, mainNetConfig, testNetConfig } from "./networks";
+import { bitcoinNetworks, mainNetConfig } from "./networks";
 
 const getConfig = () => {
     const config = {
-        EVMDefaultNetwork: testNetConfig.EvmChainDefinitions.Ethereum,
-        BitcoinDefaultNetwork: bitcoinNetworks.testnet,
+        EVMDefaultNetwork: mainNetConfig.EvmChainDefinitions.Ethereum,
+        BitcoinDefaultNetwork: bitcoinNetworks.mainnet,
         WalletTypes: {
             none: 0,
             metamask: 1,
