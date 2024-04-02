@@ -2,7 +2,7 @@ import { bitcoinNetworks, mainNetConfig } from "./networks";
 
 const getConfig = () => {
     const config = {
-        EVMDefaultNetwork: mainNetConfig.EvmChainDefinitions.Ethereum,
+        EVMDefaultNetwork: mainNetConfig.EvmChainDefinitions.Arbitrum,
         BitcoinDefaultNetwork: bitcoinNetworks.mainnet,
         WalletTypes: {
             none: 0,

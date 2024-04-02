@@ -8,11 +8,12 @@ import UnibitContractABIMain from "src/Contracts/ArbitrumOne/UIBT.json";
 import StakingContractABIMain from "src/Contracts/ArbitrumOne/StakingContract.json";
 
 // for test net
+// for main net
 let contractABIs = {
-    UnibitContractABI: UnibitContractABI.abi,
-    StakingContractABI: StakingContractABI.abi
+    UnibitContractABI: UnibitContractABIMain.abi,
+    StakingContractABI: StakingContractABIMain.abi
 };
-let contractAddresses = addresses;
+let contractAddresses = addressesMain;
 
 // check env and update if production
 if (process.env.Environment === "production") {
