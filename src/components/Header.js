@@ -47,11 +47,11 @@ export default function Header() {
                     >
                         {!isMobile && (
                             <>
-                                <NavLink link={"/"} text={"Swap"} />
-                                <NavLink link={"/pool"} text={"Liquidity Pool"} />
+                                {/* <NavLink link={"/"} text={"Swap"} />
+                                <NavLink link={"/pool"} text={"Liquidity Pool"} /> */}
                                 <NavLink link={"/staking"} text={"Staking"} />
-                                <NavLink link={"/create"} text={"Create"} />
-                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external />
+                                {/* <NavLink link={"/create"} text={"Create"} />
+                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external /> */}
                             </>
                         )}
 

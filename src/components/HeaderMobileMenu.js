@@ -59,7 +59,7 @@ export default function HeaderMobileMenu() {
                     display: { xs: "block", md: "none" }
                 }}
             >
-                <MenuItem onClick={handleCloseNavMenu}>
+                {/* <MenuItem onClick={handleCloseNavMenu}>
                     <Link underline="none" color="inherit" href={`/`} rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <CurrencyExchangeIcon />
@@ -78,7 +78,7 @@ export default function HeaderMobileMenu() {
                             </Typography>
                         </Stack>
                     </Link>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleCloseNavMenu}>
                     <Link underline="none" color="inherit" href={`/staking`} rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
@@ -89,7 +89,7 @@ export default function HeaderMobileMenu() {
                         </Stack>
                     </Link>
                 </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
+                {/* <MenuItem onClick={handleCloseNavMenu}>
                     <Link underline="none" color="inherit" href={`/create`} rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <RocketLaunchIcon />
@@ -108,7 +108,7 @@ export default function HeaderMobileMenu() {
                             </Typography>
                         </Stack>
                     </Link>
-                </MenuItem>
+                </MenuItem> */}
                 <Divider />
                 <MenuItem
                     onClick={() => {
