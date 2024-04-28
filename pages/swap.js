@@ -1,19 +1,16 @@
-import { useContext } from "react";
 // Material
 import { Container, Toolbar } from "@mui/material";
 // Context
+import { useContext } from "react";
 import { AppContext } from "src/AppContext";
-
 // Components
 import Header from "src/components/Header";
 import ScrollToTop from "src/components/ScrollToTop";
-import HomeComponent from "src/components/Home/HomeComponent";
-
+import Swapping from "src/components/Swapping";
 import { OverviewWrapper, BackgroundWrapper } from "src/utils/styles";
 
-export default function Index({}) {
+export default function Swap({}) {
     const { darkMode } = useContext(AppContext);
-
     return (
         <OverviewWrapper>
             <Toolbar id="back-to-top-anchor" />
@@ -25,7 +22,7 @@ export default function Index({}) {
             />
             <Header />
             <Container maxWidth="lg">
-                <HomeComponent />
+                <Swapping />
             </Container>
             <ScrollToTop />
         </OverviewWrapper>

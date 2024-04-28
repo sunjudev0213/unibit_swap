@@ -11,7 +11,7 @@ import CreateBRC20 from "src/components/CreateBRC20";
 //styles
 import { OverviewWrapper, BackgroundWrapper } from "src/utils/styles";
 
-export default function Swap({}) {
+export default function Create({}) {
     const { darkMode } = useContext(AppContext);
 
     return (

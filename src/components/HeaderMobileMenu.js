@@ -59,28 +59,35 @@ export default function HeaderMobileMenu() {
                     display: { xs: "block", md: "none" }
                 }}
             >
-                {/* <MenuItem onClick={handleCloseNavMenu}>
-                    <Link underline="none" color="inherit" href={`/`} rel="noreferrer noopener nofollow">
+                {/* staking and token creator and bridge */}
+                <MenuItem onClick={handleCloseNavMenu}>
+                    <Link underline="none" color="inherit" href="/" rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <CurrencyExchangeIcon />
                             <Typography variant="s3" style={{ marginLeft: "10px" }}>
                                 Swap
                             </Typography>
+                            <Typography variant="d1" style={{ marginLeft: "5px", color: "#000", fontSize: "10px", padding: "0px 3px 0px 3px", backgroundColor: "#dddddd", border: "1px solid #dddddd", borderRadius: "5px" }}>
+                                soon
+                            </Typography>
                         </Stack>
                     </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
-                    <Link underline="none" color="inherit" href={`/pool`} rel="noreferrer noopener nofollow">
+                    <Link underline="none" color="inherit" href="/" rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <AccountBalanceIcon />
                             <Typography variant="s3" style={{ marginLeft: "10px" }}>
                                 Liquidity Pool
                             </Typography>
+                            <Typography variant="d1" style={{ marginLeft: "5px", color: "#000", fontSize: "10px", padding: "0px 3px 0px 3px", backgroundColor: "#dddddd", border: "1px solid #dddddd", borderRadius: "5px" }}>
+                                soon
+                            </Typography>
                         </Stack>
                     </Link>
-                </MenuItem> */}
-                <MenuItem onClick={handleCloseNavMenu}>
-                    <Link underline="none" color="inherit" href={`/staking`} rel="noreferrer noopener nofollow">
+                </MenuItem>
+                <MenuItem>
+                    <Link underline="none" color="inherit" href="/staking" rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <AccountBalanceIcon />
                             <Typography variant="s3" style={{ marginLeft: "10px" }}>
@@ -89,17 +96,30 @@ export default function HeaderMobileMenu() {
                         </Stack>
                     </Link>
                 </MenuItem>
-                {/* <MenuItem onClick={handleCloseNavMenu}>
-                    <Link underline="none" color="inherit" href={`/create`} rel="noreferrer noopener nofollow">
+                <MenuItem>
+                    <Link underline="none" color="inherit" href="/create" rel="noreferrer noopener nofollow">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <RocketLaunchIcon />
                             <Typography variant="s3" style={{ marginLeft: "10px" }}>
-                                BRC20
+                                Token Creator
                             </Typography>
                         </Stack>
                     </Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
+                    <Link underline="none" color="inherit" href="/" rel="noreferrer noopener nofollow">
+                        <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
+                            <RocketLaunchIcon />
+                            <Typography variant="s3" style={{ marginLeft: "10px" }}>
+                                Runes
+                            </Typography>
+                            <Typography variant="d1" style={{ marginLeft: "5px", color: "#000", fontSize: "10px", padding: "0px 3px 0px 3px", backgroundColor: "#dddddd", border: "1px solid #dddddd", borderRadius: "5px" }}>
+                                soon
+                            </Typography>
+                        </Stack>
+                    </Link>
+                </MenuItem>
+                <MenuItem>
                     <Link underline="none" color="inherit" href={`https://bridge.unibit.app`} rel="noreferrer noopener nofollow" target="blank">
                         <Stack direction="row" spacing={1} sx={{ mr: 2 }} alignItems="center">
                             <SwapCallsIcon />
@@ -108,7 +128,7 @@ export default function HeaderMobileMenu() {
                             </Typography>
                         </Stack>
                     </Link>
-                </MenuItem> */}
+                </MenuItem>
                 <Divider />
                 <MenuItem
                     onClick={() => {

@@ -8,24 +8,31 @@ import Page from "src/components/Page";
 import CreateBRC20Button from "./CreateBRC20Button";
 import WalletConnectButton from "./WalletConnectButton";
 import getUnisatOrder from "src/utils/inscriptions/getUnisatOrder";
-import getMempoolFee from "src/utils/fees/getMempoolFee";
+import CreateRunesButton from "./Runes/CreateRunesButton";
 
-export default function CreateBRC20() {
+export default function RunesComponent() {
     const { openSnackbar, darkMode, walletContext, modalContext } = useContext(AppContext);
     const { walletAccount, walletType, WalletTypes } = walletContext;
     const { showConnectWallet } = modalContext;
-    const [tokenName, setTokenName] = useState("");
-    const [tokenSymbol, setTokenSymbol] = useState("");
+    const [runeName, setRuneName] = useState("");
+    const [runeSymbol, setRuneSymbol] = useState("");
+    const [runeDivisibility, setRuneDivisibility] = useState();
+    const [runePremine, setRunePremine] = useState();
+    const [isMintable, setIsMintable] = useState(true);
+    const [amount, setAmount] = useState();
+    const [cap, setCap] = useState();
+    const [destinationAddress, setDestinationAddress] = useState();
+    const [repeats, setRepeats] = useState(1);
+
+ 
     const [tokenMax, setTokenMax] = useState("");
     const [tokenLim, setTokenLim] = useState("");
     const [mintAm, setMintAm] = useState("");
     const [receiverAddress, setReceiverAddress] = useState();
     const [customCode, setCustomCode] = useState("");
-    const [createType, setCreateType] = useState("Deploy");
+    const [createType, setCreateType] = useState("Etch");
     const [orderData, setOrderData] = useState();
     const [orderId, setOrderId] = useState("");
-    const [feeRate, setFeeRate] = useState();
-    const [selectedFeeRate, setSelectedFeeRate] = useState();
     const updateOrderData = async () => {
         openSnackbar("Updating order data.", "success");
         const orderDetail = await getUnisatOrder(openSnackbar, orderData.orderId);
@@ -34,23 +41,12 @@ export default function CreateBRC20() {
 
     useEffect(() => {
         if (walletAccount) {
-            setReceiverAddress(walletAccount.address);
+            setDestinationAddress(walletAccount.address);
         }
     }, walletAccount);
 
-    useEffect(() => {
-        if (!feeRate) {
-            getUnisatFees();
-        }
-    }, [feeRate])
-
-    const getUnisatFees = async () => {
-        const fees = await getMempoolFee();
-        setFeeRate(fees);
-    }
-
     return (
-        <Page title="Create">
+        <Page title="Runes">
             <Stack justifyContent="center" alignItems="center" display="flex" minHeight="80vh">
                 <Box
                     maxWidth="md"
@@ -71,30 +67,25 @@ export default function CreateBRC20() {
                                 setCreateType(e.target.value);
                             }}
                         >
-                            <FormControlLabel value="Deploy" control={<Radio />} label="Deploy" />
+                            <FormControlLabel value="Etch" control={<Radio />} label="Etch" />
                             <FormControlLabel value="Mint" control={<Radio />} label="Mint" />
-                            {
-                                walletType == WalletTypes.unisat ?
-                                <FormControlLabel value="Detail" control={<Radio />} label="Inscription Detail" /> : null
-                            }
+                            <FormControlLabel value="Detail" control={<Radio />} label="Inscription Detail" />
                         </RadioGroup>
                     </FormControl>
                     {
-                        createType === "Deploy" ?
+                        createType === "Etch" ?
                         <>
                             <Stack spacing={2} marginBottom={3} marginTop={3}>
-                                <Typography variant="h3">Create New BRC20 Token</Typography>
-                                <Typography variant="caption">Token Name (max 4 characters)</Typography>
+                                <Typography variant="h3">Etch a new Rune</Typography>
+                                <Typography variant="caption">Name</Typography>
                                 <TextField
                                     required
-                                    placeholder="Token Name"
+                                    placeholder="Rune Name"
                                     margin="dense"
                                     onChange={(e) => {
-                                        if (e.target.value.length < 5) {
-                                            setTokenName(e.target.value);
-                                        }
+                                        setRuneName(e.target.value);
                                     }}
-                                    value={tokenName}
+                                    value={runeName}
                                     sx={{
                                         "&.MuiTextField-root": {
                                             marginTop: 1
@@ -103,16 +94,15 @@ export default function CreateBRC20() {
                                 />
                             </Stack>
                             <Stack spacing={2} marginBottom={3}>
-                                <Typography variant="caption">Symbol</Typography>
+                                <Typography variant="caption">Symbol (optional)</Typography>
                                 <TextField
                                     required
-                                    disabled
-                                    placeholder="Token Symbol"
+                                    placeholder="Rune Symbol"
                                     margin="dense"
                                     onChange={(e) => {
-                                        setTokenName(e.target.value);
+                                        setRuneSymbol(e.target.value);
                                     }}
-                                    value={tokenName}
+                                    value={runeSymbol}
                                     sx={{
                                         "&.MuiTextField-root": {
                                             marginTop: 1
@@ -121,56 +111,129 @@ export default function CreateBRC20() {
                                 />
                             </Stack>
                             <Stack spacing={2} marginBottom={3}>
-                                <Typography variant="caption">Total Supply</Typography>
-                                <TextField
-                                    required
-                                    placeholder="Token Total Supply"
-                                    margin="dense"
+                                <Typography variant="caption">Is Mintable</Typography>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={isMintable}
                                     onChange={(e) => {
-                                        setTokenMax(e.target.value);
-                                    }}
-                                    value={tokenMax}
-                                    sx={{
-                                        "&.MuiTextField-root": {
-                                            marginTop: 1
+                                        if (e.target.value === "true") {
+                                            setIsMintable(true);
+                                        } else {
+                                            setIsMintable(false);
                                         }
                                     }}
-                                    type="number"
-                                />
+                                >
+                                    <FormControlLabel value={true} control={<Radio />} label="Yes" />
+                                    <FormControlLabel value={false} control={<Radio />} label="No" />
+                                </RadioGroup>
                             </Stack>
-                            <Stack spacing={2} marginBottom={3}>
-                                <Typography variant="caption">Maximum Mint Quantity</Typography>
-                                <TextField
-                                    required
-                                    placeholder="Token Maximum Mint Quantity"
-                                    margin="dense"
-                                    onChange={(e) => {
-                                        setTokenLim(e.target.value);
-                                    }}
-                                    value={tokenLim}
-                                    sx={{
-                                        "&.MuiTextField-root": {
-                                            marginTop: 1
-                                        }
-                                    }}
-                                    type="number"
-                                />
-                            </Stack>
+                            {
+                                isMintable ?
+                                <>
+                                    <Stack spacing={2} marginBottom={3}>
+                                        <Typography variant="caption">Divisibility (optional)</Typography>
+                                        <TextField
+                                            placeholder="Rune Divisibility"
+                                            margin="dense"
+                                            onChange={(e) => {
+                                                setRuneDivisibility(e.target.value);
+                                            }}
+                                            value={runeDivisibility}
+                                            sx={{
+                                                "&.MuiTextField-root": {
+                                                    marginTop: 1
+                                                }
+                                            }}
+                                            type="number"
+                                        />
+                                    </Stack>
+                                    <Stack spacing={2} marginBottom={3}>
+                                        <Typography variant="caption">Runes Total Supply</Typography>
+                                        <TextField
+                                            placeholder="Rune Total Supply"
+                                            margin="dense"
+                                            onChange={(e) => {
+                                                setAmount(e.target.value);
+                                            }}
+                                            value={amount}
+                                            sx={{
+                                                "&.MuiTextField-root": {
+                                                    marginTop: 1
+                                                }
+                                            }}
+                                            type="number"
+                                        />
+                                    </Stack>
+                                    <Stack spacing={2} marginBottom={3}>
+                                        <Typography variant="caption">Minted Runes per Txn</Typography>
+                                        <TextField
+                                            placeholder="Runes minted per txn"
+                                            margin="dense"
+                                            onChange={(e) => {
+                                                setCap(e.target.value);
+                                            }}
+                                            value={cap}
+                                            sx={{
+                                                "&.MuiTextField-root": {
+                                                    marginTop: 1
+                                                }
+                                            }}
+                                            type="number"
+                                        />
+                                    </Stack>
+                                    <Stack spacing={2} marginBottom={3}>
+                                        <Typography variant="caption">Runes Premine (optional)</Typography>
+                                        <TextField
+                                            placeholder="Rune Premine"
+                                            margin="dense"
+                                            onChange={(e) => {
+                                                setRunePremine(e.target.value);
+                                            }}
+                                            value={runePremine}
+                                            sx={{
+                                                "&.MuiTextField-root": {
+                                                    marginTop: 1
+                                                }
+                                            }}
+                                            type="number"
+                                        />
+                                    </Stack>
+                                </> : 
+                                <>
+                                    <Stack spacing={2} marginBottom={3}>
+                                        <Typography variant="caption">Runes Premine</Typography>
+                                        <TextField
+                                            placeholder="Rune Premine"
+                                            margin="dense"
+                                            onChange={(e) => {
+                                                setRunePremine(e.target.value);
+                                            }}
+                                            value={runePremine}
+                                            sx={{
+                                                "&.MuiTextField-root": {
+                                                    marginTop: 1
+                                                }
+                                            }}
+                                            type="number"
+                                        />
+                                    </Stack>
+                                </>
+                            }
                         </> : createType === "Mint" ?
                         <>
                             <Stack spacing={2} marginBottom={3} marginTop={3}>
-                                <Typography variant="h3">Mint BRC20 Token</Typography>
-                                <Typography variant="caption">Token Name</Typography>
+                                <Typography variant="h3">Mint Runes</Typography>
+                                <Typography variant="caption">Rune Name</Typography>
                                 <TextField
                                     required
-                                    placeholder="Token Name"
+                                    placeholder="Rune Name"
                                     margin="dense"
                                     onChange={(e) => {
-                                        if (e.target.value.length < 5) {
-                                            setTokenName(e.target.value);
-                                        }
+                                        setRuneName(e.target.value);
                                     }}
-                                    value={tokenName}
+                                    value={runeName}
                                     sx={{
                                         "&.MuiTextField-root": {
                                             marginTop: 1
@@ -179,15 +242,15 @@ export default function CreateBRC20() {
                                 />
                             </Stack>
                             <Stack spacing={2} marginBottom={3}>
-                                <Typography variant="caption">Amount to Mint</Typography>
+                                <Typography variant="caption">Mint Repeats</Typography>
                                 <TextField
                                     required
-                                    placeholder="Amount to Mint"
+                                    placeholder="Mint Repeats"
                                     margin="dense"
                                     onChange={(e) => {
-                                        setMintAm(e.target.value);
+                                        setRepeats(e.target.value);
                                     }}
-                                    value={mintAm}
+                                    value={repeats}
                                     sx={{
                                         "&.MuiTextField-root": {
                                             marginTop: 1
@@ -236,26 +299,6 @@ export default function CreateBRC20() {
                             </Stack>
                         </>
                     }
-                    {
-                        createType !== "Detail" ?
-                        <><Typography variant="caption">Fee Rate sat/vB (lasts to complete)</Typography><br></br>
-                        <FormControl>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                value={selectedFeeRate}
-                                onChange={(e) => {
-                                    setSelectedFeeRate(e.target.value);
-                                }}
-                            >
-                                <FormControlLabel value={feeRate?.economyFee} control={<Radio />} label={`${feeRate?.economyFee} (>1h)`} />
-                                <FormControlLabel value={feeRate?.hourFee} control={<Radio />} label={`${feeRate?.hourFee} (1h)`} />
-                                <FormControlLabel value={feeRate?.halfHourFee} control={<Radio />} label={`${feeRate?.halfHourFee} (1/2h)`} />
-                                <FormControlLabel value={feeRate?.fastestFee} control={<Radio />} label={`${feeRate?.fastestFee} (<1/2h)`} />
-                            </RadioGroup>
-                        </FormControl></> : null
-                    }
                     <Stack display="flex" justifyContent="space-around" alignItems="center" textAlign="center" sx={{ mt: 1 }} width="100%">
                         {!walletAccount ? (
                             <WalletConnectButton showConnectWallet={showConnectWallet} />
@@ -271,8 +314,8 @@ export default function CreateBRC20() {
                                 textAlign="center"
                                 width="100%"
                             >
-                                <CreateBRC20Button 
-                                    tick={tokenName}
+                                <CreateRunesButton 
+                                    tick={runeName}
                                     max={tokenMax}
                                     lim={tokenLim}
                                     amt={mintAm}
@@ -280,7 +323,6 @@ export default function CreateBRC20() {
                                     type={createType}
                                     setOrderData={setOrderData}
                                     orderId={orderId}
-                                    feeRate={selectedFeeRate ?? feeRate?.economyFee}
                                 />
                                 {
                                     orderData && createType !== "Detail" ?
@@ -291,7 +333,7 @@ export default function CreateBRC20() {
                             </Stack>
                         )}
                         {
-                            orderData && walletType === WalletTypes.unisat ?
+                            orderData && walletType ?
                             <div>
                                 <b>BRC20 Ticker</b>
                                 <p>{JSON.parse(orderData.files[0].filename).tick}</p>
@@ -300,29 +342,16 @@ export default function CreateBRC20() {
                                 <p>{orderData.orderId}</p>
                                 <b>Inscription Status</b>
                                 <p>{orderData.status}</p>
-                                <p>{orderData.confirmedCount + orderData.unconfirmedCount} / {orderData.count} Processed</p>
-                                <p>{orderData.confirmedCount} Confirmed, {orderData.unconfirmedCount} Unconfirmed</p>
                                 {
-                                    orderData.files[0].status === "pending" ?
-                                    <div>
-                                        <b>Inscription detail</b><br></br>
-                                        <a href="https://unisat.io/orders/inscribe" target="_blank" rel="no-referrer">Inscription still pending, track your unisat order here.</a>
-                                    </div> :
                                     orderData.files[0].inscriptionId ?
                                     <div>
                                         <b>Inscription detail</b><br></br>
-                                        <a href={`https://unisat.io/inscription/${orderData.files[0].inscriptionId}`} target="_blank" rel="no-referrer">Check inscription detail</a>
+                                        <a href={`https://testnet.unisat.io/inscription/${orderData.files[0].inscriptionId}`} target="_blank" rel="no-referrer">Check inscription detail</a>
                                     </div> :
                                     null
                                 }
                             </div> :
-                            orderData && walletType === WalletTypes.xverse ?
-                            <div>
-                                <b>BRC20 Ticker</b>
-                                <p>{tokenName}</p>
-                                <b>Transaction ID</b><br></br>
-                                <a href={`https://mempool.space/tx/${orderData}`}>{orderData}</a>
-                            </div>: null
+                            null
                         }
                     </Stack>
                 </Box>

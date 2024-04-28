@@ -7,11 +7,11 @@ import { AppContext } from "src/AppContext";
 // Components
 import Header from "src/components/Header";
 import ScrollToTop from "src/components/ScrollToTop";
-import HomeComponent from "src/components/Home/HomeComponent";
+import StakingComponent from "src/components/StakingComponent";
 
 import { OverviewWrapper, BackgroundWrapper } from "src/utils/styles";
 
-export default function Index({}) {
+export default function Staking({}) {
     const { darkMode } = useContext(AppContext);
 
     return (
@@ -25,7 +25,7 @@ export default function Index({}) {
             />
             <Header />
             <Container maxWidth="lg">
-                <HomeComponent />
+                <StakingComponent />
             </Container>
             <ScrollToTop />
         </OverviewWrapper>

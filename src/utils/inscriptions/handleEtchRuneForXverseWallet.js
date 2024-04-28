@@ -1,16 +1,16 @@
-import { createRepeatInscriptions } from "sats-connect";
+import { createRepeatInscriptions, Wallet } from "sats-connect";
 import { defaultNetwork } from "../constants";
 import getConfig from "../getConfig";
-import getMempoolFee from "../fees/getMempoolFee";
 
 // pass toast func() and walletAccount(ordinals address)
-const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt, feeRate) => {
+const handleDeployForXVerseWallet = async (openSnackbar, walletAccount, tick, max, lim) => {
     // prepare payload
     const deployJSON = {
         p: "brc-20",
-        op: "mint",
+        op: "deploy",
         tick: tick,
-        amt: amt
+        max: max,
+        lim: lim
     };
 
     // inscription payload
@@ -26,7 +26,6 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt,
     appFeeAddress: "", // the address where the inscription fee should go
     appFee: 1000, // the amount of sats that should be sent to the fee address
     */
-        suggestedMinerFeeRate: Number(feeRate)
     };
     // send inscription request
     try {
@@ -34,12 +33,12 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt,
             payload: payload,
             onFinish: (response) => {
                 console.log("Inscription result for xverse wallet: ", response);
-                openSnackbar(`Successfully minted Txn ID: ${response.txId}`, "success");
+                openSnackbar(`Successfully deployed Txn ID: ${response.txId}`, "success");
                 return response.txId;
             },
             onCancel: () => {
                 openSnackbar("Inscription cancelled!", "warning");
-            }
+            },
         });
     } catch (error) {
         console.log("Error while inscription for xverse: ", error);
@@ -53,4 +52,4 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt,
     }
 };
 
-export default handleMintForXVerseWallet;
+export default handleDeployForXVerseWallet;

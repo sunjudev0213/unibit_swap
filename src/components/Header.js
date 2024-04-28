@@ -45,13 +45,15 @@ export default function Header() {
                             alignItems: "center"
                         }}
                     >
+                        {/* staking and token creator and bridge */}
                         {!isMobile && (
                             <>
-                                {/* <NavLink link={"/"} text={"Swap"} />
-                                <NavLink link={"/pool"} text={"Liquidity Pool"} /> */}
+                                <NavLink link={"/swap"} text={"Swap"} />
+                                <NavLink link={"/pool"} text={"Liquidity Pool"} />
                                 <NavLink link={"/staking"} text={"Staking"} />
-                                {/* <NavLink link={"/create"} text={"Create"} />
-                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external /> */}
+                                <NavLink link={"/create"} text={"Token Creator"} />
+                                <NavLink link={"/runes"} text={"Runes"} />
+                                <NavLink link={"https://bridge.unibit.app"} text={"Bridge"} external />
                             </>
                         )}
 

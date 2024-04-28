@@ -24,7 +24,7 @@ function BloxifiApp(props) {
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <link rel="manifest" href="/site.webmanifest" />
-                <title>Unibit Swap</title>
+                <title>Unibit App</title>
                 <link rel="shortcut icon" href="logo/logo.png" />
                 <meta name="msapplication-TileColor" content="#121619" />
                 <meta name="theme-color" content="#ffffff" />

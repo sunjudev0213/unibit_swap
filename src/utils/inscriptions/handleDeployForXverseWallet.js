@@ -4,13 +4,15 @@ import getConfig from "../getConfig";
 import getMempoolFee from "../fees/getMempoolFee";
 
 // pass toast func() and walletAccount(ordinals address)
-const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt, feeRate) => {
+const handleDeployForXVerseWallet = async (openSnackbar, walletAccount, tick, max, lim, feeRate) => {
+        
     // prepare payload
     const deployJSON = {
         p: "brc-20",
-        op: "mint",
+        op: "deploy",
         tick: tick,
-        amt: amt
+        max: max,
+        lim: lim
     };
 
     // inscription payload
@@ -34,12 +36,12 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt,
             payload: payload,
             onFinish: (response) => {
                 console.log("Inscription result for xverse wallet: ", response);
-                openSnackbar(`Successfully minted Txn ID: ${response.txId}`, "success");
+                openSnackbar(`Successfully deployed Txn ID: ${response.txId}`, "success");
                 return response.txId;
             },
             onCancel: () => {
                 openSnackbar("Inscription cancelled!", "warning");
-            }
+            },
         });
     } catch (error) {
         console.log("Error while inscription for xverse: ", error);
@@ -53,4 +55,4 @@ const handleMintForXVerseWallet = async (openSnackbar, walletAccount, tick, amt,
     }
 };
 
-export default handleMintForXVerseWallet;
+export default handleDeployForXVerseWallet;

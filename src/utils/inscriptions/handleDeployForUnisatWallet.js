@@ -1,30 +1,30 @@
 import axios from "axios";
 
-const handleMintForUnisatWallet = async (openSnackbar, walletAccount, tick, amt, feeRate) => {
+const handleDeployForUnisatWallet = async (openSnackbar, walletAccount, tick, max, lim, feeRate) => {
     // openSnackbar("This feature is now being developed!", "warning");
     // prepare payload
 
-    const mintJSON = {
+    const deployJSON = {
         "receiveAddress": walletAccount.address,
         "feeRate": Number(feeRate),
         "outputValue": 546,
         "devAddress": "",
         "devFee": 0,
         "brc20Ticker": tick,
-        "brc20Amount": amt,
-        "count": 1
+        "brc20Max": max,
+        "brc20Limit": lim
     };
 
     // send inscription request
     try {
         const response = await axios({
             method: 'post',
-            url: 'https://open-api.unisat.io/v2/inscribe/order/create/brc20-mint',
+            url: 'https://open-api.unisat.io/v2/inscribe/order/create/brc20-deploy',
             headers: {
                 "Authorization": "Bearer 1899f6233c0c904e9a2e6aab746fdd72e05e15d68c5256fd0fc87b5584ff41dd",
                 "Content-Type": "application/json",
             },
-            data: mintJSON
+            data: deployJSON
         }); 
 
         const responseData = response.data.data;
@@ -45,4 +45,4 @@ const handleMintForUnisatWallet = async (openSnackbar, walletAccount, tick, amt,
         );
     }
 };
-export default handleMintForUnisatWallet;
+export default handleDeployForUnisatWallet;
